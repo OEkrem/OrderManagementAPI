@@ -1,5 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.DataAccess;
+package com.oekrem.SpringMVCBackEnd.DataAccess.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.DataAccess.OrderDetailRepository;
 import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -40,17 +41,16 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
 
     @Override
     @Transactional
-    public void deleteOrderDetail(OrderDetail orderDetail) {
+    public void deleteOrderDetail(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        OrderDetail orderDetailToDelete = session.get(OrderDetail.class, orderDetail.getId());
+        OrderDetail orderDetailToDelete = session.get(OrderDetail.class, id);
         session.delete(orderDetailToDelete);
     }
 
     @Override
     @Transactional
-    public OrderDetail getOrderDetailById(int id) {
+    public OrderDetail getOrderDetailById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        OrderDetail orderDetail = session.get(OrderDetail.class, id);
-        return orderDetail;
+        return session.get(OrderDetail.class, id);
     }
 }

@@ -1,5 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Models;
 
+import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentMethod;
+import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -21,7 +23,7 @@ public class Payment {
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    private PaymentStatus paymentStatus;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
@@ -31,11 +33,11 @@ public class Payment {
 
     public Payment() {}
 
-    public Payment(Long id, String description, BigDecimal amount, PaymentStatus status, PaymentMethod paymentMethod, LocalDateTime date) {
+    public Payment(Long id, String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date) {
         this.id = id;
         this.description = description;
         this.amount = amount;
-        this.status = status;
+        this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
         this.date = date;
     }
@@ -64,12 +66,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public PaymentStatus getStatus() {
-        return status;
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
     }
 
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public PaymentMethod getPaymentMethod() {
@@ -94,7 +96,7 @@ public class Payment {
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
-                ", status=" + status +
+                ", paymentStatus=" + paymentStatus +
                 ", paymentMethod=" + paymentMethod +
                 ", date=" + date +
                 '}';

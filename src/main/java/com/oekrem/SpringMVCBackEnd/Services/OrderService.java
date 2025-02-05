@@ -8,6 +8,6 @@ public interface OrderService {
     List<Order> findAll();
     void addOrder(Order order);
     void updateOrder(Order order);
-    void deleteOrder(Order order);
-    Order getOrderById(int id);
+    void deleteOrder(Long id);
+    Order getOrderById(Long id);
 }

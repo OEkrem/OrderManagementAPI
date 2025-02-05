@@ -1,5 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.DataAccess;
+package com.oekrem.SpringMVCBackEnd.DataAccess.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.DataAccess.AddressRepository;
 import com.oekrem.SpringMVCBackEnd.Models.Address;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -40,15 +41,15 @@ public class HibernateAddressRepository implements AddressRepository {
 
     @Override
     @Transactional
-    public void deleteAddress(Address address) {
+    public void deleteAddress(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        Address addressToDelete = session.get(Address.class, address.getId());
+        Address addressToDelete = session.get(Address.class, id);
         session.delete(addressToDelete);
     }
 
     @Override
     @Transactional
-    public Address getAddressById(int id) {
+    public Address getAddressById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return session.get(Address.class, id);
     }

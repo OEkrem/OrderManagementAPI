@@ -1,5 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.DataAccess;
+package com.oekrem.SpringMVCBackEnd.DataAccess.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.DataAccess.ProductRepository;
 import com.oekrem.SpringMVCBackEnd.Models.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -40,15 +41,15 @@ public class HibernateProductRepository implements ProductRepository {
 
     @Override
     @Transactional
-    public void deleteProduct(Product product) {
+    public void deleteProduct(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        Product productToDelete = session.get(Product.class, product.getId());
+        Product productToDelete = session.get(Product.class, id);
         session.delete(productToDelete);
     }
 
     @Override
     @Transactional
-    public Product getProductById(int id) {
+    public Product getProductById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return session.get(Product.class, id);
     }

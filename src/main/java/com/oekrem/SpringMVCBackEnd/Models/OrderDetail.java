@@ -1,6 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.oekrem.SpringMVCBackEnd.Models.enums.QuantityType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -16,7 +16,6 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnore
     private Product product;
 
     @Enumerated(EnumType.STRING)
@@ -28,7 +27,6 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", nullable = false)
-    @JsonIgnore
     private Order order;
 
     public OrderDetail() {}

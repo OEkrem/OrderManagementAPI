@@ -30,7 +30,6 @@ public class Product {
     private String image;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<OrderDetail> orderDetail = new LinkedList<OrderDetail>();
 
     public Product() {}

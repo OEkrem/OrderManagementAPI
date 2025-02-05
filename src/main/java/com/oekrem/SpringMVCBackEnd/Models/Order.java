@@ -1,6 +1,5 @@
 package com.oekrem.SpringMVCBackEnd.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -17,15 +16,12 @@ public class Order {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<OrderDetail> orderDetail = new HashSet<OrderDetail>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
     private Payment payment;
 
     @Temporal(TemporalType.DATE)

@@ -10,6 +10,6 @@ public interface UserRepository {
     List<User> findAll();
     void addUser(User user);
     void updateUser(User user);
-    void deleteUser(User user);
-    User getUserById(int id);
+    void deleteUser(Long id);
+    User getUserById(Long id);
 }

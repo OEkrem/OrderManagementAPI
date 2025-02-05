@@ -1,7 +1,8 @@
-package com.oekrem.SpringMVCBackEnd.Services;
+package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.OrderDetailRepository;
 import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
+import com.oekrem.SpringMVCBackEnd.Services.OrderDetailService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,13 +37,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
-    public void deleteOrderDetail(OrderDetail orderDetail) {
-        orderDetailRepository.deleteOrderDetail(orderDetail);
+    public void deleteOrderDetail(Long id) {
+        orderDetailRepository.deleteOrderDetail(id);
     }
 
     @Override
     @Transactional
-    public OrderDetail getOrderDetailById(int id) {
+    public OrderDetail getOrderDetailById(Long id) {
         return orderDetailRepository.getOrderDetailById(id);
     }
 }

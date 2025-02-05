@@ -1,4 +1,4 @@
-package com.oekrem.SpringMVCBackEnd.Models;
+package com.oekrem.SpringMVCBackEnd.Models.enums;
 
 public enum PaymentStatus {
     SUCCESSFUL("Succesful"),

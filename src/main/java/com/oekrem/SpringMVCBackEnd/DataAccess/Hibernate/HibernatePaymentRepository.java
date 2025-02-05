@@ -1,5 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.DataAccess;
+package com.oekrem.SpringMVCBackEnd.DataAccess.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.DataAccess.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.Models.Payment;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -40,15 +41,15 @@ public class HibernatePaymentRepository implements PaymentRepository {
 
     @Override
     @Transactional
-    public void deletePayment(Payment payment) {
+    public void deletePayment(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        Payment paymentToDelete = session.get(Payment.class, payment.getId());
+        Payment paymentToDelete = session.get(Payment.class, id);
         session.delete(paymentToDelete);
     }
 
     @Override
     @Transactional
-    public Payment getPaymentById(int id) {
+    public Payment getPaymentById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return session.get(Payment.class, id);
     }

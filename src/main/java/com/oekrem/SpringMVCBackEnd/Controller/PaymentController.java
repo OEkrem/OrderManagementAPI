@@ -3,12 +3,14 @@ package com.oekrem.SpringMVCBackEnd.Controller;
 import com.oekrem.SpringMVCBackEnd.Models.Payment;
 import com.oekrem.SpringMVCBackEnd.Services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/payments")
 public class PaymentController {
 
     private PaymentService paymentService;
@@ -16,28 +18,31 @@ public class PaymentController {
     @Autowired
     public PaymentController(PaymentService paymentService) {this.paymentService = paymentService;}
 
-    @GetMapping("/payments")
+    @GetMapping
     public List<Payment> getPayments(){
         return paymentService.findAll();
     }
 
-    @GetMapping("/payments/{id}")
-    public Payment getPaymentById(@PathVariable int id){
+    @GetMapping("/{id}")
+    public Payment getPaymentById(@PathVariable Long id){
         return paymentService.getPaymentById(id);
     }
 
-    @PostMapping("/payment/add")
-    public void addPayment(@RequestBody Payment payment){
+    @PostMapping
+    public ResponseEntity<Payment> addPayment(@RequestBody Payment payment){
         paymentService.addPayment(payment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(payment);
     }
 
-    @PostMapping("/payment/update")
-    public void updatePayment(@RequestBody Payment payment){
+    @PutMapping("/{id}")
+    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment){
         paymentService.updatePayment(payment);
+        return ResponseEntity.ok(payment);
     }
 
-    @PostMapping("/payment/delete")
-    public void deletePayment(@RequestBody Payment payment){
-        paymentService.deletePayment(payment);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id){
+        paymentService.deletePayment(id);
+        return ResponseEntity.noContent().build();
     }
 }

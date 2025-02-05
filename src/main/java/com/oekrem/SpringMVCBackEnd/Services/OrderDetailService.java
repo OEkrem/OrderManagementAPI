@@ -8,6 +8,6 @@ public interface OrderDetailService {
     List<OrderDetail> findAll();
     void addOrderDetail(OrderDetail orderDetail);
     void updateOrderDetail(OrderDetail orderDetail);
-    void deleteOrderDetail(OrderDetail orderDetail);
-    OrderDetail getOrderDetailById(int id);
+    void deleteOrderDetail(Long id);
+    OrderDetail getOrderDetailById(Long id);
 }

@@ -1,38 +1,26 @@
-package com.oekrem.SpringMVCBackEnd.Models;
+package com.oekrem.SpringMVCBackEnd.Dto.Response;
 
-import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
-@Entity
-@Table(name = "users")
-public class User {
+@Data
+public class UserResponse {
 
-    @SequenceGenerator(name = "user", sequenceName = "User_Id_Seq", allocationSize = 1)
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user")
-    private Long id;
-
+    private int id;
     private String username;
     private String password;
 
     private String firstName;
     private String lastName;
-
     private String email;
     private String phone;
+    private Set<AddressResponse> addresses;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Address> addresses = new LinkedList<>();
-    // bir kullanıcının birden fazla tanımlı adresi olabilir
-
-
-
-    public User() {
+    public UserResponse() {
     }
 
-    public User(Long id, String username, String password, String firstName, String lastName, String email, String phone, List<Address> addresses) {
+    public UserResponse(int id, String username, String password, String firstName, String lastName, String email, String phone, Set<AddressResponse> addresses) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,11 +31,11 @@ public class User {
         this.addresses = addresses;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -99,25 +87,11 @@ public class User {
         this.phone = phone;
     }
 
-    public List<Address> getAddresses() {
+    public Set<AddressResponse> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<AddressResponse> addresses) {
         this.addresses = addresses;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", addresses=" + addresses +
-                '}';
     }
 }

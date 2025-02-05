@@ -1,5 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.DataAccess;
+package com.oekrem.SpringMVCBackEnd.DataAccess.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.DataAccess.UserRepository;
 import com.oekrem.SpringMVCBackEnd.Models.User;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -44,16 +45,16 @@ public class HibernateUserRepository implements UserRepository {
 
     @Override
     @Transactional
-    public void deleteUser(User user) {
+    public void deleteUser(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        User user2 = session.get(User.class, user.getId());
+        User user2 = session.get(User.class, id);
         session.delete(user2);
     }
 
     @Override
     @Transactional
-    public User getUserById(int id) {
+    public User getUserById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(User.class, id);
+        return session.get(User.class, id.intValue());
     }
 }

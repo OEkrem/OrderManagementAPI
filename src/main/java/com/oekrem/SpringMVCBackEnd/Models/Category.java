@@ -1,6 +1,5 @@
 package com.oekrem.SpringMVCBackEnd.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -22,7 +21,6 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<Product> products = new HashSet<Product>();
 
     public Category() {}

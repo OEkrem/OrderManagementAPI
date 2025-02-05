@@ -8,6 +8,6 @@ public interface ProductService {
     List<Product> findAll();
     void addProduct(Product product);
     void updateProduct(Product product);
-    void deleteProduct(Product product);
-    Product getProductById(int id);
+    void deleteProduct(Long id);
+    Product getProductById(Long id);
 }

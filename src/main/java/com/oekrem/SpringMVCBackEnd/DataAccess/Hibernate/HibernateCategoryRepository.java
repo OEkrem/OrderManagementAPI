@@ -1,5 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.DataAccess;
+package com.oekrem.SpringMVCBackEnd.DataAccess.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.DataAccess.CategoryRepository;
 import com.oekrem.SpringMVCBackEnd.Models.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -40,15 +41,15 @@ public class HibernateCategoryRepository implements CategoryRepository {
 
     @Override
     @Transactional
-    public void deleteCategory(Category category) {
+    public void deleteCategory(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        Category categoryToDelete = session.get(Category.class, category.getId());
+        Category categoryToDelete = session.get(Category.class, id);
         session.delete(categoryToDelete);
     }
 
     @Override
     @Transactional
-    public Category getCategoryById(int id) {
+    public Category getCategoryById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return session.get(Category.class, id);
     }

@@ -1,14 +1,17 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
-import com.oekrem.SpringMVCBackEnd.Models.User;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     private UserService userService;
@@ -18,29 +21,33 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
-    public List<User> getUsers(){
+    @GetMapping
+    public List<UserResponse> getUsers(){
         return userService.findAll();
     }
 
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable int id){
+    @GetMapping("/{id}")
+    public UserResponse getUserById(@PathVariable Long id){
         return userService.getUserById(id);
     }
 
-    @PostMapping("/user/add")
-    public void addUser(@RequestBody User user){
+    @PostMapping
+    public ResponseEntity<UserRequest> addUser(@RequestBody UserRequest user){
         userService.addUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PostMapping("/user/update")
-    public void updateUser(@RequestBody User user){
+    @PutMapping("/{id}")
+    public ResponseEntity<UserRequest> updateUser(@PathVariable Long id, @RequestBody UserRequest user){
+        user.setId(id);
         userService.updateUser(user);
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/user/delete")
-    public void deleteUser(@RequestBody User user){
-        userService.deleteUser(user);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

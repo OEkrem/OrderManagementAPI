@@ -1,7 +1,8 @@
-package com.oekrem.SpringMVCBackEnd.Services;
+package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.CategoryRepository;
 import com.oekrem.SpringMVCBackEnd.Models.Category;
+import com.oekrem.SpringMVCBackEnd.Services.CategoryService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,30 +26,26 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void addCategory(Category category) {
-        if(category.getId() != null && getCategoryById(category.getId().intValue()) == null){
-            categoryRepository.addCategory(category);
-        }
+        categoryRepository.addCategory(category);
     }
 
     @Override
     @Transactional
     public void updateCategory(Category category) {
-        if(getCategoryById(category.getId().intValue()) != null){
-            categoryRepository.updateCategory(category);
+        categoryRepository.updateCategory(category);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategory(Long id) {
+        if(getCategoryById(id) != null){
+            categoryRepository.deleteCategory(id);
         }
     }
 
     @Override
     @Transactional
-    public void deleteCategory(Category category) {
-        if(getCategoryById(category.getId().intValue()) != null){
-            categoryRepository.deleteCategory(category);
-        }
-    }
-
-    @Override
-    @Transactional
-    public Category getCategoryById(int id) {
+    public Category getCategoryById(Long id) {
         return categoryRepository.getCategoryById(id);
     }
 }

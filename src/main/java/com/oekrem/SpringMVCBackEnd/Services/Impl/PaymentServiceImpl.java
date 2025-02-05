@@ -1,7 +1,8 @@
-package com.oekrem.SpringMVCBackEnd.Services;
+package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.Models.Payment;
+import com.oekrem.SpringMVCBackEnd.Services.PaymentService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,13 +37,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void deletePayment(Payment payment) {
-        paymentRepository.deletePayment(payment);
+    public void deletePayment(Long id) {
+        paymentRepository.deletePayment(id);
     }
 
     @Override
     @Transactional
-    public Payment getPaymentById(int id) {
+    public Payment getPaymentById(Long id) {
         return paymentRepository.getPaymentById(id);
     }
 }

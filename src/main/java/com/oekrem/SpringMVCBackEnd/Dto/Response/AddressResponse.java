@@ -1,45 +1,23 @@
-package com.oekrem.SpringMVCBackEnd.Models;
+package com.oekrem.SpringMVCBackEnd.Dto.Response;
 
-import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
+public class AddressResponse {
 
-@Entity
-@Table(name = "addresses")
-public class Address {
-
-    @Id
-    @SequenceGenerator(name = "address", allocationSize = 1, sequenceName = "address_id_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address")
     private Long id;
-
-    @Column(name = "name", length = 50)
     private String name;
-
-    @Column(name = "doorNumber", length = 5)
     private Integer doorNumber;
-
-    @Column(name = "floor", length = 5)
     private Integer floor;
-
-    @Column(name = "buildingNumber", length = 15)
     private String buildingNumber;
-
-    @Column(name = "street", length = 50)
     private String street;
-
-    @Column(name = "city", length = 50)
     private String city;
-
-    @Column(name = "country", length = 30)
     private String country;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false) // foreign key
-    private User user;
+    public AddressResponse() {
+    }
 
-    public Address() {}
-
-    public Address(Long id, String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country, User user) {
+    public AddressResponse(Long id, String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country) {
         this.id = id;
         this.name = name;
         this.doorNumber = doorNumber;
@@ -48,7 +26,6 @@ public class Address {
         this.street = street;
         this.city = city;
         this.country = country;
-        this.user = user;
     }
 
     public Long getId() {
@@ -113,28 +90,5 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", doorNumber=" + doorNumber +
-                ", floor=" + floor +
-                ", buildingNumber='" + buildingNumber + '\'' +
-                ", street='" + street + '\'' +
-                ", city='" + city + '\'' +
-                ", country='" + country + '\'' +
-                ", user=" + user +
-                '}';
     }
 }
