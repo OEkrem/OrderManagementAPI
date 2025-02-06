@@ -1,7 +1,5 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
-import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
-import com.oekrem.SpringMVCBackEnd.Models.Payment;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,15 +9,15 @@ import java.util.List;
 public class AddOrderRequest {
 
     private Long userId;
-    private List<OrderDetail> orderDetailList;
-    private Payment payment;
+    private List<AddOrderDetailRequest> orderDetailList;
+    private PaymentRequest payment;
     private LocalDate date;
     private Double total;
 
     public AddOrderRequest() {
     }
 
-    public AddOrderRequest(Long userId, List<OrderDetail> orderDetailList, Payment payment, LocalDate date, Double total) {
+    public AddOrderRequest(Long userId, List<AddOrderDetailRequest> orderDetailList, PaymentRequest payment, LocalDate date, Double total) {
         this.userId = userId;
         this.orderDetailList = orderDetailList;
         this.payment = payment;
@@ -35,19 +33,19 @@ public class AddOrderRequest {
         this.userId = userId;
     }
 
-    public List<OrderDetail> getOrderDetailList() {
+    public List<AddOrderDetailRequest> getOrderDetailList() {
         return orderDetailList;
     }
 
-    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
+    public void setOrderDetailList(List<AddOrderDetailRequest> orderDetailList) {
         this.orderDetailList = orderDetailList;
     }
 
-    public Payment getPayment() {
+    public PaymentRequest getPayment() {
         return payment;
     }
 
-    public void setPayment(Payment payment) {
+    public void setPayment(PaymentRequest payment) {
         this.payment = payment;
     }
 

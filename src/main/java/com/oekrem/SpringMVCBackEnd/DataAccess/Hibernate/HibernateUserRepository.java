@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateUserRepository implements UserRepository {
@@ -30,31 +31,39 @@ public class HibernateUserRepository implements UserRepository {
 
     @Override
     @Transactional
-    public void addUser(User user) {
+    public User addUser(User user) {
         Session session = entityManager.unwrap(Session.class);
         session.saveOrUpdate(user);
+        return user;
     }
 
     @Override
     @Transactional
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         Session session = entityManager.unwrap(Session.class);
         session.saveOrUpdate(user);
-
+        return user;
     }
 
     @Override
     @Transactional
     public void deleteUser(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        User user2 = session.get(User.class, id);
-        session.delete(user2);
+        User userToDelete = session.get(User.class, id);
+        session.delete(userToDelete);
     }
 
     @Override
     @Transactional
-    public User getUserById(Long id) {
+    public Optional<User> getUserById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(User.class, id.intValue());
+        return Optional.ofNullable(session.get(User.class, id));
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> getUserByEmail(String email) {
+        Session session = entityManager.unwrap(Session.class);
+        return Optional.ofNullable(session.get(User.class, email));
     }
 }
