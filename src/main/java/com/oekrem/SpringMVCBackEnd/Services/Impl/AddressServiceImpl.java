@@ -1,11 +1,14 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.AddressRepository;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.AddressMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.AddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
+import com.oekrem.SpringMVCBackEnd.Exceptions.AddressExceptions.AddressDoesntExitsException;
 import com.oekrem.SpringMVCBackEnd.Models.Address;
 import com.oekrem.SpringMVCBackEnd.Models.User;
 import com.oekrem.SpringMVCBackEnd.Services.AddressService;
@@ -23,9 +26,12 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private AddressMapper addressMapper;
 
     private final AddressRepository addressRepository;
     private final UserService userService;
+
 
     @Autowired
     public AddressServiceImpl(AddressRepository addressRepository, UserService userService) {
@@ -43,49 +49,59 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @Transactional
     public AddressResponse getAddressById(Long id) {
-        Address address = addressRepository.getAddressById(id);
+        Address address = addressRepository.getAddressById(id)
+                .orElseThrow(AddressDoesntExitsException::new);
+
         return modelMapper.map(address, AddressResponse.class);
     }
 
     @Override
     @Transactional
-    public void addAddress(Long userId, CreateAddressRequest address) {
-        User user = userService.validateUser(userId);
-        user.getAddresses().add(modelMapper.map(address, Address.class));
-        userService.updateUser(modelMapper.map(user, UserRequest.class));
+    public CreateAddressRequest addAddress(Long userId, CreateAddressRequest address) {
+        userService.validateUser(userId);
+        Address addressToAdd = addressMapper.toAddressFromCreateAddressRequest(address);
+        User user = new User(); user.setId(userId);
+        addressToAdd.setUser(user);
+        addressRepository.addAddress(addressToAdd);
+        return address;
     }
 
     @Override
     @Transactional
-    public void updateAddress(Long userId, UpdateAddressRequest address) {
-        User user = userService.validateUser(userId);
-        for(Address address1 : user.getAddresses()) {
-            if(address1.getId().equals(address.getId())) {
-                address1 = modelMapper.map(address1, Address.class);
-            }
-        }
-        userService.updateUser(modelMapper.map(user, UserRequest.class));
+    public UpdateAddressRequest updateAddress(Long userId, UpdateAddressRequest address) {
+        userService.validateUser(userId);
+        validateAddress(address.getId())
+                .orElseThrow(() -> new AddressDoesntExitsException("Address not found"));
+
+        Address addressToUpdate = addressMapper.toAddressFromUpdateAddressRequest(address);
+        User user = new User(); user.setId(userId);
+        addressToUpdate.setUser(user);
+        addressRepository.updateAddress(addressToUpdate);
+        return address;
     }
 
     @Override
     @Transactional
     public void deleteAddress(Long id) {
+        addressRepository.getAddressById(id)
+                .orElseThrow(() -> new AddressDoesntExitsException("There is no address with this id:" + id));
 
-        Optional<Address> existingAddress = Optional.ofNullable(addressRepository.getAddressById(id));
-        if (existingAddress.isEmpty()) {
-            throw new IllegalArgumentException("Address bulunamadı..");
-        }
-
-        if(id == null){return;}
         addressRepository.deleteAddress(id);
     }
-/*
+
     @Override
     @Transactional
     public List<AddressResponse> getAddressByUserId(Long id) {
-        UserResponse user = userService.getUserById(id);
-        return user.getAddresses().stream().map(address -> modelMapper.map(address, AddressResponse.class)).collect(Collectors.toList());
+        userService.validateUser(id);
+
+        List<Address> addressList = addressRepository.getAddressesByUserId(id);
+        return addressList.stream().map(u -> addressMapper.toAddressResponse(u)).collect(Collectors.toList());
     }
-    */
+
+
+    @Override
+    public Optional<Address> validateAddress(Long id) {
+        return addressRepository.getAddressById(id);
+    }
 
 }

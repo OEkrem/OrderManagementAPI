@@ -33,7 +33,7 @@ public class Address {
     @Column(name = "country", length = 30)
     private String country;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // foreign key
     private User user;
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateAddressRepository implements AddressRepository {
@@ -26,17 +27,40 @@ public class HibernateAddressRepository implements AddressRepository {
     }
 
     @Override
-    @Transactional
-    public void deleteAddress(Long id) {
+    public Address addAddress(Address address) {
         Session session = entityManager.unwrap(Session.class);
-        Address addressToDelete = session.get(Address.class, id);
-        session.delete(addressToDelete);
+        session.merge(address);
+        return address;
+    }
+
+    @Override
+    public Address updateAddress(Address address) {
+        Session session = entityManager.unwrap(Session.class);
+        session.merge(address);
+        return address;
     }
 
     @Override
     @Transactional
-    public Address getAddressById(Long id) {
+    public void deleteAddress(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(Address.class, id);
+        Address addressToDelete = session.get(Address.class, id);
+        session.remove(addressToDelete);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Address> getAddressById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return Optional.ofNullable(session.get(Address.class, id));
+    }
+
+    @Override
+    @Transactional
+    public List<Address> getAddressesByUserId(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        List<Address> addresses = session.createQuery("select u from Address u where u.user.id = :id", Address.class)
+                .setParameter("id", id).list();
+        return addresses;
     }
 }

@@ -24,7 +24,7 @@ public class User {
     private String email;
     private String phone;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "user")
     private List<Address> addresses = new LinkedList<>();
     // bir kullanıcının birden fazla tanımlı adresi olabilir
 

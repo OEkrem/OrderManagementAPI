@@ -13,11 +13,11 @@ public class AddressResponse {
     private String street;
     private String city;
     private String country;
-
+    private Long userId;
     public AddressResponse() {
     }
 
-    public AddressResponse(Long id, String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country) {
+    public AddressResponse(Long id, String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country, Long userId) {
         this.id = id;
         this.name = name;
         this.doorNumber = doorNumber;
@@ -26,6 +26,7 @@ public class AddressResponse {
         this.street = street;
         this.city = city;
         this.country = country;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -92,6 +93,14 @@ public class AddressResponse {
         this.country = country;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "AddressResponse{" +
@@ -103,6 +112,7 @@ public class AddressResponse {
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }

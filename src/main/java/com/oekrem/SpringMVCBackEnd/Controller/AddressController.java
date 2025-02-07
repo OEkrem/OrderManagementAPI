@@ -32,24 +32,23 @@ public class AddressController {
         return ResponseEntity.ok(addressService.getAddressById(id));
     }
 
-    /*
+
     @GetMapping("/users/{id}")
     public List<AddressResponse> getAddressesByUserId(@PathVariable Long id){
         return addressService.getAddressByUserId(id);
-    }*/
+    }
 
-    // user_id ve address body'ye ihtiyaç var
     @PostMapping("/users/{id}")
     public ResponseEntity<CreateAddressRequest> addAddress(@PathVariable Long id, @RequestBody CreateAddressRequest addressRequest){
-        addressService.addAddress(id, addressRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(addressRequest);
+        CreateAddressRequest address = addressService.addAddress(id, addressRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(address);
     }
 
     // user_id ve address body'ye ihtiyacımız var
     @PutMapping("/users/{id}")
     public ResponseEntity<UpdateAddressRequest> updateAddress(@PathVariable Long id, @RequestBody UpdateAddressRequest addressRequest){
-        addressService.updateAddress(id, addressRequest);
-        return ResponseEntity.ok(addressRequest);
+        UpdateAddressRequest address= addressService.updateAddress(id, addressRequest);
+        return ResponseEntity.ok(address);
     }
 
     // address id üzerinden siliniyor
