@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface AddressRepository {
     List<Address> findAll();
-    void addAddress(Address address);
-    void updateAddress(Address address);
+    //void addAddress(Address address);
+    //void updateAddress(Address address);
     void deleteAddress(Long id);
     Address getAddressById(Long id);
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -105,6 +106,18 @@ public class User {
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
     }
 
     @Override

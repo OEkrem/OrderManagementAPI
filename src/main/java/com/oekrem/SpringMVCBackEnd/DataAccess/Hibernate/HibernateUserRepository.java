@@ -25,15 +25,14 @@ public class HibernateUserRepository implements UserRepository {
     @Transactional
     public List<User> findAll() {
         Session session = entityManager.unwrap(Session.class);
-        List<User> users = session.createQuery("select distinct u from User u", User.class).list();
-        return users;
+        return session.createQuery("select distinct u from User u", User.class).list();
     }
 
     @Override
     @Transactional
     public User addUser(User user) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(user);
+        session.save(user);
         return user;
     }
 
@@ -41,7 +40,7 @@ public class HibernateUserRepository implements UserRepository {
     @Transactional
     public User updateUser(User user) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(user);
+        session.save(user);
         return user;
     }
 
@@ -50,7 +49,7 @@ public class HibernateUserRepository implements UserRepository {
     public void deleteUser(Long id) {
         Session session = entityManager.unwrap(Session.class);
         User userToDelete = session.get(User.class, id);
-        session.delete(userToDelete);
+        session.remove(userToDelete);
     }
 
     @Override
@@ -64,6 +63,9 @@ public class HibernateUserRepository implements UserRepository {
     @Transactional
     public Optional<User> getUserByEmail(String email) {
         Session session = entityManager.unwrap(Session.class);
-        return Optional.ofNullable(session.get(User.class, email));
+        User user = session.createQuery("select u from User u where u.email = :email", User.class)
+                .setParameter("email", email)
+                .uniqueResult();
+        return Optional.ofNullable(user);
     }
 }

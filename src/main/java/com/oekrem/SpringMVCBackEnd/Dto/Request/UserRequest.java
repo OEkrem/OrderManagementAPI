@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
+import com.oekrem.SpringMVCBackEnd.Models.Address;
 import lombok.Data;
 
 import java.util.List;
@@ -17,19 +18,16 @@ public class UserRequest {
     private String email;
     private String phone;
 
-    private List<AddressRequest> addresses;
-
     public UserRequest() {
     }
 
-    public UserRequest(String username, String password, String firstName, String lastName, String email, String phone, List<AddressRequest> addresses) {
+    public UserRequest(String username, String password, String firstName, String lastName, String email, String phone) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.addresses = addresses;
     }
 
     public Long getId() {
@@ -88,11 +86,16 @@ public class UserRequest {
         this.phone = phone;
     }
 
-    public List<AddressRequest> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<AddressRequest> addresses) {
-        this.addresses = addresses;
+    @Override
+    public String toString() {
+        return "UserRequest{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }

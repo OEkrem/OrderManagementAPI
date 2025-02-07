@@ -1,9 +1,6 @@
-package com.oekrem.SpringMVCBackEnd.Dto.Response;
+package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
-import lombok.Data;
-
-@Data
-public class AddressResponse {
+public class UpdateAddressRequest {
 
     private Long id;
     private String name;
@@ -14,10 +11,10 @@ public class AddressResponse {
     private String city;
     private String country;
 
-    public AddressResponse() {
+    public UpdateAddressRequest() {
     }
 
-    public AddressResponse(Long id, String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country) {
+    public UpdateAddressRequest(Long id, String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country) {
         this.id = id;
         this.name = name;
         this.doorNumber = doorNumber;
@@ -92,17 +89,4 @@ public class AddressResponse {
         this.country = country;
     }
 
-    @Override
-    public String toString() {
-        return "AddressResponse{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", doorNumber=" + doorNumber +
-                ", floor=" + floor +
-                ", buildingNumber='" + buildingNumber + '\'' +
-                ", street='" + street + '\'' +
-                ", city='" + city + '\'' +
-                ", country='" + country + '\'' +
-                '}';
-    }
 }

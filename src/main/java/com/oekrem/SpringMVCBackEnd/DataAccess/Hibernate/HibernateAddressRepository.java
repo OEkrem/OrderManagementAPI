@@ -27,20 +27,6 @@ public class HibernateAddressRepository implements AddressRepository {
 
     @Override
     @Transactional
-    public void addAddress(Address address) {
-        Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(address);
-    }
-
-    @Override
-    @Transactional
-    public void updateAddress(Address address) {
-        Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(address);
-    }
-
-    @Override
-    @Transactional
     public void deleteAddress(Long id) {
         Session session = entityManager.unwrap(Session.class);
         Address addressToDelete = session.get(Address.class, id);

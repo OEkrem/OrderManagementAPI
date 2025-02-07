@@ -3,7 +3,8 @@ package com.oekrem.SpringMVCBackEnd.Dto.Request;
 import lombok.Data;
 
 @Data
-public class AddAddressRequest {
+public class CreateAddressRequest {
+
     private String name;
     private Integer doorNumber;
     private Integer floor;
@@ -11,12 +12,11 @@ public class AddAddressRequest {
     private String street;
     private String city;
     private String country;
-    private Long userId;
 
-    public AddAddressRequest() {
+    public CreateAddressRequest() {
     }
 
-    public AddAddressRequest(String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country, Long userId) {
+    public CreateAddressRequest(String name, Integer doorNumber, Integer floor, String buildingNumber, String street, String city, String country) {
         this.name = name;
         this.doorNumber = doorNumber;
         this.floor = floor;
@@ -24,7 +24,6 @@ public class AddAddressRequest {
         this.street = street;
         this.city = city;
         this.country = country;
-        this.userId = userId;
     }
 
     public String getName() {
@@ -83,11 +82,4 @@ public class AddAddressRequest {
         this.country = country;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }

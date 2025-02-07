@@ -2,12 +2,12 @@ package com.oekrem.SpringMVCBackEnd.Dto.Response;
 
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class UserResponse {
 
-    private int id;
+    private Long id;
     private String username;
     private String password;
 
@@ -15,12 +15,11 @@ public class UserResponse {
     private String lastName;
     private String email;
     private String phone;
-    private Set<AddressResponse> addresses;
 
     public UserResponse() {
     }
 
-    public UserResponse(int id, String username, String password, String firstName, String lastName, String email, String phone, Set<AddressResponse> addresses) {
+    public UserResponse(Long id, String username, String password, String firstName, String lastName, String email, String phone) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -28,14 +27,13 @@ public class UserResponse {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.addresses = addresses;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -87,11 +85,16 @@ public class UserResponse {
         this.phone = phone;
     }
 
-    public Set<AddressResponse> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<AddressResponse> addresses) {
-        this.addresses = addresses;
+    @Override
+    public String toString() {
+        return "UserResponse{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }

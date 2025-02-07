@@ -1,8 +1,11 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateAddressRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.Services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,9 @@ public class AddressController {
     private AddressService addressService;
 
     @Autowired
-    public AddressController(AddressService addressService) {this.addressService = addressService;}
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
+    }
 
     @GetMapping
     public List<AddressResponse> getAddresses(){
@@ -27,24 +32,31 @@ public class AddressController {
         return ResponseEntity.ok(addressService.getAddressById(id));
     }
 
-    // Add Update Delete işlemleri user üzerinden gerçekleştirilebiliyor zaten
     /*
-    @PostMapping
-    public ResponseEntity<AddAddressRequest> addAddress(@RequestBody AddAddressRequest address){
-        addressService.addAddress(address);
-        return ResponseEntity.ok(address);
+    @GetMapping("/users/{id}")
+    public List<AddressResponse> getAddressesByUserId(@PathVariable Long id){
+        return addressService.getAddressByUserId(id);
+    }*/
+
+    // user_id ve address body'ye ihtiyaç var
+    @PostMapping("/users/{id}")
+    public ResponseEntity<CreateAddressRequest> addAddress(@PathVariable Long id, @RequestBody CreateAddressRequest addressRequest){
+        addressService.addAddress(id, addressRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressRequest);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address address){
-        addressService.updateAddress(address);
-        return ResponseEntity.ok(address);
+    // user_id ve address body'ye ihtiyacımız var
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UpdateAddressRequest> updateAddress(@PathVariable Long id, @RequestBody UpdateAddressRequest addressRequest){
+        addressService.updateAddress(id, addressRequest);
+        return ResponseEntity.ok(addressRequest);
     }
 
+    // address id üzerinden siliniyor
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id){
         addressService.deleteAddress(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    */
+
 }

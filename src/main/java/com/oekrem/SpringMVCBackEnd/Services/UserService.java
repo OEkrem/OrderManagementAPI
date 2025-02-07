@@ -5,6 +5,7 @@ import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.Models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -13,4 +14,7 @@ public interface UserService {
     User updateUser(UserRequest userRequest);
     void deleteUser(Long id);
     UserResponse getUserById(Long id);
+
+    User validateUser(Long id);
+    Optional<User> validateUserEmail(String email);
 }
