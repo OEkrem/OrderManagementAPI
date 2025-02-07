@@ -1,0 +1,30 @@
+// USER PROCESS --------------------------------------------------------------------------
+
+User READ
+GET - /api/users
+GET - /api/users/{id}
+
+User ADD
+POST - /api/users
+{
+        "username": "deneme37",
+        "password": "sifre",
+        "firstName": "firstName",
+        "lastName": "lasname",
+        "email": "firstname@hotmail.com",
+        "phone": "5323212121"
+    }
+
+User UPDATE
+PUT - /api/users/{id}
+{
+        "username": "deneme37",
+        "password": "sifre",
+        "firstName": "firstName",
+        "lastName": "lasname",
+        "email": "firstname@hotmail.com",
+        "phone": "5323212121"
+    }
+
+User DELETE
+DELETE - /api/users/{id}

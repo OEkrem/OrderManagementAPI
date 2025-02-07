@@ -1,0 +1,23 @@
+// CATEGORY PROCESS --------------------------------------------------------------------------
+
+Category READ
+GET - /api/categories
+GET - /api/categories/{id}
+
+Category ADD
+POST - /api/categories
+{
+        "name": "Telefonlar",
+        "description": "Iphone Marka Telefon",
+    }
+
+Category UPDATE
+PUT - /api/categories/{id}
+{
+        "name": "Telefonlar",
+        "description": "Iphone Marka Telefon",
+    }
+
+
+Category DELETE
+DELETE - /api/categories/{id}

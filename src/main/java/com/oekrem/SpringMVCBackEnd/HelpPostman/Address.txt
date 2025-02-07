@@ -1,0 +1,35 @@
+// ADDRESSES PROCESS --------------------------------------------------------------------------
+
+Address READ
+GET - /api/addresses
+GET - /api/addresses/{id}
+
+Address ADD
+POST - /api/addresses/users/{id}
+{
+    "name": "Address_Name2",
+    "doorNumber": 5,
+    "floor": 0,
+    "buildingNumber": "58",
+    "street": "Street Name",
+    "city": "City Name",
+    "country": "Country Name",
+    "userId": 4
+}
+
+Address UPDATE
+PUT - /api/addresses/users/{userId}
+{
+        "id": 4,
+        "name": "Home",
+        "doorNumber": 5,
+        "floor": 0,
+        "buildingNumber": "4/6",
+        "street": "Faruk Nafiz Çamlıbel",
+        "city": "Istanbul",
+        "country": "Turkiye",
+        "userId": 4
+    }
+
+Address DELETE
+DELETE - /api/addresses/{id}

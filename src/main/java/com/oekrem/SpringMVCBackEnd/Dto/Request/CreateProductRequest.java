@@ -1,36 +1,28 @@
-package com.oekrem.SpringMVCBackEnd.Dto.Response;
+package com.oekrem.SpringMVCBackEnd.Dto.Request;
+
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class ProductResponse {
-    private Long id;
+public class CreateProductRequest {
+
     private String name;
-    private Long category_id;
+    private Long categoryId;
     private String description;
     private BigDecimal price;
     private String image;
 
-    public ProductResponse() {
+    public CreateProductRequest() {
     }
 
-    public ProductResponse(Long id, String name, Long category_id, String description, BigDecimal price, String image) {
-        this.id = id;
+    public CreateProductRequest(String name, Long categoryId, String description, BigDecimal price, String image) {
         this.name = name;
-        this.category_id = category_id;
+        this.categoryId = categoryId;
         this.description = description;
         this.price = price;
         this.image = image;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -41,12 +33,12 @@ public class ProductResponse {
         this.name = name;
     }
 
-    public Long getCategory_id() {
-        return category_id;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory_id(Long category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getDescription() {
@@ -75,10 +67,9 @@ public class ProductResponse {
 
     @Override
     public String toString() {
-        return "ProductResponse{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", category_id=" + category_id +
+        return "CreateProdutRequest{" +
+                "name='" + name + '\'' +
+                ", categoryId=" + categoryId +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", image='" + image + '\'' +

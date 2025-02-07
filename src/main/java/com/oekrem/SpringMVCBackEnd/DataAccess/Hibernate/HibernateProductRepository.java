@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateProductRepository implements ProductRepository {
@@ -27,16 +28,18 @@ public class HibernateProductRepository implements ProductRepository {
 
     @Override
     @Transactional
-    public void addProduct(Product product) {
+    public Product addProduct(Product product) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(product);
+        session.merge(product);
+        return product;
     }
 
     @Override
     @Transactional
-    public void updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(product);
+        session.merge(product);
+        return product;
     }
 
     @Override
@@ -44,13 +47,22 @@ public class HibernateProductRepository implements ProductRepository {
     public void deleteProduct(Long id) {
         Session session = entityManager.unwrap(Session.class);
         Product productToDelete = session.get(Product.class, id);
-        session.delete(productToDelete);
+        session.remove(productToDelete);
     }
 
     @Override
     @Transactional
-    public Product getProductById(Long id) {
+    public Optional<Product> getProductById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(Product.class, id);
+        return Optional.ofNullable(session.get(Product.class, id));
+    }
+
+    @Override
+    @Transactional
+    public List<Product> getProductsByCategoryId(Long categoryId) {
+        Session session = entityManager.unwrap(Session.class);
+        List<Product> products = session.createQuery("Select u from Product u where u.category.id = :id", Product.class)
+                .setParameter("id", categoryId).list();
+        return products;
     }
 }

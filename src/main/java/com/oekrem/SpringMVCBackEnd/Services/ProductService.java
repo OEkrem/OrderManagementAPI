@@ -1,13 +1,20 @@
 package com.oekrem.SpringMVCBackEnd.Services;
 
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateProductRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateProductRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.Models.Product;
 
 import java.util.List;
 
 public interface ProductService {
-    List<Product> findAll();
-    void addProduct(Product product);
-    void updateProduct(Product product);
+    List<ProductResponse> findAll();
+    CreateProductRequest addProduct(CreateProductRequest product);
+    UpdateProductRequest updateProduct(Long id, UpdateProductRequest product);
     void deleteProduct(Long id);
-    Product getProductById(Long id);
+    ProductResponse getProductById(Long id);
+
+    List<ProductResponse> getProductsByCategoryId(Long categoryId);
+
+    Product validateProduct(Long id);
 }
