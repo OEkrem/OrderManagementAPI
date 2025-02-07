@@ -23,13 +23,11 @@ public class ProductController {
     @Qualifier("defaultModelMapper")
     private ModelMapper modelMapper;
 
-    private CategoryService categoryService;
     private ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -57,11 +55,6 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product){
-        if(product.getCategory().getId() != null){
-            Category category = categoryService.getCategoryById(product.getCategory().getId());
-            product.setCategory(category);
-        }
-        productService.updateProduct(product);
         return ResponseEntity.ok(product);
     }
 

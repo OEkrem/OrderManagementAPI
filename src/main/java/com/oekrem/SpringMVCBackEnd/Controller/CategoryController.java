@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
+import com.oekrem.SpringMVCBackEnd.Dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.Models.Category;
 import com.oekrem.SpringMVCBackEnd.Services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,12 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {this.categoryService = categoryService;}
 
     @GetMapping
-    public List<Category> getCategories(){
+    public List<CategoryResponse> getCategories(){
         return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id){
+    public CategoryResponse getCategoryById(@PathVariable Long id){
         return categoryService.getCategoryById(id);
     }
 
@@ -35,14 +36,14 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateUser(@PathVariable Long id, @RequestBody Category category){
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category){
         category.setId(id);
         categoryService.updateCategory(category);
         return ResponseEntity.ok(category);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }

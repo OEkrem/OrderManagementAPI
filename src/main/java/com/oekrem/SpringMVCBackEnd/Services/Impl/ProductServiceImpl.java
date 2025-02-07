@@ -1,7 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.ProductRepository;
-import com.oekrem.SpringMVCBackEnd.Models.Category;
 import com.oekrem.SpringMVCBackEnd.Models.Product;
 import com.oekrem.SpringMVCBackEnd.Services.CategoryService;
 import com.oekrem.SpringMVCBackEnd.Services.ProductService;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -33,14 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void addProduct(Product product) {
-        if(product.getCategory() != null && product.getCategory().getId() != null){
-            Optional<Category> existCategory = Optional.ofNullable(categoryService.getCategoryById(product.getCategory().getId()));
-            if(existCategory.isPresent())
-                product.setCategory(existCategory.get());
-
-            System.out.println("Product setCategory is completed succesfuly");
-        }
-        productRepository.addProduct(product);
+        return;
     }
 
     @Override

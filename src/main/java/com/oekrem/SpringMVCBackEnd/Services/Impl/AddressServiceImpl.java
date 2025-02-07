@@ -2,13 +2,10 @@ package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.AddressRepository;
 import com.oekrem.SpringMVCBackEnd.Dto.Mapper.AddressMapper;
-import com.oekrem.SpringMVCBackEnd.Dto.Request.AddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateAddressRequest;
-import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.AddressResponse;
-import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
-import com.oekrem.SpringMVCBackEnd.Exceptions.AddressExceptions.AddressDoesntExitsException;
+import com.oekrem.SpringMVCBackEnd.Exceptions.AddressExceptions.AddressNotFoundException;
 import com.oekrem.SpringMVCBackEnd.Models.Address;
 import com.oekrem.SpringMVCBackEnd.Models.User;
 import com.oekrem.SpringMVCBackEnd.Services.AddressService;
@@ -50,7 +47,7 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public AddressResponse getAddressById(Long id) {
         Address address = addressRepository.getAddressById(id)
-                .orElseThrow(AddressDoesntExitsException::new);
+                .orElseThrow(AddressNotFoundException::new);
 
         return modelMapper.map(address, AddressResponse.class);
     }
@@ -71,7 +68,7 @@ public class AddressServiceImpl implements AddressService {
     public UpdateAddressRequest updateAddress(Long userId, UpdateAddressRequest address) {
         userService.validateUser(userId);
         validateAddress(address.getId())
-                .orElseThrow(() -> new AddressDoesntExitsException("Address not found"));
+                .orElseThrow(() -> new AddressNotFoundException("Address not found"));
 
         Address addressToUpdate = addressMapper.toAddressFromUpdateAddressRequest(address);
         User user = new User(); user.setId(userId);
@@ -84,7 +81,7 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public void deleteAddress(Long id) {
         addressRepository.getAddressById(id)
-                .orElseThrow(() -> new AddressDoesntExitsException("There is no address with this id:" + id));
+                .orElseThrow(() -> new AddressNotFoundException("There is no address with this id:" + id));
 
         addressRepository.deleteAddress(id);
     }

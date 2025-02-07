@@ -5,8 +5,7 @@ import com.oekrem.SpringMVCBackEnd.Dto.Mapper.UserMapper;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.Exceptions.UserExceptions.EMailTakenException;
-import com.oekrem.SpringMVCBackEnd.Exceptions.UserExceptions.UserDoesntExistsException;
-import com.oekrem.SpringMVCBackEnd.Models.Address;
+import com.oekrem.SpringMVCBackEnd.Exceptions.UserExceptions.UserNotFoundException;
 import com.oekrem.SpringMVCBackEnd.Models.User;
 import com.oekrem.SpringMVCBackEnd.Services.UserService;
 import jakarta.transaction.Transactional;
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User validateUser(Long id) {
         return userRepository.getUserById(id)
-                .orElseThrow(() -> new UserDoesntExistsException("User not found with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
     @Override

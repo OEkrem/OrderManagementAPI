@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateCategoryRepository implements CategoryRepository {
@@ -27,16 +28,18 @@ public class HibernateCategoryRepository implements CategoryRepository {
 
     @Override
     @Transactional
-    public void addCategory(Category category) {
+    public Category addCategory(Category category) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(category);
+        session.merge(category);
+        return category;
     }
 
     @Override
     @Transactional
-    public void updateCategory(Category category) {
+    public Category updateCategory(Category category) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(category);
+        session.merge(category);
+        return category;
     }
 
     @Override
@@ -49,8 +52,8 @@ public class HibernateCategoryRepository implements CategoryRepository {
 
     @Override
     @Transactional
-    public Category getCategoryById(Long id) {
+    public Optional<Category> getCategoryById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(Category.class, id);
+        return Optional.ofNullable(session.get(Category.class, id));
     }
 }
