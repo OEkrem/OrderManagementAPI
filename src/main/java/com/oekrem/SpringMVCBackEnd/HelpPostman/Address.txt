@@ -13,8 +13,7 @@ POST - /api/addresses/users/{id}
     "buildingNumber": "58",
     "street": "Street Name",
     "city": "City Name",
-    "country": "Country Name",
-    "userId": 4
+    "country": "Country Name"
 }
 
 Address UPDATE
@@ -27,8 +26,7 @@ PUT - /api/addresses/users/{userId}
         "buildingNumber": "4/6",
         "street": "Faruk Nafiz Çamlıbel",
         "city": "Istanbul",
-        "country": "Turkiye",
-        "userId": 4
+        "country": "Turkiye"
     }
 
 Address DELETE

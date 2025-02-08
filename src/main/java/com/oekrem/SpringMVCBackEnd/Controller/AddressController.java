@@ -35,7 +35,7 @@ public class AddressController {
 
     @GetMapping("/users/{id}")
     public List<AddressResponse> getAddressesByUserId(@PathVariable Long id){
-        return addressService.getAddressByUserId(id);
+        return addressService.getAddressesByUserId(id);
     }
 
     @PostMapping("/users/{id}")

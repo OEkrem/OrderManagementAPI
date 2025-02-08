@@ -1,9 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
-import com.oekrem.SpringMVCBackEnd.Models.Address;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class UserRequest {

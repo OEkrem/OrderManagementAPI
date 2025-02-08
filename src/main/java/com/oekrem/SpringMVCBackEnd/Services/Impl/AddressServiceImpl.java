@@ -88,10 +88,10 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public List<AddressResponse> getAddressByUserId(Long id) {
+    public List<AddressResponse> getAddressesByUserId(Long id) {
         userService.validateUser(id);
-
         List<Address> addressList = addressRepository.getAddressesByUserId(id);
+        System.out.println(addressList.stream().map(address -> addressMapper.toAddressResponse(address)).collect(Collectors.toList()));
         return addressList.stream().map(u -> addressMapper.toAddressResponse(u)).collect(Collectors.toList());
     }
 

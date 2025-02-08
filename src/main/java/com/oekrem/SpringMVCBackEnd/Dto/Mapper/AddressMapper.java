@@ -86,6 +86,7 @@ public class AddressMapper {
         addressResponse.setStreet(address.getStreet());
         addressResponse.setCity(address.getCity());
         addressResponse.setCountry(address.getCountry());
+        addressResponse.setUserId(address.getUser().getId());
         return addressResponse;
     }
 }

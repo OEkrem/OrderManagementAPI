@@ -15,7 +15,7 @@ public interface AddressService {
     void deleteAddress(Long id);
     AddressResponse getAddressById(Long id);
 
-    List<AddressResponse> getAddressByUserId(Long id);
+    List<AddressResponse> getAddressesByUserId(Long id);
 
     Optional<Address> validateAddress(Long id);
 
