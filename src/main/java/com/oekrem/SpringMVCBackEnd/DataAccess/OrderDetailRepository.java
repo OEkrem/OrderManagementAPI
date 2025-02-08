@@ -3,11 +3,14 @@ package com.oekrem.SpringMVCBackEnd.DataAccess;
 import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderDetailRepository {
     List<OrderDetail> findAll();
-    void addOrderDetail(OrderDetail orderDetail);
-    void updateOrderDetail(OrderDetail orderDetail);
+    OrderDetail addOrderDetail(OrderDetail orderDetail);
+    OrderDetail updateOrderDetail(OrderDetail orderDetail);
     void deleteOrderDetail(Long id);
-    OrderDetail getOrderDetailById(Long id);
+    Optional<OrderDetail> getOrderDetailById(Long id);
+
+    List<OrderDetail> getOrderDetailsByOrderId(Long orderId);
 }

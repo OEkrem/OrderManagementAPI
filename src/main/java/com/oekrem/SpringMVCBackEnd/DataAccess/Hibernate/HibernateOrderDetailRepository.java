@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateOrderDetailRepository implements OrderDetailRepository {
@@ -27,16 +28,18 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
 
     @Override
     @Transactional
-    public void addOrderDetail(OrderDetail orderDetail) {
+    public OrderDetail addOrderDetail(OrderDetail orderDetail) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(orderDetail);
+        session.merge(orderDetail);
+        return orderDetail;
     }
 
     @Override
     @Transactional
-    public void updateOrderDetail(OrderDetail orderDetail) {
+    public OrderDetail updateOrderDetail(OrderDetail orderDetail) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(orderDetail);
+        session.merge(orderDetail);
+        return orderDetail;
     }
 
     @Override
@@ -49,8 +52,19 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
 
     @Override
     @Transactional
-    public OrderDetail getOrderDetailById(Long id) {
+    public Optional<OrderDetail> getOrderDetailById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(OrderDetail.class, id);
+        return Optional.ofNullable(session.get(OrderDetail.class, id));
     }
+
+    @Override
+    @Transactional
+    public List<OrderDetail> getOrderDetailsByOrderId(Long orderId) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("select u from OrderDetail u where order.id = :orderId",OrderDetail.class)
+                .setParameter("orderId", orderId)
+                .list();
+    }
+
+
 }

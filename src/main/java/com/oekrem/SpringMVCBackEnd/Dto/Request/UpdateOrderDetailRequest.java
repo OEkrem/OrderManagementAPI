@@ -4,22 +4,32 @@ import com.oekrem.SpringMVCBackEnd.Models.enums.QuantityType;
 
 import java.math.BigDecimal;
 
-public class CreateOrderDetailRequest {
+public class UpdateOrderDetailRequest {
 
+    private Long id;
     private Long productId;
     private QuantityType quantityType;
     private BigDecimal quantity;
     private BigDecimal price;
-    //private Long orderId; // bu bilgi path variable ile alınacak
+    //private Long orderId; // bu bilgi pathvariable olarak alınacak
 
-    public CreateOrderDetailRequest() {
+    public UpdateOrderDetailRequest() {
     }
 
-    public CreateOrderDetailRequest(Long productId, QuantityType quantityType, BigDecimal quantity, BigDecimal price) {
+    public UpdateOrderDetailRequest(Long id, Long productId, QuantityType quantityType, BigDecimal quantity, BigDecimal price) {
+        this.id = id;
         this.productId = productId;
         this.quantityType = quantityType;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getProductId() {
@@ -56,8 +66,9 @@ public class CreateOrderDetailRequest {
 
     @Override
     public String toString() {
-        return "CreateOrderDetailRequest{" +
-                "productId=" + productId +
+        return "UpdateOrderDetailRequest{" +
+                "id=" + id +
+                ", productId=" + productId +
                 ", quantityType=" + quantityType +
                 ", quantity=" + quantity +
                 ", price=" + price +

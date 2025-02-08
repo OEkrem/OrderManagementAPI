@@ -1,25 +1,19 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateOrderDetailRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderDetailResponse;
-import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.Services.OrderDetailService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orderdetails")
 public class OrderDetailController {
-
-    @Autowired
-    @Qualifier("orderDetailModelMapper")
-    private ModelMapper modelMapper;
 
     private OrderDetailService orderDetailService;
 
@@ -28,28 +22,29 @@ public class OrderDetailController {
 
     @GetMapping
     public List<OrderDetailResponse> getOrderDetails(){
-        List<OrderDetail> orderDetailList = orderDetailService.findAll();
-        return orderDetailList.stream()
-                .map(p-> modelMapper.map(p, OrderDetailResponse.class))
-                .collect(Collectors.toList());
+        return orderDetailService.findAll();
     }
 
     @GetMapping("/{id}")
     public OrderDetailResponse getOrderDetailById(@PathVariable Long id){
-        OrderDetail orderDetail = orderDetailService.getOrderDetailById(id);
-        return modelMapper.map(orderDetail, OrderDetailResponse.class);
+        return orderDetailService.getOrderDetailById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<OrderDetail> addOrderDetail(@RequestBody OrderDetail orderDetail){
-        orderDetailService.addOrderDetail(orderDetail);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderDetail);
+    @GetMapping("/orders/{orderId}")
+    public List<OrderDetailResponse> getOrderDetailsByOrderId(@PathVariable Long orderId){
+        return orderDetailService.getOrderDetailsByOrderId(orderId);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<OrderDetail> updateOrderDetail(@PathVariable Long id, @RequestBody OrderDetail orderDetail){
-        orderDetailService.updateOrderDetail(orderDetail);
-        return ResponseEntity.ok(orderDetail);
+    @PostMapping("/orders/{orderId}")
+    public ResponseEntity<CreateOrderDetailRequest> addOrderDetail(@PathVariable Long orderId,@RequestBody CreateOrderDetailRequest createOrderDetailRequest){
+        orderDetailService.addOrderDetail(orderId, createOrderDetailRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createOrderDetailRequest);
+    }
+
+    @PutMapping("/orders/{orderId}")
+    public ResponseEntity<UpdateOrderDetailRequest> updateOrderDetail(@PathVariable Long orderId, @RequestBody UpdateOrderDetailRequest updateOrderDetailRequest){
+        orderDetailService.updateOrderDetail(orderId, updateOrderDetailRequest);
+        return ResponseEntity.ok(updateOrderDetailRequest);
     }
 
     @DeleteMapping("/{id}")
