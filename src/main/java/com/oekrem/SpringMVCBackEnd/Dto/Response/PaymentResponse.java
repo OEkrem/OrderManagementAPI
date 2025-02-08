@@ -1,49 +1,32 @@
-package com.oekrem.SpringMVCBackEnd.Models;
+package com.oekrem.SpringMVCBackEnd.Dto.Response;
 
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentMethod;
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentStatus;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+public class PaymentResponse {
 
-@Entity
-@Table(name = "payments")
-public class Payment {
-
-    @SequenceGenerator(name = "payment", sequenceName = "Payment_Id_Seq", allocationSize = 1)
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment")
     private Long id;
-
-    @Column(length = 255)
     private String description;
-
     private BigDecimal amount;
-
-    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
-
-    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime date;
+    private Long orderId;
 
-    @OneToOne(mappedBy = "payment")
-    private Order order;
+    public PaymentResponse() {
+    }
 
-    public Payment() {}
-
-    public Payment(Long id, String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date, Order order) {
+    public PaymentResponse(Long id, String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date, Long orderId) {
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
         this.date = date;
-        this.order = order;
+        this.orderId = orderId;
     }
 
     public Long getId() {
@@ -94,24 +77,24 @@ public class Payment {
         this.date = date;
     }
 
-    public Order getOrder() {
-        return order;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     @Override
     public String toString() {
-        return "Payment{" +
+        return "PaymentResponse{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
                 ", paymentStatus=" + paymentStatus +
                 ", paymentMethod=" + paymentMethod +
                 ", date=" + date +
-                ", order=" + order +
+                ", orderId=" + orderId +
                 '}';
     }
 }

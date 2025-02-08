@@ -4,17 +4,17 @@ import com.oekrem.SpringMVCBackEnd.Models.enums.QuantityType;
 
 import java.math.BigDecimal;
 
-public class AddOrderDetailRequest {
+public class CreateOrderDetailRequest {
 
     private Long productId;
     private QuantityType quantityType;
     private BigDecimal quantity;
     private BigDecimal price;
 
-    public AddOrderDetailRequest() {
+    public CreateOrderDetailRequest() {
     }
 
-    public AddOrderDetailRequest(Long productId, QuantityType quantityType, BigDecimal quantity, BigDecimal price) {
+    public CreateOrderDetailRequest(Long productId, QuantityType quantityType, BigDecimal quantity, BigDecimal price) {
         this.productId = productId;
         this.quantityType = quantityType;
         this.quantity = quantity;

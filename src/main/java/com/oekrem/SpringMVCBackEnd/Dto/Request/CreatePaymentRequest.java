@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
+import com.oekrem.SpringMVCBackEnd.Models.Order;
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentMethod;
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentStatus;
 import lombok.Data;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-public class PaymentRequest {
+public class CreatePaymentRequest {
 
     private String description;
     private BigDecimal amount;
@@ -16,10 +17,10 @@ public class PaymentRequest {
     private PaymentMethod paymentMethod;
     private LocalDateTime date;
 
-    public PaymentRequest() {
+    public CreatePaymentRequest() {
     }
 
-    public PaymentRequest(String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date) {
+    public CreatePaymentRequest(String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date) {
         this.description = description;
         this.amount = amount;
         this.paymentStatus = paymentStatus;
@@ -65,5 +66,17 @@ public class PaymentRequest {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+
+    @Override
+    public String toString() {
+        return "CreatePaymentRequest{" +
+                "description='" + description + '\'' +
+                ", amount=" + amount +
+                ", paymentStatus=" + paymentStatus +
+                ", paymentMethod=" + paymentMethod +
+                ", date=" + date +
+                '}';
     }
 }

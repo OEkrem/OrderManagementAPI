@@ -1,6 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
-import com.oekrem.SpringMVCBackEnd.Dto.Request.AddOrderRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateOrderRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderResponse;
 import com.oekrem.SpringMVCBackEnd.Models.Order;
 import com.oekrem.SpringMVCBackEnd.Services.OrderService;
@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> addOrder(@RequestBody AddOrderRequest addOrderRequest){
+    public ResponseEntity<Order> addOrder(@RequestBody CreateOrderRequest addOrderRequest){
         Order order = modelMapper.map(addOrderRequest, Order.class);
         orderService.addOrder(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(order);

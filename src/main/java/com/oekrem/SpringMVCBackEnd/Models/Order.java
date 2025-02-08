@@ -15,13 +15,13 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     private Set<OrderDetail> orderDetail = new HashSet<OrderDetail>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
     private Payment payment;
 
     @Temporal(TemporalType.DATE)

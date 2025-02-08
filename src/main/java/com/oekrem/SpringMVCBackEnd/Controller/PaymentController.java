@@ -1,6 +1,8 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
-import com.oekrem.SpringMVCBackEnd.Models.Payment;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.Services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,25 +21,25 @@ public class PaymentController {
     public PaymentController(PaymentService paymentService) {this.paymentService = paymentService;}
 
     @GetMapping
-    public List<Payment> getPayments(){
+    public List<PaymentResponse> getPayments(){
         return paymentService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Payment getPaymentById(@PathVariable Long id){
+    public PaymentResponse getPaymentById(@PathVariable Long id){
         return paymentService.getPaymentById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Payment> addPayment(@RequestBody Payment payment){
-        paymentService.addPayment(payment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(payment);
+    @PostMapping("/orders/{orderId}")
+    public ResponseEntity<CreatePaymentRequest> addPayment(@PathVariable Long orderId, @RequestBody CreatePaymentRequest createPaymentRequest){
+        paymentService.addPayment(orderId, createPaymentRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createPaymentRequest);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment){
-        paymentService.updatePayment(payment);
-        return ResponseEntity.ok(payment);
+    @PutMapping("orders/{orderId}")
+    public ResponseEntity<UpdatePaymentRequest> updatePayment(@PathVariable Long orderId, @RequestBody UpdatePaymentRequest updatePaymentRequest){
+        paymentService.updatePayment(orderId, updatePaymentRequest);
+        return ResponseEntity.ok(updatePaymentRequest);
     }
 
     @DeleteMapping("/{id}")

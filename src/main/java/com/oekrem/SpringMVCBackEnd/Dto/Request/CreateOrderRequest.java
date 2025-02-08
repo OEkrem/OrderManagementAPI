@@ -6,18 +6,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class AddOrderRequest {
+public class CreateOrderRequest {
 
     private Long userId;
-    private List<AddOrderDetailRequest> orderDetailList;
-    private PaymentRequest payment;
+    private List<CreateOrderDetailRequest> orderDetailList;
+    private CreatePaymentRequest payment;
     private LocalDate date;
     private Double total;
 
-    public AddOrderRequest() {
+    public CreateOrderRequest() {
     }
 
-    public AddOrderRequest(Long userId, List<AddOrderDetailRequest> orderDetailList, PaymentRequest payment, LocalDate date, Double total) {
+    public CreateOrderRequest(Long userId, List<CreateOrderDetailRequest> orderDetailList, CreatePaymentRequest payment, LocalDate date, Double total) {
         this.userId = userId;
         this.orderDetailList = orderDetailList;
         this.payment = payment;
@@ -33,19 +33,19 @@ public class AddOrderRequest {
         this.userId = userId;
     }
 
-    public List<AddOrderDetailRequest> getOrderDetailList() {
+    public List<CreateOrderDetailRequest> getOrderDetailList() {
         return orderDetailList;
     }
 
-    public void setOrderDetailList(List<AddOrderDetailRequest> orderDetailList) {
+    public void setOrderDetailList(List<CreateOrderDetailRequest> orderDetailList) {
         this.orderDetailList = orderDetailList;
     }
 
-    public PaymentRequest getPayment() {
+    public CreatePaymentRequest getPayment() {
         return payment;
     }
 
-    public void setPayment(PaymentRequest payment) {
+    public void setPayment(CreatePaymentRequest payment) {
         this.payment = payment;
     }
 

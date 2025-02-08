@@ -1,49 +1,30 @@
-package com.oekrem.SpringMVCBackEnd.Models;
+package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentMethod;
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentStatus;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+public class UpdatePaymentRequest {
 
-@Entity
-@Table(name = "payments")
-public class Payment {
-
-    @SequenceGenerator(name = "payment", sequenceName = "Payment_Id_Seq", allocationSize = 1)
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment")
     private Long id;
-
-    @Column(length = 255)
     private String description;
-
     private BigDecimal amount;
-
-    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
-
-    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime date;
 
-    @OneToOne(mappedBy = "payment")
-    private Order order;
+    public UpdatePaymentRequest() {
+    }
 
-    public Payment() {}
-
-    public Payment(Long id, String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date, Order order) {
+    public UpdatePaymentRequest(Long id, String description, BigDecimal amount, PaymentStatus paymentStatus, PaymentMethod paymentMethod, LocalDateTime date) {
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
         this.date = date;
-        this.order = order;
     }
 
     public Long getId() {
@@ -94,24 +75,15 @@ public class Payment {
         this.date = date;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
     @Override
     public String toString() {
-        return "Payment{" +
+        return "UpdatePaymentRequest{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
                 ", paymentStatus=" + paymentStatus +
                 ", paymentMethod=" + paymentMethod +
                 ", date=" + date +
-                ", order=" + order +
                 '}';
     }
 }

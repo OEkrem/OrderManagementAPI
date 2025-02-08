@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernatePaymentRepository implements PaymentRepository {
@@ -27,16 +28,18 @@ public class HibernatePaymentRepository implements PaymentRepository {
 
     @Override
     @Transactional
-    public void addPayment(Payment payment) {
+    public Payment addPayment(Payment payment) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(payment);
+        session.merge(payment);
+        return payment;
     }
 
     @Override
     @Transactional
-    public void updatePayment(Payment payment) {
+    public Payment updatePayment(Payment payment) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(payment);
+        session.merge(payment);
+        return payment;
     }
 
     @Override
@@ -49,8 +52,8 @@ public class HibernatePaymentRepository implements PaymentRepository {
 
     @Override
     @Transactional
-    public Payment getPaymentById(Long id) {
+    public Optional<Payment> getPaymentById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(Payment.class, id);
+        return Optional.ofNullable(session.get(Payment.class, id));
     }
 }

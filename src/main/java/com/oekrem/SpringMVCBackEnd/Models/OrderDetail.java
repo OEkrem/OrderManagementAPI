@@ -25,7 +25,7 @@ public class OrderDetail {
 
     private BigDecimal price; // ürünfiyatı x quantity cevabı olacak aslında buradan da oluşalabiliyor olalım diye yazdım.
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
