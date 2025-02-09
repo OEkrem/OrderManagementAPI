@@ -30,7 +30,7 @@ public class HibernatePaymentRepository implements PaymentRepository {
     @Transactional
     public Payment addPayment(Payment payment) {
         Session session = entityManager.unwrap(Session.class);
-        session.merge(payment);
+        session.persist(payment);
         return payment;
     }
 

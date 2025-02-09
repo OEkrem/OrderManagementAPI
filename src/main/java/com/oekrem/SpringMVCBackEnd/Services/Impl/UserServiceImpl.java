@@ -79,8 +79,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User validateUserEmail(String email) {
-        return userRepository.getUserByEmail(email)
-                .orElseThrow(() -> new EMailTakenException("User not found with email: " + email));
+    public void validateUserEmail(String email) {
+        if(userRepository.getUserByEmail(email).isPresent())
+            throw new EMailTakenException("User already exist with email: " + email);
     }
 }

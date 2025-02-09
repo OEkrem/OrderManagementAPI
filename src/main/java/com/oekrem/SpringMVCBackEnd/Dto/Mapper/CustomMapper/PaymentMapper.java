@@ -18,7 +18,10 @@ public class PaymentMapper {
         paymentResponse.setPaymentStatus(payment.getPaymentStatus());
         paymentResponse.setPaymentMethod(payment.getPaymentMethod());
         paymentResponse.setDate(payment.getDate());
-        paymentResponse.setOrderId(payment.getOrder().getId());
+        //if(payment.getOrder() != null)
+            paymentResponse.setOrderId(payment.getOrder().getId());
+        //else
+        //    paymentResponse.setOrderId(-1L);
         return paymentResponse;
     }
 

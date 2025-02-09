@@ -16,5 +16,5 @@ public interface UserService {
     UserResponse getUserById(Long id);
 
     User validateUser(Long id);
-    User validateUserEmail(String email);
+    void validateUserEmail(String email);
 }

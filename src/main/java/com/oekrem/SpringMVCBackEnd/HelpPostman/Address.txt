@@ -3,6 +3,7 @@
 Address READ
 GET - /api/addresses
 GET - /api/addresses/{id}
+GET - /api/addresses/users/{id}
 
 Address ADD
 POST - /api/addresses/users/{id}

@@ -1,23 +1,24 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Response;
 
-import lombok.Data;
-
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
-public class OrderResponse {
-
+public class OrderAllResponse {
     private Long id;
     private Long userId;
+    private List<OrderDetailResponse> orderDetailIdList;
+    private PaymentResponse payment;
     private LocalDate date;
     private Double total;
 
-    public OrderResponse() {
+    public OrderAllResponse() {
     }
 
-    public OrderResponse(Long id, Long userId, LocalDate date, Double total) {
+    public OrderAllResponse(Long id, Long userId, List<OrderDetailResponse> orderDetailIdList, PaymentResponse payment, LocalDate date, Double total) {
         this.id = id;
         this.userId = userId;
+        this.orderDetailIdList = orderDetailIdList;
+        this.payment = payment;
         this.date = date;
         this.total = total;
     }
@@ -38,6 +39,22 @@ public class OrderResponse {
         this.userId = userId;
     }
 
+    public List<OrderDetailResponse> getOrderDetailIdList() {
+        return orderDetailIdList;
+    }
+
+    public void setOrderDetailIdList(List<OrderDetailResponse> orderDetailIdList) {
+        this.orderDetailIdList = orderDetailIdList;
+    }
+
+    public PaymentResponse getPayment() {
+        return payment;
+    }
+
+    public void setPayment(PaymentResponse payment) {
+        this.payment = payment;
+    }
+
     public LocalDate getDate() {
         return date;
     }
@@ -56,9 +73,11 @@ public class OrderResponse {
 
     @Override
     public String toString() {
-        return "OrderResponse{" +
+        return "OrderAllResponse{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", orderDetailIdList=" + orderDetailIdList +
+                ", payment=" + payment +
                 ", date=" + date +
                 ", total=" + total +
                 '}';

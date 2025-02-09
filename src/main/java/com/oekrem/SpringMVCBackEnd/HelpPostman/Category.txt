@@ -8,14 +8,14 @@ Category ADD
 POST - /api/categories
 {
         "name": "Telefonlar",
-        "description": "Iphone Marka Telefon",
+        "description": "Iphone Marka Telefon"
     }
 
 Category UPDATE
 PUT - /api/categories/{id}
 {
         "name": "Telefonlar",
-        "description": "Iphone Marka Telefon",
+        "description": "Iphone Marka Telefon"
     }
 
 

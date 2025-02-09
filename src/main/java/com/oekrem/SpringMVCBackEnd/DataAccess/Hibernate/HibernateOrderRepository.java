@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class HibernateOrderRepository implements OrderRepository {
@@ -27,16 +28,18 @@ public class HibernateOrderRepository implements OrderRepository {
 
     @Override
     @Transactional
-    public void addOrder(Order order) {
+    public Order addOrder(Order order) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(order);
+        session.merge(order);
+        return order;
     }
 
     @Override
     @Transactional
-    public void updateOrder(Order order) {
+    public Order updateOrder(Order order) {
         Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(order);
+        session.merge(order);
+        return order;
     }
 
     @Override
@@ -44,13 +47,13 @@ public class HibernateOrderRepository implements OrderRepository {
     public void deleteOrder(Long id) {
         Session session = entityManager.unwrap(Session.class);
         Order orderToDelete = session.get(Order.class, id);
-        session.delete(orderToDelete);
+        session.remove(orderToDelete);
     }
 
     @Override
     @Transactional
-    public Order getOrderById(Long id) {
+    public Optional<Order> getOrderById(Long id) {
         Session session = entityManager.unwrap(Session.class);
-        return session.get(Order.class, id);
+        return Optional.ofNullable(session.get(Order.class, id));
     }
 }

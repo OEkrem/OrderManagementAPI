@@ -1,0 +1,28 @@
+// ORDERDETAIL PROCESS --------------------------------------------------------------------------
+
+GET  ORDERDETAIL
+GET - /api/orderdetails
+GET - /api/orderdetails/{id}
+GET - /api/orderdetails/orders/{orderId}
+
+ADD  ORDERDETAIL
+POST - /api/orderdetails/orders/{orderId}
+{
+    "productId": 1,
+    "quantityType": "PIECE",
+    "quantity": 1,
+    "price": 150
+}
+
+UPDATE  ORDERDETAIL
+PUT - /api/orderdetails/orders/{orderId}
+{
+    "id": 1,
+    "productId": 1,
+    "quantityType": "PIECE",
+    "quantity": 1,
+    "price": 150
+}
+
+DELETE  ORDERDETAIL
+DELETE - /api/orderdetails/{id}

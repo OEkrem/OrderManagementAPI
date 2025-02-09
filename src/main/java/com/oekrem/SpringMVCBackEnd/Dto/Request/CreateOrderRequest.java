@@ -8,31 +8,21 @@ import java.util.List;
 @Data
 public class CreateOrderRequest {
 
-    private Long userId;
-    private List<CreateOrderDetailRequest> orderDetailList;
-    private CreatePaymentRequest payment;
+    /*private List<CreateOrderDetailRequest> orderDetailList;
+    private CreatePaymentRequest payment;*/
     private LocalDate date;
     private Double total;
 
     public CreateOrderRequest() {
     }
 
-    public CreateOrderRequest(Long userId, List<CreateOrderDetailRequest> orderDetailList, CreatePaymentRequest payment, LocalDate date, Double total) {
-        this.userId = userId;
-        this.orderDetailList = orderDetailList;
-        this.payment = payment;
+    public CreateOrderRequest(/*List<CreateOrderDetailRequest> orderDetailList, CreatePaymentRequest payment, */LocalDate date, Double total) {
+        /*this.orderDetailList = orderDetailList;
+        this.payment = payment;*/
         this.date = date;
         this.total = total;
     }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
+/*
     public List<CreateOrderDetailRequest> getOrderDetailList() {
         return orderDetailList;
     }
@@ -47,7 +37,7 @@ public class CreateOrderRequest {
 
     public void setPayment(CreatePaymentRequest payment) {
         this.payment = payment;
-    }
+    }*/
 
     public LocalDate getDate() {
         return date;
@@ -63,5 +53,15 @@ public class CreateOrderRequest {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateOrderRequest{" +
+                //"orderDetailList=" + orderDetailList +
+                //", payment=" + payment +
+                ", date=" + date +
+                ", total=" + total +
+                '}';
     }
 }

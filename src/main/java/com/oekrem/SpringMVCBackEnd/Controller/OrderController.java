@@ -1,26 +1,20 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateOrderRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateOrderRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderAllResponse;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderResponse;
-import com.oekrem.SpringMVCBackEnd.Models.Order;
 import com.oekrem.SpringMVCBackEnd.Services.OrderService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-
-    @Autowired
-    @Qualifier("orderModelMapper")
-    private ModelMapper modelMapper;
 
     private OrderService orderService;
 
@@ -29,29 +23,29 @@ public class OrderController {
 
     @GetMapping
     public List<OrderResponse> getOrders(){
-        List<Order> orderList = orderService.findAll();
-        return orderList.stream()
-                .map(p->modelMapper.map(p, OrderResponse.class))
-                .collect(Collectors.toList());
+        return orderService.findAll();
+    }
+
+    @GetMapping("/all")
+    public List<OrderAllResponse> getOrdersAll(){
+        return orderService.findAllOrders();
     }
 
     @GetMapping("/{id}")
     public OrderResponse getOrderById(@PathVariable Long id){
-        Order order = orderService.getOrderById(id);
-        return modelMapper.map(order, OrderResponse.class);
+        return orderService.getOrderById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Order> addOrder(@RequestBody CreateOrderRequest addOrderRequest){
-        Order order = modelMapper.map(addOrderRequest, Order.class);
-        orderService.addOrder(order);
-        return ResponseEntity.status(HttpStatus.CREATED).body(order);
+    @PostMapping("/users/{userId}")
+    public ResponseEntity<CreateOrderRequest> addOrder(@PathVariable Long userId, @RequestBody CreateOrderRequest createOrderRequest){
+        orderService.addOrder(userId, createOrderRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createOrderRequest);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order){
-        orderService.updateOrder(order);
-        return ResponseEntity.ok(order);
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<UpdateOrderRequest> updateOrder(@PathVariable Long userId, @RequestBody UpdateOrderRequest updateOrderRequest){
+        orderService.updateOrder(userId, updateOrderRequest);
+        return ResponseEntity.ok(updateOrderRequest);
     }
 
     @DeleteMapping("/{id}")

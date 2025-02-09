@@ -3,8 +3,8 @@ package com.oekrem.SpringMVCBackEnd.Models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -19,9 +19,10 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
-    private Set<OrderDetail> orderDetail = new HashSet<OrderDetail>();
+    private List<OrderDetail> orderDetail = new LinkedList<>();
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne
+    @JoinColumn(name = "payment_id")
     private Payment payment;
 
     @Temporal(TemporalType.DATE)
@@ -32,7 +33,7 @@ public class Order {
 
     public Order() {}
 
-    public Order(Long id, User user, Set<OrderDetail> orderDetail, Payment payment, LocalDate date, Double total) {
+    public Order(Long id, User user, List<OrderDetail> orderDetail, Payment payment, LocalDate date, Double total) {
         this.id = id;
         this.user = user;
         this.orderDetail = orderDetail;
@@ -57,11 +58,11 @@ public class Order {
         this.user = user;
     }
 
-    public Set<OrderDetail> getOrderDetail() {
+    public List<OrderDetail> getOrderDetail() {
         return orderDetail;
     }
 
-    public void setOrderDetail(Set<OrderDetail> orderDetail) {
+    public void setOrderDetail(List<OrderDetail> orderDetail) {
         this.orderDetail = orderDetail;
     }
 

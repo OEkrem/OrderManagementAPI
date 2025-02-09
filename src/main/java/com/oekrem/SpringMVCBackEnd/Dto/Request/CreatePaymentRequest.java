@@ -1,6 +1,5 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
-import com.oekrem.SpringMVCBackEnd.Models.Order;
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentMethod;
 import com.oekrem.SpringMVCBackEnd.Models.enums.PaymentStatus;
 import lombok.Data;

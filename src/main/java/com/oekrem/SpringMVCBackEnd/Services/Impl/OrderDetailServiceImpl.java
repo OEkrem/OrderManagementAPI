@@ -6,8 +6,10 @@ import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.Exceptions.OrderDetailExceptions.OrderDetailNotFoundException;
+import com.oekrem.SpringMVCBackEnd.Models.Order;
 import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.Services.OrderDetailService;
+import com.oekrem.SpringMVCBackEnd.Services.OrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private OrderDetailMapper orderDetailMapper;
     private OrderDetailRepository orderDetailRepository;
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository) {
@@ -39,17 +43,25 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     @Transactional
     public CreateOrderDetailRequest addOrderDetail(Long orderId, CreateOrderDetailRequest createOrderDetailRequest) {
-        // validate orderId
-        orderDetailRepository.addOrderDetail(orderDetailMapper.toOrderDetailFromCreateOrderDetailRequest(createOrderDetailRequest));
+        orderService.validateOrder(orderId);
+
+        OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromCreateOrderDetailRequest(createOrderDetailRequest);
+        Order order = new Order(); order.setId(orderId);
+        orderDetail.setOrder(order);
+        orderDetailRepository.addOrderDetail(orderDetail);
         return createOrderDetailRequest;
     }
 
     @Override
     @Transactional
     public UpdateOrderDetailRequest updateOrderDetail(Long orderId ,UpdateOrderDetailRequest updateOrderDetailRequest) {
-        // validate orderId
+        orderService.validateOrder(orderId);
         validateOrderDetail(updateOrderDetailRequest.getId());
-        orderDetailRepository.updateOrderDetail(orderDetailMapper.toOrderDetailFromUpdateOrderDetailRequest(updateOrderDetailRequest));
+
+        OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromUpdateOrderDetailRequest(updateOrderDetailRequest);
+        Order order = new Order(); order.setId(orderId);
+        orderDetail.setOrder(order);
+        orderDetailRepository.updateOrderDetail(orderDetail);
         return updateOrderDetailRequest;
     }
 
