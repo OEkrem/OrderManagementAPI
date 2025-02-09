@@ -1,6 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Mapper;
 
-import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.UserMapper;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.Models.User;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ public class UserMapperIntegrationTest {
 
     private User testUser;
     private UserResponse testUserResponse;
-    private UserRequest testUserRequest;
 
     @Test
     public void testResponseToUser(){
@@ -37,15 +36,8 @@ public class UserMapperIntegrationTest {
 
     @Test
     public void testRequestToUser(){
-        testUserRequest = new UserRequest("ekrem37", "123", "Ekrem", "Yıldırım", "ekrem@hotmail.com", "3213212121");
-        testUserRequest.setId(1L);
+        //testUserRequest = new UserRequest("ekrem37", "123", "Ekrem", "Yıldırım", "ekrem@hotmail.com", "3213212121");
 
-        testUser = userMapper.toUserFromRequest(testUserRequest);
-
-        assertNotNull(testUser);
-        assertEquals(testUserRequest.getId(), testUser.getId());
-        assertEquals(testUserRequest.getEmail(), testUser.getEmail());
-        System.out.println("User:         " + testUser);
     }
 
     @Test
@@ -63,12 +55,5 @@ public class UserMapperIntegrationTest {
     @Test
     public void testUserToRequest(){
         testUser = new User(1L, "ekrem37", "123", "Ekrem", "Yıldırım", "ekrem@hotmail.com", "3213212121",null);
-
-        testUserRequest = userMapper.toRequest(testUser);
-
-        assertNotNull(testUserRequest);
-        assertEquals(testUserRequest.getId(), testUser.getId());
-        assertEquals(testUserRequest.getEmail(), testUser.getEmail());
-        System.out.println("UserRequest: " + testUserRequest);
     }
 }

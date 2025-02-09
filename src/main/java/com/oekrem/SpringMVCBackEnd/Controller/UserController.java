@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
-import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateUserRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +33,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserRequest> addUser(@RequestBody UserRequest user){
-        userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public ResponseEntity<CreateUserRequest> addUser(@RequestBody CreateUserRequest createUserRequest){
+        userService.addUser(createUserRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createUserRequest);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserRequest> updateUser(@PathVariable Long id, @RequestBody UserRequest user){
-        user.setId(id);
-        System.out.println(user);
-        userService.updateUser(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UpdateUserRequest> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest){
+        userService.updateUser(id, updateUserRequest);
+        return ResponseEntity.ok(updateUserRequest);
     }
 
     @DeleteMapping("/{id}")

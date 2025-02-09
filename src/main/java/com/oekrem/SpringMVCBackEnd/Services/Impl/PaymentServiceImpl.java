@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.PaymentRepository;
-import com.oekrem.SpringMVCBackEnd.Dto.Mapper.PaymentMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.PaymentMapper;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.PaymentResponse;

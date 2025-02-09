@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.ProductRepository;
-import com.oekrem.SpringMVCBackEnd.Dto.Mapper.ProductMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.ProductMapper;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateProductRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.ProductResponse;

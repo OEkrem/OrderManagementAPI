@@ -1,7 +1,8 @@
 package com.oekrem.SpringMVCBackEnd.Controller;
 
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateCategoryRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.CategoryResponse;
-import com.oekrem.SpringMVCBackEnd.Models.Category;
 import com.oekrem.SpringMVCBackEnd.Services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,16 +31,15 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> addCategory(@RequestBody Category category){
-        categoryService.addCategory(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    public ResponseEntity<CreateCategoryRequest> addCategory(@RequestBody CreateCategoryRequest createCategoryRequest){
+        categoryService.addCategory(createCategoryRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createCategoryRequest);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category){
-        category.setId(id);
-        categoryService.updateCategory(category);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<UpdateCategoryRequest> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoryRequest updateCategoryRequest){
+        categoryService.updateCategory(id, updateCategoryRequest);
+        return ResponseEntity.ok(updateCategoryRequest);
     }
 
     @DeleteMapping("/{id}")

@@ -1,8 +1,9 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.UserRepository;
-import com.oekrem.SpringMVCBackEnd.Dto.Mapper.UserMapper;
-import com.oekrem.SpringMVCBackEnd.Dto.Request.UserRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.UserMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateUserRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.Exceptions.UserExceptions.EMailTakenException;
 import com.oekrem.SpringMVCBackEnd.Exceptions.UserExceptions.UserNotFoundException;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,19 +41,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User addUser(UserRequest userRequest) {
-        if(validateUserEmail(userRequest.getEmail()).isPresent())
-            throw new EMailTakenException("This E-Mail already exists!");
-        User user = userMapper.toUserFromRequest(userRequest);
-        return userRepository.addUser(user);
+    public CreateUserRequest addUser(CreateUserRequest createUserRequest) {
+        validateUserEmail(createUserRequest.getEmail());
+        User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
+        userRepository.addUser(user);
+        return createUserRequest;
     }
 
     @Override
     @Transactional
-    public User updateUser(UserRequest userRequest) {
-        validateUser(userRequest.getId());
-        User user = modelMapper.map(userRequest, User.class);
-        return userRepository.updateUser(user);
+    public UpdateUserRequest updateUser(Long id, UpdateUserRequest updateUserRequest) {
+        validateUser(id);
+        User user = userMapper.toUserFromUpdateUserRequest(updateUserRequest);
+        user.setId(id);
+        return updateUserRequest;
     }
 
     @Override
@@ -78,7 +79,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> validateUserEmail(String email) {
-        return userRepository.getUserByEmail(email);
+    public User validateUserEmail(String email) {
+        return userRepository.getUserByEmail(email)
+                .orElseThrow(() -> new EMailTakenException("User not found with email: " + email));
     }
 }

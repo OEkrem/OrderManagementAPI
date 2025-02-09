@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.AddressRepository;
-import com.oekrem.SpringMVCBackEnd.Dto.Mapper.AddressMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.AddressMapper;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.AddressResponse;

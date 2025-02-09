@@ -1,11 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Dto.Request;
 
-import lombok.Data;
+public class UpdateUserRequest {
 
-@Data
-public class UserRequest {
-
-    private Long id;
     private String username;
     private String password;
 
@@ -15,10 +11,10 @@ public class UserRequest {
     private String email;
     private String phone;
 
-    public UserRequest() {
+    public UpdateUserRequest() {
     }
 
-    public UserRequest(String username, String password, String firstName, String lastName, String email, String phone) {
+    public UpdateUserRequest(String username, String password, String firstName, String lastName, String email, String phone) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -27,13 +23,6 @@ public class UserRequest {
         this.phone = phone;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -85,8 +74,7 @@ public class UserRequest {
 
     @Override
     public String toString() {
-        return "UserRequest{" +
-                "id=" + id +
+        return "UpdateUserRequest{" +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +

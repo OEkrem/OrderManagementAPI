@@ -1,7 +1,9 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.CategoryRepository;
-import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CategoryMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.CategoryMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateCategoryRequest;
+import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.Exceptions.CategoryExceptions.CategoryNotFoundException;
 import com.oekrem.SpringMVCBackEnd.Models.Category;
@@ -32,15 +34,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void addCategory(Category category) {
+    public CreateCategoryRequest addCategory(CreateCategoryRequest createCategoryRequest) {
+        Category category = new Category();
+        category = categoryMapper.toCategoryFromCreateCategoryRequest(createCategoryRequest);
         categoryRepository.addCategory(category);
+        return createCategoryRequest;
     }
 
     @Override
     @Transactional
-    public void updateCategory(Category category) {
-        validateCategory(category.getId());
+    public UpdateCategoryRequest updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest) {
+        validateCategory(id);
+        Category category = categoryMapper.toCategoryFromUpdateCategoryRequest(updateCategoryRequest);
         categoryRepository.updateCategory(category);
+        return updateCategoryRequest;
     }
 
     @Override

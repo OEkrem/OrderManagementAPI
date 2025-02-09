@@ -1,4 +1,4 @@
-package com.oekrem.SpringMVCBackEnd.Dto.Mapper;
+package com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper;
 
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdatePaymentRequest;

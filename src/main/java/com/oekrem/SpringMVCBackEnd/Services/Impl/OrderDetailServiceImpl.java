@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.Services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.DataAccess.OrderDetailRepository;
-import com.oekrem.SpringMVCBackEnd.Dto.Mapper.OrderDetailMapper;
+import com.oekrem.SpringMVCBackEnd.Dto.Mapper.CustomMapper.OrderDetailMapper;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderDetailResponse;
