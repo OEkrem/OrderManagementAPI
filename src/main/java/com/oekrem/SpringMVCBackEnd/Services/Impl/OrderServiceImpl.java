@@ -49,8 +49,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public CreateOrderRequest addOrder(Long id, CreateOrderRequest createOrderRequest) {
-        // ilgili user yok ise ekleme işlemi yapma
         userService.validateUser(id);
+
         User user = new User(); user.setId(id);
         Order order = orderMapper.toOrderFromCreateOrderRequest(createOrderRequest);
         order.setUser(user);
@@ -62,12 +62,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public UpdateOrderRequest updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
-        // user ve order bulunması lazım ki update edebilesin
         User user = userService.validateUser(id);
-        validateOrder(updateOrderRequest.getId());
+        Order orderValidated = validateOrder(updateOrderRequest.getId());
 
         Order order = orderMapper.toOrderFromUpdateOrderRequest(updateOrderRequest);
         order.setUser(user);
+        order.setOrderDetail(orderValidated.getOrderDetail());
+        order.setPayment(orderValidated.getPayment());
         orderRepository.updateOrder(order);
         return updateOrderRequest;
     }

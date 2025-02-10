@@ -13,6 +13,8 @@ public interface PaymentService {
     UpdatePaymentRequest updatePayment(Long orderId, UpdatePaymentRequest updatePayment);
     void deletePayment(Long id);
     PaymentResponse getPaymentById(Long id);
+    PaymentResponse getPaymentByOrderId(Long orderId);
 
     Payment validatePayment(Long id);
+    Payment validatePaymentByOrderId(Long orderId);
 }

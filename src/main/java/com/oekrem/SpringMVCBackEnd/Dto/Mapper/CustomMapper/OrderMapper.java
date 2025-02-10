@@ -26,15 +26,10 @@ public class OrderMapper {
     @Autowired
     private PaymentMapper paymentMapper;
 
+
     public Order toOrderFromCreateOrderRequest(CreateOrderRequest createOrderRequest){
         order = new Order();
-        /*order.setOrderDetail(
-                createOrderRequest.getOrderDetailList().stream()
-                        .map( u-> orderDetailMapper.toOrderDetailFromCreateOrderDetailRequest(u))
-                        .collect(Collectors.toList())
-        );*/
         order.setDate(createOrderRequest.getDate());
-        //order.setPayment(paymentMapper.toPaymentFromCreatePaymentRequest(createOrderRequest.getPayment()));
         order.setTotal(createOrderRequest.getTotal());
         return order;
     }

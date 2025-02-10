@@ -34,9 +34,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public List<PaymentResponse> findAll() {
-        List<Payment> payments = paymentRepository.findAll();
         return paymentRepository.findAll().stream().map(paymentMapper::toResponse).collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional
@@ -46,7 +47,6 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentMapper.toPaymentFromCreatePaymentRequest(createPaymentRequest);
         Order order = new Order(); order.setId(orderId);
         payment.setOrder(order);
-        System.out.println(payment);
         paymentRepository.addPayment(payment);
         return createPaymentRequest;
     }
@@ -76,9 +76,20 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public PaymentResponse getPaymentByOrderId(Long orderId) {
+        return paymentMapper.toResponse(validatePaymentByOrderId(orderId));
+    }
+
+    @Override
     public Payment validatePayment(Long id) {
         return paymentRepository.getPaymentById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+    }
+
+    @Override
+    public Payment validatePaymentByOrderId(Long orderId) {
+        return paymentRepository.getPaymentByOrderId(orderId)
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found by orderId"));
     }
 
 

@@ -21,8 +21,7 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<OrderDetail> orderDetail = new LinkedList<>();
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
 
     @Temporal(TemporalType.DATE)

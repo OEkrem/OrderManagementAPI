@@ -56,4 +56,11 @@ public class HibernatePaymentRepository implements PaymentRepository {
         Session session = entityManager.unwrap(Session.class);
         return Optional.ofNullable(session.get(Payment.class, id));
     }
+
+    @Override
+    @Transactional
+    public Optional<Payment> getPaymentByOrderId(Long orderId){
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("from Payment where orderId = :orderId").setParameter("orderId", orderId).list().stream().findFirst();
+    }
 }

@@ -30,6 +30,11 @@ public class PaymentController {
         return paymentService.getPaymentById(id);
     }
 
+    @GetMapping("/orders/{orderId}")
+    public PaymentResponse getPaymentByOrderId(@PathVariable Long orderId){
+        return paymentService.getPaymentByOrderId(orderId);
+    }
+
     @PostMapping("/orders/{orderId}")
     public ResponseEntity<CreatePaymentRequest> addPayment(@PathVariable Long orderId, @RequestBody CreatePaymentRequest createPaymentRequest){
         paymentService.addPayment(orderId, createPaymentRequest);

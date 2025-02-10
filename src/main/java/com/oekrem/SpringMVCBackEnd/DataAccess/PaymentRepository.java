@@ -11,4 +11,5 @@ public interface PaymentRepository {
     Payment updatePayment(Payment payment);
     void deletePayment(Long id);
     Optional<Payment> getPaymentById(Long id);
+    Optional<Payment> getPaymentByOrderId(Long orderId);
 }

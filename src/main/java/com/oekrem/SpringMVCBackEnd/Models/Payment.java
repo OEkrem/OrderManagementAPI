@@ -31,7 +31,8 @@ public class Payment {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime date;
 
-    @OneToOne(mappedBy = "payment")
+    @OneToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 
     public Payment() {}
