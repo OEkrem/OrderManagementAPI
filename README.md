@@ -1,15 +1,15 @@
-  # ORDER MANAGMENT API
+# ORDER MANAGMENT API
   - Bu API, sipariş süreçlerini kolaylaştırmak için geliştirilmiş olup, sipariş oluşturma, güncelleme, ödeme işlemleri, kullanıcı yönetimi gibi özellikler sunar.
 
-  ## PROJE YAPISI
-  src/
-  ├── config/  /* Includes AppConfig and ModelMapperConfig */
-  ├── controller/  
-  ├── DataAccess/ /* Hibernate işlemleri ve interface sınıfları ile DB bağlantısını sağlar */
-  ├── Dto/  /* Response, Request ve CustomMapper sınıflarını barındırır */ 
-  ├── Exceptions/  /* Custom istisnaları yönetir */
-  ├── Models/
-  └── Services/
+## PROJE YAPISI
+src/
+├── config/              # Uygulama yapılandırmalarını içerir (AppConfig, ModelMapperConfig vb.)
+├── controller/          # API endpoint'lerini yöneten controller sınıfları
+├── dataAccess/          # Hibernate işlemleri ve interface sınıfları ile veritabanı bağlantısı sağlar
+├── dto/                 # Response, Request ve CustomMapper sınıflarını içerir
+├── exceptions/          # Özel istisnaları yönetir
+├── models/              # Veritabanı model sınıfları (User, Order, vb.)
+└── services/            # İş mantığını yöneten servis sınıfları
 
 ## Kullanılan Teknolojiler
 Spring-boot-starter-data-jpa
@@ -23,7 +23,7 @@ Lombok - Tercihe bğlı
 ## API Dokümentasyonu
 Models: User, Address, Category, Product, Order, OrderDetail, Payment
 
-## USER PROCESS --------------------------------------------------------------------------
+## USER PROCESS --------------------------------------------------------------------
 ### User READ
 GET - /api/users
 GET - /api/users/{id}
@@ -53,14 +53,14 @@ PUT - /api/users/{id}
 ### User DELETE
 DELETE - /api/users/{id}
 
-## ADDRESSES PROCESS --------------------------------------------------------------------------
+## ADDRESSES PROCESS --------------------------------------------------------------------
 
-Address READ
+### Address READ
 GET - /api/addresses
 GET - /api/addresses/{id}
 GET - /api/addresses/users/{id}
 
-Address ADD
+### Address ADD
 POST - /api/addresses/users/{id}
 {
     "name": "Address_Name2",
@@ -72,7 +72,7 @@ POST - /api/addresses/users/{id}
     "country": "Country Name"
 }
 
-Address UPDATE
+### Address UPDATE
 PUT - /api/addresses/users/{userId}
 {
         "id": 4,
@@ -85,23 +85,23 @@ PUT - /api/addresses/users/{userId}
         "country": "Turkiye"
     }
 
-Address DELETE
+### Address DELETE
 DELETE - /api/addresses/{id}
 
 ## CATEGORY PROCESS --------------------------------------------------------------------------
 
-Category READ
+### Category READ
 GET - /api/categories
 GET - /api/categories/{id}
 
-Category ADD
+### Category ADD
 POST - /api/categories
 {
         "name": "Telefonlar",
         "description": "Iphone Marka Telefon"
     }
 
-Category UPDATE
+### Category UPDATE
 PUT - /api/categories/{id}
 {
         "name": "Telefonlar",
@@ -109,17 +109,17 @@ PUT - /api/categories/{id}
     }
 
 
-Category DELETE
+### Category DELETE
 DELETE - /api/categories/{id}
 
 ## PRODUCT PROCESS --------------------------------------------------------------------------
 
-Product READ
+### Product READ
 GET - /api/products
 GET - /api/products/{id}
 
 
-Product ADD
+### Product ADD
 GET - /api/products
 {
     "name": "Iphone 7s",
@@ -130,7 +130,7 @@ GET - /api/products
 }
 
 
-Product UPDATE
+### Product UPDATE
 PUT - api/products/id
 {
     "name": "Iphone 7s",
@@ -141,24 +141,24 @@ PUT - api/products/id
 }
 
 
-Product DELETE
+### Product DELETE
 Delete - api/products/id
 
 ## ORDER PROCESS --------------------------------------------------------------------------
 
-READ  ORDER
+### READ  ORDER
 GET - /api/orders
 GET - /api/orders/{orderId}
 GET - /api/orders/all
 
-ADD  ORDER
+### ADD  ORDER
 POST - /api/orders/users/{userId}
 {
     "date": "2024-02-07",
     "total": 150
 }
 
-UPDATE  ORDER
+### UPDATE  ORDER
 PUT - /api/orders/users/{userId}
 {
     "id": 1,
@@ -166,17 +166,17 @@ PUT - /api/orders/users/{userId}
     "total": 150
 }
 
-DELETE  ORDER
+### DELETE  ORDER
 DELETE - /api/orders/{orderId}
 
-## ORDERDETAIL PROCESS --------------------------------------------------------------------------
+## ORDERDETAIL PROCESS --------------------------------------------------------------------
 
-GET  ORDERDETAIL
+### READ  ORDERDETAIL
 GET - /api/orderdetails
 GET - /api/orderdetails/{id}
 GET - /api/orderdetails/orders/{orderId}
 
-ADD  ORDERDETAIL
+### ADD  ORDERDETAIL
 POST - /api/orderdetails/orders/{orderId}
 {
     "productId": 1,
@@ -185,7 +185,7 @@ POST - /api/orderdetails/orders/{orderId}
     "price": 150
 }
 
-UPDATE  ORDERDETAIL
+### UPDATE  ORDERDETAIL
 PUT - /api/orderdetails/orders/{orderId}
 {
     "id": 1,
@@ -195,16 +195,16 @@ PUT - /api/orderdetails/orders/{orderId}
     "price": 150
 }
 
-DELETE  ORDERDETAIL
+### DELETE  ORDERDETAIL
 DELETE - /api/orderdetails/{id}
 
-## PAYMENT PROCESS --------------------------------------------------------------------------
+## PAYMENT PROCESS --------------------------------------------------------------------
 
-READ  PAYMENT
+### READ  PAYMENT
 GET - /api/payments
 GET - /api/payments/{id}
 
-ADD  PAYMENT
+### ADD  PAYMENT
 POST - /api/payments/orders/{orderId}
 {
     "description": "Description information",
@@ -214,7 +214,7 @@ POST - /api/payments/orders/{orderId}
     "date": "2024-02-07T14:30:00"
 }
 
-UPDATE  PAYMENT
+### UPDATE  PAYMENT
 PUT - /api/payments/orders/{orderId}
 {
     "id": 1,
@@ -225,11 +225,11 @@ PUT - /api/payments/orders/{orderId}
     "date": "2024-02-07T14:30:00"
 }
 
-DELETE  PAYMENT
+### DELETE  PAYMENT
 DELETE - /api/payments/{id}
 
 
 
-İLETİŞİM
+## İLETİŞİM
 Mail: oekremyildirim@outlook.com
 Linkedin: https://www.linkedin.com/in/onur-ekrem-y%C4%B1ld%C4%B1r%C4%B1m-8b2010263/
