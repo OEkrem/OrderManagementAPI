@@ -1,17 +1,17 @@
-  ORDER MANAGMENT API
+  # ORDER MANAGMENT API
   - Bu API, sipariş süreçlerini kolaylaştırmak için geliştirilmiş olup, sipariş oluşturma, güncelleme, ödeme işlemleri, kullanıcı yönetimi gibi özellikler sunar.
 
-  PROJE YAPISI
+  ## PROJE YAPISI
   src/
-├── config/  /* Includes AppConfig and ModelMapperConfig */
-├── controller/  
-├── DataAccess/ /* Hibernate işlemleri ve interface sınıfları ile DB bağlantısını sağlar */
-├── Dto/  /* Response, Request ve CustomMapper sınıflarını barındırır */ 
-├── Exceptions/  /* Custom istisnaları yönetir */
-├── Models/
-└── Services/
+  ├── config/  /* Includes AppConfig and ModelMapperConfig */
+  ├── controller/  
+  ├── DataAccess/ /* Hibernate işlemleri ve interface sınıfları ile DB bağlantısını sağlar */
+  ├── Dto/  /* Response, Request ve CustomMapper sınıflarını barındırır */ 
+  ├── Exceptions/  /* Custom istisnaları yönetir */
+  ├── Models/
+  └── Services/
 
-Kullanılan Teknolojiler
+## Kullanılan Teknolojiler
 Spring-boot-starter-data-jpa
 Spring-boot-stater-web
 Spring-boot-devtools
@@ -20,15 +20,15 @@ ModelMapper 3.2.2 - Tercihe bağlı
 Mockito-core 5.0.0
 Lombok - Tercihe bğlı
 
-API Dokümentasyonu
+## API Dokümentasyonu
 Models: User, Address, Category, Product, Order, OrderDetail, Payment
 
-// USER PROCESS --------------------------------------------------------------------------
-User READ
+## USER PROCESS --------------------------------------------------------------------------
+### User READ
 GET - /api/users
 GET - /api/users/{id}
 
-User ADD
+### User ADD
 POST - /api/users
 {
         "username": "deneme37",
@@ -39,7 +39,7 @@ POST - /api/users
         "phone": "5323212121"
     }
 
-User UPDATE
+### User UPDATE
 PUT - /api/users/{id}
 {
         "username": "deneme37",
@@ -50,10 +50,10 @@ PUT - /api/users/{id}
         "phone": "5323212121"
     }
 
-User DELETE
+### User DELETE
 DELETE - /api/users/{id}
 
-// ADDRESSES PROCESS --------------------------------------------------------------------------
+## ADDRESSES PROCESS --------------------------------------------------------------------------
 
 Address READ
 GET - /api/addresses
@@ -88,7 +88,7 @@ PUT - /api/addresses/users/{userId}
 Address DELETE
 DELETE - /api/addresses/{id}
 
-// CATEGORY PROCESS --------------------------------------------------------------------------
+## CATEGORY PROCESS --------------------------------------------------------------------------
 
 Category READ
 GET - /api/categories
@@ -112,7 +112,7 @@ PUT - /api/categories/{id}
 Category DELETE
 DELETE - /api/categories/{id}
 
-// PRODUCT PROCESS --------------------------------------------------------------------------
+## PRODUCT PROCESS --------------------------------------------------------------------------
 
 Product READ
 GET - /api/products
@@ -144,7 +144,7 @@ PUT - api/products/id
 Product DELETE
 Delete - api/products/id
 
-// ORDER PROCESS --------------------------------------------------------------------------
+## ORDER PROCESS --------------------------------------------------------------------------
 
 READ  ORDER
 GET - /api/orders
@@ -169,7 +169,7 @@ PUT - /api/orders/users/{userId}
 DELETE  ORDER
 DELETE - /api/orders/{orderId}
 
-// ORDERDETAIL PROCESS --------------------------------------------------------------------------
+## ORDERDETAIL PROCESS --------------------------------------------------------------------------
 
 GET  ORDERDETAIL
 GET - /api/orderdetails
@@ -198,7 +198,7 @@ PUT - /api/orderdetails/orders/{orderId}
 DELETE  ORDERDETAIL
 DELETE - /api/orderdetails/{id}
 
-// PAYMENT PROCESS --------------------------------------------------------------------------
+## PAYMENT PROCESS --------------------------------------------------------------------------
 
 READ  PAYMENT
 GET - /api/payments
