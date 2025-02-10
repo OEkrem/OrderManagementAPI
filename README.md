@@ -212,5 +212,7 @@ Models: **`User`**, **`Address`**, **`Category`**, **`Product`**, **`Order`**, *
 
 
 ## İLETİŞİM
-Mail: oekremyildirim@outlook.com
-Linkedin: https://www.linkedin.com/in/onur-ekrem-y%C4%B1ld%C4%B1r%C4%B1m-8b2010263/
+E-posta: oekremyildirim@outlook.com  
+LinkedIn: [Profil Linki](https://www.linkedin.com/in/onur-ekrem-y%C4%B1ld%C4%B1r%C4%B1m-8b2010263/)  
+GitHub: [Profil Linki](https://github.com/OEkrem)
+
