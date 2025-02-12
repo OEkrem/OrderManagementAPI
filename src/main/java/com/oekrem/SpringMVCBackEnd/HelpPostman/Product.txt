@@ -1,31 +1,31 @@
 // PRODUCT PROCESS --------------------------------------------------------------------------
 
-    Product READ
-    GET - /api/products
-    GET - /api/products/{id}
+Product READ
+GET - /api/products
+GET - /api/products/{id}
 
 
-    Product ADD
-    GET - /api/products
-    {
-        "name": "Iphone 7s",
-        "categoryId": 11,
-        "description": "Iphone Marka Telefon",
-        "price": 7000.00,
-        "image": "image/url/iphone7s.jpeg"
-    }
+Product ADD
+GET - /api/products
+{
+    "name": "Iphone 7s",
+    "categoryId": 11,
+    "description": "Iphone Marka Telefon",
+    "price": 7000.00,
+    "image": "image/url/iphone7s.jpeg"
+}
 
 
-    Product UPDATE
-    PUT - api/products/id
-    {
-        "name": "Iphone 7s",
-        "categoryId": 11,
-        "description": "Iphone Marka Telefon",
-        "price": 7000.00,
-        "image": "image/url/iphone7s.jpeg"
-    }
+Product UPDATE
+PUT - api/products/id
+{
+    "name": "Iphone 7s",
+    "categoryId": 11,
+    "description": "Iphone Marka Telefon",
+    "price": 7000.00,
+    "image": "image/url/iphone7s.jpeg"
+}
 
 
-    Product DELETE
-    Delete - api/products/id
+Product DELETE
+Delete - api/products/id
