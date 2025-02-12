@@ -1,9 +1,9 @@
 package com.oekrem.SpringMVCBackEnd.config;
 
-import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderDetailResponse;
-import com.oekrem.SpringMVCBackEnd.Dto.Response.OrderResponse;
-import com.oekrem.SpringMVCBackEnd.Models.Order;
-import com.oekrem.SpringMVCBackEnd.Models.OrderDetail;
+import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
+import com.oekrem.SpringMVCBackEnd.dto.Response.OrderResponse;
+import com.oekrem.SpringMVCBackEnd.models.Order;
+import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.beans.factory.annotation.Qualifier;

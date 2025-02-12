@@ -1,8 +1,7 @@
 package com.oekrem.SpringMVCBackEnd;
 
-import com.oekrem.SpringMVCBackEnd.Dto.Request.CreateAddressRequest;
-import com.oekrem.SpringMVCBackEnd.Models.Address;
-import com.oekrem.SpringMVCBackEnd.Models.User;
+import com.oekrem.SpringMVCBackEnd.models.Address;
+import com.oekrem.SpringMVCBackEnd.models.User;
 
 public class TestDataUtil {
 
