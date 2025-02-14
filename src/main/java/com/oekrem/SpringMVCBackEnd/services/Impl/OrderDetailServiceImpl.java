@@ -11,6 +11,7 @@ import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderDetailServiceImpl implements OrderDetailService {
 
-    @Autowired
-    private OrderDetailMapper orderDetailMapper;
-    private OrderDetailRepository orderDetailRepository;
-    @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository) {
-        this.orderDetailRepository = orderDetailRepository;
-    }
+    private final OrderDetailMapper orderDetailMapper;
+    private final OrderDetailRepository orderDetailRepository;
+    private final OrderService orderService;
 
     @Override
     @Transactional

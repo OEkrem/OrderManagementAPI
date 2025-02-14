@@ -10,6 +10,7 @@ import com.oekrem.SpringMVCBackEnd.models.Product;
 import com.oekrem.SpringMVCBackEnd.services.CategoryService;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final ProductMapper productMapper;
-
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryService categoryService, ProductMapper productMapper) {
-        this.productRepository = productRepository;
-        this.categoryService = categoryService;
-        this.productMapper = productMapper;
-    }
 
     @Override
     @Transactional

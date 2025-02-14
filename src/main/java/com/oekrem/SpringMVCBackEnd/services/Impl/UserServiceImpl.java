@@ -10,6 +10,7 @@ import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.UserNotFoundExcepti
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,19 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private UserMapper userMapper;
-
-    private UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional

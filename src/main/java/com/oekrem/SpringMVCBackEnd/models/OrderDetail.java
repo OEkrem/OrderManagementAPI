@@ -2,9 +2,17 @@ package com.oekrem.SpringMVCBackEnd.models;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.QuantityType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "OrderDetails")
 public class OrderDetail {
@@ -29,74 +37,4 @@ public class OrderDetail {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    public OrderDetail() {}
-
-    public OrderDetail(Long id, Product product, QuantityType quantityType, BigDecimal quantity, BigDecimal price, Order order) {
-        this.id = id;
-        this.product = product;
-        this.quantityType = quantityType;
-        this.quantity = quantity;
-        this.price = price;
-        this.order = order;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public QuantityType getQuantityType() {
-        return quantityType;
-    }
-
-    public void setQuantityType(QuantityType quantityType) {
-        this.quantityType = quantityType;
-    }
-
-    public BigDecimal getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderDetail{" +
-                "id=" + id +
-                ", product=" + product +
-                ", quantityType=" + quantityType +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                ", order=" + order +
-                '}';
-    }
 }

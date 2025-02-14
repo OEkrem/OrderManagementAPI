@@ -1,11 +1,19 @@
 package com.oekrem.SpringMVCBackEnd.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -30,74 +38,4 @@ public class Order {
     //@Transient kullanılabilir belki
     private Double total; // aslında hesaplanabilir ancak tek sorguyla kolaylıkla ulaşılabilir olması faydalı diye yazdım
 
-    public Order() {}
-
-    public Order(Long id, User user, List<OrderDetail> orderDetail, Payment payment, LocalDate date, Double total) {
-        this.id = id;
-        this.user = user;
-        this.orderDetail = orderDetail;
-        this.payment = payment;
-        this.date = date;
-        this.total = total;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<OrderDetail> getOrderDetail() {
-        return orderDetail;
-    }
-
-    public void setOrderDetail(List<OrderDetail> orderDetail) {
-        this.orderDetail = orderDetail;
-    }
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", user=" + user +
-                ", orderDetail=" + orderDetail +
-                ", payment=" + payment +
-                ", date=" + date +
-                ", total=" + total +
-                '}';
-    }
 }

@@ -5,6 +5,7 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderAllResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderResponse;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
-    private OrderService orderService;
-
-    @Autowired
-    public OrderController(OrderService orderService) {this.orderService = orderService;}
+    private final OrderService orderService;
 
     @GetMapping
     public List<OrderResponse> getOrders(){

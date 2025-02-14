@@ -1,8 +1,17 @@
 package com.oekrem.SpringMVCBackEnd.dto.Response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OrderAllResponse {
     private Long id;
     private Long userId;
@@ -11,75 +20,4 @@ public class OrderAllResponse {
     private LocalDate date;
     private Double total;
 
-    public OrderAllResponse() {
-    }
-
-    public OrderAllResponse(Long id, Long userId, List<OrderDetailResponse> orderDetailIdList, PaymentResponse payment, LocalDate date, Double total) {
-        this.id = id;
-        this.userId = userId;
-        this.orderDetailIdList = orderDetailIdList;
-        this.payment = payment;
-        this.date = date;
-        this.total = total;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public List<OrderDetailResponse> getOrderDetailIdList() {
-        return orderDetailIdList;
-    }
-
-    public void setOrderDetailIdList(List<OrderDetailResponse> orderDetailIdList) {
-        this.orderDetailIdList = orderDetailIdList;
-    }
-
-    public PaymentResponse getPayment() {
-        return payment;
-    }
-
-    public void setPayment(PaymentResponse payment) {
-        this.payment = payment;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderAllResponse{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", orderDetailIdList=" + orderDetailIdList +
-                ", payment=" + payment +
-                ", date=" + date +
-                ", total=" + total +
-                '}';
-    }
 }

@@ -11,6 +11,7 @@ import com.oekrem.SpringMVCBackEnd.models.Payment;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
     private final OrderService orderService;
-
-    @Autowired
-    public PaymentServiceImpl(PaymentRepository paymentRepository, OrderService orderService, PaymentMapper paymentMapper) {
-        this.paymentRepository = paymentRepository;
-        this.orderService = orderService;
-        this.paymentMapper = paymentMapper;
-    }
 
     @Override
     @Transactional

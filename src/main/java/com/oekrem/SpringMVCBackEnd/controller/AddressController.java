@@ -4,6 +4,7 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.services.AddressService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/addresses")
+@RequiredArgsConstructor
 public class AddressController {
 
-    private AddressService addressService;
+    private final AddressService addressService;
 
-    @Autowired
-    public AddressController(AddressService addressService) {
-        this.addressService = addressService;
-    }
 
     @GetMapping
     public List<AddressResponse> getAddresses(){

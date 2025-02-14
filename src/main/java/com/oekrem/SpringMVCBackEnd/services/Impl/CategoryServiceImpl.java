@@ -9,6 +9,7 @@ import com.oekrem.SpringMVCBackEnd.exceptions.CategoryExceptions.CategoryNotFoun
 import com.oekrem.SpringMVCBackEnd.models.Category;
 import com.oekrem.SpringMVCBackEnd.services.CategoryService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
-    }
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional

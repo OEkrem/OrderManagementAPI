@@ -11,30 +11,21 @@ import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.AddressService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private AddressMapper addressMapper;
-
+    private final ModelMapper modelMapper;
+    private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
     private final UserService userService;
-
-
-    @Autowired
-    public AddressServiceImpl(AddressRepository addressRepository, UserService userService) {
-        this.addressRepository = addressRepository;
-        this.userService = userService;
-    }
 
     @Override
     @Transactional

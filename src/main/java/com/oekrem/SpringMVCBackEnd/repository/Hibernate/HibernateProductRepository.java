@@ -4,6 +4,7 @@ import com.oekrem.SpringMVCBackEnd.repository.ProductRepository;
 import com.oekrem.SpringMVCBackEnd.models.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,12 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class HibernateProductRepository implements ProductRepository {
 
-    private EntityManager entityManager;
-
-    @Autowired
-    public HibernateProductRepository(EntityManager entityManager) {this.entityManager = entityManager;}
+    private final EntityManager entityManager;
 
     @Override
     @Transactional
