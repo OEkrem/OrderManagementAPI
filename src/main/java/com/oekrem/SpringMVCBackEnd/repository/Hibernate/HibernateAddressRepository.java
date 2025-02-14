@@ -27,6 +27,7 @@ public class HibernateAddressRepository implements AddressRepository {
     }
 
     @Override
+    @Transactional
     public Address addAddress(Address address) {
         Session session = entityManager.unwrap(Session.class);
         session.merge(address);
@@ -34,6 +35,7 @@ public class HibernateAddressRepository implements AddressRepository {
     }
 
     @Override
+    @Transactional
     public Address updateAddress(Address address) {
         Session session = entityManager.unwrap(Session.class);
         session.merge(address);
