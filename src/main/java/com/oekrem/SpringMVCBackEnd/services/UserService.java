@@ -6,15 +6,16 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
     List<UserResponse> findAll();
-    CreateUserRequest addUser(CreateUserRequest createUserRequest);
-    UpdateUserRequest updateUser(Long id, UpdateUserRequest updateUserRequest);
+    UserResponse addUser(CreateUserRequest createUserRequest);
+    UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest);
     void deleteUser(Long id);
     UserResponse getUserById(Long id);
 
     User validateUser(Long id);
-    void validateUserEmail(String email);
+    Optional<User> validateUserEmail(String email);
 }

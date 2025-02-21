@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,20 +36,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public CreateUserRequest addUser(CreateUserRequest createUserRequest) {
-        validateUserEmail(createUserRequest.getEmail());
+    public UserResponse addUser(CreateUserRequest createUserRequest) {
+        if(userRepository.findUserByEmail(createUserRequest.getEmail()).isPresent())
+            throw new EMailTakenException("Email already exists");
+
         User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
-        userRepository.addUser(user);
-        return createUserRequest;
+        User savedUser = userRepository.addUser(user);
+        return userMapper.toResponse(savedUser);
     }
 
     @Override
     @Transactional
-    public UpdateUserRequest updateUser(Long id, UpdateUserRequest updateUserRequest) {
+    public UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest) {
         validateUser(id);
         User user = userMapper.toUserFromUpdateUserRequest(updateUserRequest);
         user.setId(id);
-        return updateUserRequest;
+        User updatedUser = userRepository.updateUser(user);
+        return userMapper.toResponse(updatedUser);
     }
 
     @Override
@@ -73,8 +77,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateUserEmail(String email) {
-        if(userRepository.getUserByEmail(email).isPresent())
-            throw new EMailTakenException("User already exist with email: " + email);
+    public Optional<User> validateUserEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
+
 }
