@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
             throw new EMailTakenException("Email already exists");
 
         User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
+
         User savedUser = userRepository.addUser(user);
         return userMapper.toResponse(savedUser);
     }
