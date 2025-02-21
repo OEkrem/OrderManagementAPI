@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface AddressService {
     List<AddressResponse> findAll();
-    CreateAddressRequest addAddress(Long userId, CreateAddressRequest address);
-    UpdateAddressRequest updateAddress(Long userId, UpdateAddressRequest address);
+    AddressResponse addAddress(Long userId, CreateAddressRequest address);
+    AddressResponse updateAddress(Long userId, UpdateAddressRequest address);
     void deleteAddress(Long id);
     AddressResponse getAddressById(Long id);
 
