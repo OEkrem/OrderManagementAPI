@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.RegisterRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Response.RegisterResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.EMailTakenException;
 import com.oekrem.SpringMVCBackEnd.models.User;
@@ -66,7 +67,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public UserResponse register(RegisterRequest registerRequest) {
+    public RegisterResponse register(RegisterRequest registerRequest) {
         userService.validateUserEmail(registerRequest.getEmail()).ifPresent(
                 p -> {throw new EMailTakenException("E-mail already exists");
                 }
@@ -90,8 +91,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .phone(null)
                         .build()
         );
-
-        return savedUser;
+        RegisterResponse registerResponse = RegisterResponse.builder()
+                .id(savedUser.getId())
+                .username(savedUser.getUsername())
+                .email(savedUser.getEmail())
+                .firstName(savedUser.getFirstName())
+                .lastName(savedUser.getLastName())
+                .phone(savedUser.getPhone())
+                .password(savedUser.getPassword())
+                .success(true)
+                .message("Success")
+                .build();
+        return registerResponse;
     }
 
     private String extractUsername(String token) {

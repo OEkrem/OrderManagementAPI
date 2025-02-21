@@ -42,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
+            System.out.println(e.getMessage());
             log.warn("Received invalid JWT token: ", e);
         }
 
