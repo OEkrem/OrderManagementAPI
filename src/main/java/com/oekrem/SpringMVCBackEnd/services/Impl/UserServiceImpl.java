@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,9 +36,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse addUser(CreateUserRequest createUserRequest) {
-        validateUserEmail(createUserRequest.getEmail());
-        User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
+        if(userRepository.findUserByEmail(createUserRequest.getEmail()).isPresent())
+            throw new EMailTakenException("Email already exists");
 
+        User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
         User savedUser = userRepository.addUser(user);
         return userMapper.toResponse(savedUser);
     }
@@ -48,8 +50,9 @@ public class UserServiceImpl implements UserService {
         validateUser(id);
         User user = userMapper.toUserFromUpdateUserRequest(updateUserRequest);
         user.setId(id);
-        User upddatedUser = userRepository.updateUser(user);
-        return userMapper.toResponse(upddatedUser);
+
+        User updatedUser = userRepository.updateUser(user);
+        return userMapper.toResponse(updatedUser);
     }
 
     @Override
@@ -74,8 +77,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateUserEmail(String email) {
-        if(userRepository.getUserByEmail(email).isPresent())
-            throw new EMailTakenException("User already exist with email: " + email);
+    public Optional<User> validateUserEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
+
 }

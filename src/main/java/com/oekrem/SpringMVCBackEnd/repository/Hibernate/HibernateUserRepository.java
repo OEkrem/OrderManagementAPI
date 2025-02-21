@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,9 +20,12 @@ public class HibernateUserRepository implements UserRepository {
 
     @Override
     @Transactional
-    public List<User> findAll() {
+    public List<User> findAll(/*int pageNumber, int pageSize*/) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("select distinct u from User u", User.class).list();
+        Query<User> query = session.createQuery("select distinct u from User u", User.class);
+        //query.setFirstResult((pageNumber - 1) * pageSize); // Hangi kayıttan başlayacağını belirler
+        //query.setMaxResults(pageSize);
+        return query.list(); // getResultList hibernate 5 ile daha uyumlu imiş, 6 ise list
     }
 
     @Override
@@ -63,6 +66,14 @@ public class HibernateUserRepository implements UserRepository {
         User user = session.createQuery("select u from User u where u.email = :email", User.class)
                 .setParameter("email", email)
                 .uniqueResult();
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        Session session = entityManager.unwrap(Session.class);
+        User user = session.createQuery("select u from User u where u.email = :email", User.class)
+                .setParameter("email", email).uniqueResult();
         return Optional.ofNullable(user);
     }
 }
