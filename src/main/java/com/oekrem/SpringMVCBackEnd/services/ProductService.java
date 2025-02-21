@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ProductService {
     List<ProductResponse> findAll();
-    CreateProductRequest addProduct(CreateProductRequest product);
-    UpdateProductRequest updateProduct(Long id, UpdateProductRequest product);
+    ProductResponse addProduct(CreateProductRequest product);
+    ProductResponse updateProduct(Long id, UpdateProductRequest product);
     void deleteProduct(Long id);
     ProductResponse getProductById(Long id);
 

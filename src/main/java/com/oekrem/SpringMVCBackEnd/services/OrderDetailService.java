@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface OrderDetailService {
     List<OrderDetailResponse> findAll();
-    CreateOrderDetailRequest addOrderDetail(Long orderId, CreateOrderDetailRequest createOrderDetailRequest);
-    UpdateOrderDetailRequest updateOrderDetail(Long orderId, UpdateOrderDetailRequest updateOrderDetailRequest);
+    OrderDetailResponse addOrderDetail(Long orderId, CreateOrderDetailRequest createOrderDetailRequest);
+    OrderDetailResponse updateOrderDetail(Long orderId, UpdateOrderDetailRequest updateOrderDetailRequest);
     void deleteOrderDetail(Long id);
     OrderDetailResponse getOrderDetailById(Long id);
 

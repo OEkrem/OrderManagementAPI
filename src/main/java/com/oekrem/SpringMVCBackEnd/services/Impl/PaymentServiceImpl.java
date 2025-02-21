@@ -12,7 +12,6 @@ import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,30 +31,30 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.findAll().stream().map(paymentMapper::toResponse).collect(Collectors.toList());
     }
 
-
-
     @Override
     @Transactional
-    public CreatePaymentRequest addPayment(Long orderId, CreatePaymentRequest createPaymentRequest) {
+    public PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest) {
         orderService.validateOrder(orderId);
 
         Payment payment = paymentMapper.toPaymentFromCreatePaymentRequest(createPaymentRequest);
         Order order = new Order(); order.setId(orderId);
         payment.setOrder(order);
-        paymentRepository.addPayment(payment);
-        return createPaymentRequest;
+
+        Payment savedPayment = paymentRepository.addPayment(payment);
+        return paymentMapper.toResponse(savedPayment);
     }
 
     @Override
     @Transactional
-    public UpdatePaymentRequest updatePayment(Long orderId, UpdatePaymentRequest updatePaymentRequest) {
+    public PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePaymentRequest) {
         orderService.validateOrder(orderId);
 
         Payment payment = paymentMapper.toPaymentFromUpdatePaymentRequest(updatePaymentRequest);
         Order order = new Order(); order.setId(orderId);
         payment.setOrder(order);
-        paymentRepository.updatePayment(payment);
-        return updatePaymentRequest;
+
+        Payment  updatedPayment = paymentRepository.updatePayment(payment);
+        return paymentMapper.toResponse(updatedPayment);
     }
 
     @Override

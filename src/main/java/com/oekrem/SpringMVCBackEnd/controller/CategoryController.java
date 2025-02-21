@@ -30,15 +30,13 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateCategoryRequest> addCategory(@RequestBody CreateCategoryRequest createCategoryRequest){
-        categoryService.addCategory(createCategoryRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createCategoryRequest);
+    public ResponseEntity<CategoryResponse> addCategory(@RequestBody CreateCategoryRequest createCategoryRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.addCategory(createCategoryRequest));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateCategoryRequest> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoryRequest updateCategoryRequest){
-        categoryService.updateCategory(id, updateCategoryRequest);
-        return ResponseEntity.ok(updateCategoryRequest);
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoryRequest updateCategoryRequest){
+        return ResponseEntity.ok(categoryService.updateCategory(id, updateCategoryRequest));
     }
 
     @DeleteMapping("/{id}")

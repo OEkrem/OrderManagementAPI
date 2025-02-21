@@ -11,7 +11,6 @@ import com.oekrem.SpringMVCBackEnd.services.CategoryService;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,20 +34,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public CreateProductRequest addProduct(CreateProductRequest product) {
-        System.out.println(product);
-        productRepository.addProduct(productMapper.toProductFromCreateProductRequest(product));
-        return product;
+    public ProductResponse addProduct(CreateProductRequest product) {
+        Product savedProduct = productRepository.addProduct(productMapper.toProductFromCreateProductRequest(product));
+        return productMapper.toResponse(savedProduct);
     }
 
     @Override
     @Transactional
-    public UpdateProductRequest updateProduct(Long id, UpdateProductRequest product) {
+    public ProductResponse updateProduct(Long id, UpdateProductRequest product) {
         validateProduct(id);
         Product productToUpdate = productMapper.toProductFromUpdateProductRequest(product);
         productToUpdate.setId(id);
-        productRepository.updateProduct(productToUpdate);
-        return product;
+
+        Product updatedProduct = productRepository.updateProduct(productToUpdate);
+        return productMapper.toResponse(updatedProduct);
     }
 
     @Override

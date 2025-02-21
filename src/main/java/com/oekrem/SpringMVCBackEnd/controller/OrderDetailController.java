@@ -35,15 +35,13 @@ public class OrderDetailController {
     }
 
     @PostMapping("/orders/{orderId}")
-    public ResponseEntity<CreateOrderDetailRequest> addOrderDetail(@PathVariable Long orderId,@RequestBody CreateOrderDetailRequest createOrderDetailRequest){
-        orderDetailService.addOrderDetail(orderId, createOrderDetailRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createOrderDetailRequest);
+    public ResponseEntity<OrderDetailResponse> addOrderDetail(@PathVariable Long orderId,@RequestBody CreateOrderDetailRequest createOrderDetailRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailService.addOrderDetail(orderId, createOrderDetailRequest));
     }
 
     @PutMapping("/orders/{orderId}")
-    public ResponseEntity<UpdateOrderDetailRequest> updateOrderDetail(@PathVariable Long orderId, @RequestBody UpdateOrderDetailRequest updateOrderDetailRequest){
-        orderDetailService.updateOrderDetail(orderId, updateOrderDetailRequest);
-        return ResponseEntity.ok(updateOrderDetailRequest);
+    public ResponseEntity<OrderDetailResponse> updateOrderDetail(@PathVariable Long orderId, @RequestBody UpdateOrderDetailRequest updateOrderDetailRequest){
+        return ResponseEntity.ok(orderDetailService.updateOrderDetail(orderId, updateOrderDetailRequest));
     }
 
     @DeleteMapping("/{id}")

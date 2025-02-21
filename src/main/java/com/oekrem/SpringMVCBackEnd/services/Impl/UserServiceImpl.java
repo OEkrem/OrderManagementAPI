@@ -12,7 +12,6 @@ import com.oekrem.SpringMVCBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +40,7 @@ public class UserServiceImpl implements UserService {
             throw new EMailTakenException("Email already exists");
 
         User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
+
         User savedUser = userRepository.addUser(user);
         return userMapper.toResponse(savedUser);
     }
@@ -51,8 +51,10 @@ public class UserServiceImpl implements UserService {
         validateUser(id);
         User user = userMapper.toUserFromUpdateUserRequest(updateUserRequest);
         user.setId(id);
+
         User updatedUser = userRepository.updateUser(user);
         return userMapper.toResponse(updatedUser);
+
     }
 
     @Override

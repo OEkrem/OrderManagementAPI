@@ -43,20 +43,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public CreateOrderRequest addOrder(Long id, CreateOrderRequest createOrderRequest) {
+    public OrderResponse addOrder(Long id, CreateOrderRequest createOrderRequest) {
         userService.validateUser(id);
 
         User user = new User(); user.setId(id);
         Order order = orderMapper.toOrderFromCreateOrderRequest(createOrderRequest);
         order.setUser(user);
-        System.out.println(order);
-        orderRepository.addOrder(order);
-        return createOrderRequest;
+
+        Order savedOrder = orderRepository.addOrder(order);
+        return orderMapper.toOrderResponse(savedOrder);
     }
 
     @Override
     @Transactional
-    public UpdateOrderRequest updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
+    public OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
         User user = userService.validateUser(id);
         Order orderValidated = validateOrder(updateOrderRequest.getId());
 
@@ -64,8 +64,9 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         order.setOrderDetail(orderValidated.getOrderDetail());
         order.setPayment(orderValidated.getPayment());
-        orderRepository.updateOrder(order);
-        return updateOrderRequest;
+        Order updatedOrder = orderRepository.updateOrder(order);
+
+        return orderMapper.toOrderResponse(updatedOrder);
     }
 
     @Override

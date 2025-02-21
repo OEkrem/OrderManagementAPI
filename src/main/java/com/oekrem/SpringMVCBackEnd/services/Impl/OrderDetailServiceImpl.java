@@ -12,7 +12,6 @@ import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,33 +30,35 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public List<OrderDetailResponse> findAll() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll();
         return orderDetails.stream()
-                .map(u-> orderDetailMapper.toResponse(u))
+                .map(orderDetailMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public CreateOrderDetailRequest addOrderDetail(Long orderId, CreateOrderDetailRequest createOrderDetailRequest) {
+    public OrderDetailResponse addOrderDetail(Long orderId, CreateOrderDetailRequest createOrderDetailRequest) {
         orderService.validateOrder(orderId);
 
         OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromCreateOrderDetailRequest(createOrderDetailRequest);
         Order order = new Order(); order.setId(orderId);
         orderDetail.setOrder(order);
-        orderDetailRepository.addOrderDetail(orderDetail);
-        return createOrderDetailRequest;
+
+        OrderDetail savedOrderDetail = orderDetailRepository.addOrderDetail(orderDetail);
+        return orderDetailMapper.toResponse(savedOrderDetail);
     }
 
     @Override
     @Transactional
-    public UpdateOrderDetailRequest updateOrderDetail(Long orderId ,UpdateOrderDetailRequest updateOrderDetailRequest) {
+    public OrderDetailResponse updateOrderDetail(Long orderId ,UpdateOrderDetailRequest updateOrderDetailRequest) {
         orderService.validateOrder(orderId);
         validateOrderDetail(updateOrderDetailRequest.getId());
 
         OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromUpdateOrderDetailRequest(updateOrderDetailRequest);
         Order order = new Order(); order.setId(orderId);
         orderDetail.setOrder(order);
-        orderDetailRepository.updateOrderDetail(orderDetail);
-        return updateOrderDetailRequest;
+
+        OrderDetail updatedOrderDetail = orderDetailRepository.updateOrderDetail(orderDetail);
+        return orderDetailMapper.toResponse(updatedOrderDetail);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public List<OrderDetailResponse> getOrderDetailsByOrderId(Long orderId) {
         List<OrderDetail> orderDetails = orderDetailRepository.getOrderDetailsByOrderId(orderId);
         return orderDetails.stream()
-                .map(u-> orderDetailMapper.toResponse(u))
+                .map(orderDetailMapper::toResponse)
                 .collect(Collectors.toList());
     }
 

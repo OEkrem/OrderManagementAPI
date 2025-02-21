@@ -37,16 +37,14 @@ public class AddressController {
     }
 
     @PostMapping("/users/{id}")
-    public ResponseEntity<CreateAddressRequest> addAddress(@PathVariable Long id, @RequestBody CreateAddressRequest addressRequest){
-        CreateAddressRequest address = addressService.addAddress(id, addressRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(address);
+    public ResponseEntity<AddressResponse> addAddress(@PathVariable Long id, @RequestBody CreateAddressRequest addressRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.addAddress(id, addressRequest));
     }
 
     // user_id ve address body'ye ihtiyacımız var
     @PutMapping("/users/{id}")
-    public ResponseEntity<UpdateAddressRequest> updateAddress(@PathVariable Long id, @RequestBody UpdateAddressRequest addressRequest){
-        UpdateAddressRequest address= addressService.updateAddress(id, addressRequest);
-        return ResponseEntity.ok(address);
+    public ResponseEntity<AddressResponse> updateAddress(@PathVariable Long id, @RequestBody UpdateAddressRequest addressRequest){
+        return ResponseEntity.ok(addressService.updateAddress(id, addressRequest));
     }
 
     // address id üzerinden siliniyor
