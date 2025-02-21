@@ -10,6 +10,7 @@ src/
 ├── dto/                 # Response, Request ve CustomMapper sınıflarını içerir
 ├── exceptions/          # Özel istisnaları yönetir
 ├── models/              # Veritabanı model sınıfları (User, Order, vb.)
+├── security/            # Security için gerekli sınıflar (UserDetails, UserDetailService, vb.)
 └── services/            # İş mantığını yöneten servis sınıfları
 ```
 
@@ -18,9 +19,11 @@ src/
   - Spring Boot
   - MySQL Connector-j 8.3.0
   - Mockito-core 5.0.0
-  - Lombok - Tercihe bağlı
-  - ModelMapper 3.2.2 - Tercihe bağlı
+  - Lombok
   - Maven
+  - Spring Security - jjwt
+  - Validation
+  - ModelMapper 3.2.2 - Tercihe bağlı
 
 ## API Dokümentasyonu
 Models: **`User`**, **`Address`**, **`Category`**, **`Product`**, **`Order`**, **`OrderDetail`**, **`Payment`**
