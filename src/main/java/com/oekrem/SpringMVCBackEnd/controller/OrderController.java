@@ -36,15 +36,13 @@ public class OrderController {
     }
 
     @PostMapping("/users/{userId}")
-    public ResponseEntity<CreateOrderRequest> addOrder(@PathVariable Long userId, @RequestBody CreateOrderRequest createOrderRequest){
-        orderService.addOrder(userId, createOrderRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createOrderRequest);
+    public ResponseEntity<OrderResponse> addOrder(@PathVariable Long userId, @RequestBody CreateOrderRequest createOrderRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.addOrder(userId, createOrderRequest));
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<UpdateOrderRequest> updateOrder(@PathVariable Long userId, @RequestBody UpdateOrderRequest updateOrderRequest){
-        orderService.updateOrder(userId, updateOrderRequest);
-        return ResponseEntity.ok(updateOrderRequest);
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long userId, @RequestBody UpdateOrderRequest updateOrderRequest){
+        return ResponseEntity.ok(orderService.updateOrder(userId, updateOrderRequest));
     }
 
     @DeleteMapping("/{id}")

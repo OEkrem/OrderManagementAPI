@@ -11,8 +11,8 @@ import java.util.List;
 public interface OrderService {
     List<OrderResponse> findAll();
     List<OrderAllResponse> findAllOrders();
-    CreateOrderRequest addOrder(Long id, CreateOrderRequest createOrderRequest);
-    UpdateOrderRequest updateOrder(Long id, UpdateOrderRequest updateOrderRequest);
+    OrderResponse addOrder(Long id, CreateOrderRequest createOrderRequest);
+    OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest);
     void deleteOrder(Long id);
     OrderResponse getOrderById(Long id);
 
