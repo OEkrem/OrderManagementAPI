@@ -31,20 +31,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CreateCategoryRequest addCategory(CreateCategoryRequest createCategoryRequest) {
-        Category category = new Category();
-        category = categoryMapper.toCategoryFromCreateCategoryRequest(createCategoryRequest);
-        categoryRepository.addCategory(category);
-        return createCategoryRequest;
+    public CategoryResponse addCategory(CreateCategoryRequest createCategoryRequest) {
+        Category category = categoryMapper.toCategoryFromCreateCategoryRequest(createCategoryRequest);
+        Category addedCategory = categoryRepository.addCategory(category);
+        return categoryMapper.toCategoryResponse(addedCategory);
     }
 
     @Override
     @Transactional
-    public UpdateCategoryRequest updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest) {
+    public CategoryResponse updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest) {
         validateCategory(id);
         Category category = categoryMapper.toCategoryFromUpdateCategoryRequest(updateCategoryRequest);
-        categoryRepository.updateCategory(category);
-        return updateCategoryRequest;
+        category.setId(id);
+        Category updatedCategory = categoryRepository.updateCategory(category);
+        return categoryMapper.toCategoryResponse(updatedCategory);
     }
 
     @Override
