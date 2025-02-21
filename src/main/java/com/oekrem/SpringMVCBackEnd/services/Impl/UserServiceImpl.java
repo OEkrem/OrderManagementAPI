@@ -12,7 +12,6 @@ import com.oekrem.SpringMVCBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,20 +34,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public CreateUserRequest addUser(CreateUserRequest createUserRequest) {
+    public UserResponse addUser(CreateUserRequest createUserRequest) {
         validateUserEmail(createUserRequest.getEmail());
         User user = userMapper.toUserFromCreateUserRequest(createUserRequest);
-        userRepository.addUser(user);
-        return createUserRequest;
+
+        User savedUser = userRepository.addUser(user);
+        return userMapper.toResponse(savedUser);
     }
 
     @Override
     @Transactional
-    public UpdateUserRequest updateUser(Long id, UpdateUserRequest updateUserRequest) {
+    public UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest) {
         validateUser(id);
         User user = userMapper.toUserFromUpdateUserRequest(updateUserRequest);
         user.setId(id);
-        return updateUserRequest;
+        User upddatedUser = userRepository.updateUser(user);
+        return userMapper.toResponse(upddatedUser);
     }
 
     @Override
