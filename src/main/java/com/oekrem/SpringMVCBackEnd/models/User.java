@@ -6,9 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import javax.management.relation.Role;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -35,5 +34,13 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user", orphanRemoval = true)
     private List<Address> addresses = new LinkedList<>();
     // bir kullanıcının birden fazla tanımlı adresi olabilir
+
+    /*@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();*/
 
 }
