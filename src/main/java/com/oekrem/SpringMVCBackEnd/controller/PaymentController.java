@@ -5,7 +5,6 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,15 +34,13 @@ public class PaymentController {
     }
 
     @PostMapping("/orders/{orderId}")
-    public ResponseEntity<CreatePaymentRequest> addPayment(@PathVariable Long orderId, @RequestBody CreatePaymentRequest createPaymentRequest){
-        paymentService.addPayment(orderId, createPaymentRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createPaymentRequest);
+    public ResponseEntity<PaymentResponse> addPayment(@PathVariable Long orderId, @RequestBody CreatePaymentRequest createPaymentRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(paymentService.addPayment(orderId, createPaymentRequest));
     }
 
     @PutMapping("orders/{orderId}")
-    public ResponseEntity<UpdatePaymentRequest> updatePayment(@PathVariable Long orderId, @RequestBody UpdatePaymentRequest updatePaymentRequest){
-        paymentService.updatePayment(orderId, updatePaymentRequest);
-        return ResponseEntity.ok(updatePaymentRequest);
+    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable Long orderId, @RequestBody UpdatePaymentRequest updatePaymentRequest){
+        return ResponseEntity.ok(paymentService.updatePayment(orderId, updatePaymentRequest));
     }
 
     @DeleteMapping("/{id}")

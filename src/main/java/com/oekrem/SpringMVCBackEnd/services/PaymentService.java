@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface PaymentService {
     List<PaymentResponse> findAll();
-    CreatePaymentRequest addPayment(Long orderId, CreatePaymentRequest createPaymentRequest);
-    UpdatePaymentRequest updatePayment(Long orderId, UpdatePaymentRequest updatePayment);
+    PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest);
+    PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePayment);
     void deletePayment(Long id);
     PaymentResponse getPaymentById(Long id);
     PaymentResponse getPaymentByOrderId(Long orderId);
