@@ -54,7 +54,6 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.updateUser(user);
         return userMapper.toResponse(updatedUser);
-
     }
 
     @Override
@@ -69,6 +68,12 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         User user = validateUser(id);
         return modelMapper.map(user, UserResponse.class);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found") );
     }
 
 
