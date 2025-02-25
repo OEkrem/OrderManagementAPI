@@ -11,8 +11,10 @@ import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
+import com.oekrem.SpringMVCBackEnd.services.event.OrderCreatedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+
+    private final AmqpTemplate amqpTemplate; // RabbitMQ ile
 
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
@@ -51,6 +55,15 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
 
         Order savedOrder = orderRepository.addOrder(order);
+
+        // sipariş oluşturuldu
+        // Olay nesnesi
+        OrderCreatedEvent orderCreatedEvent = OrderCreatedEvent.builder()
+                .customerId(user.getId())
+                .orderId(savedOrder.getId())
+                .build();
+        amqpTemplate.convertAndSend("orderQueue", orderCreatedEvent);
+
         return orderMapper.toOrderResponse(savedOrder);
     }
 

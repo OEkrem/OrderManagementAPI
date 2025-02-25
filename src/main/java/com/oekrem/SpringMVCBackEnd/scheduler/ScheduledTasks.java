@@ -1,4 +1,4 @@
-package com.oekrem.SpringMVCBackEnd.utils;
+package com.oekrem.SpringMVCBackEnd.scheduler;
 
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
