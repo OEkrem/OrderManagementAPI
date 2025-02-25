@@ -20,5 +20,6 @@ public class RegisterResponse {
     private String phone;
 
     private boolean success;
+    private String accessToken;
     private String message;
 }
