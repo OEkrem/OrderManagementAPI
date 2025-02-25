@@ -13,9 +13,9 @@ import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,6 +76,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void deleteAllOrders(List<Order> orders) {
+        orderRepository.deleteAllOrders(orders);
+    }
+
+    @Override
     @Transactional
     public OrderResponse getOrderById(Long id) {
         return orderMapper.toOrderResponse(validateOrder(id));
@@ -85,5 +90,10 @@ public class OrderServiceImpl implements OrderService {
     public Order validateOrder(Long id) {
         return orderRepository.getOrderById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id " + id));
+    }
+
+    @Override
+    public List<Order> findByOrdersDateBefore(LocalDate date) {
+        return orderRepository.findByOrdersDateBefore(date);
     }
 }
