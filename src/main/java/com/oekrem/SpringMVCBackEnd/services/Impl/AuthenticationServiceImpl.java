@@ -4,7 +4,7 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.LoginRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.RegisterRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AuthResponse;
-import com.oekrem.SpringMVCBackEnd.dto.Response.RefreshTokenResponse;
+import com.oekrem.SpringMVCBackEnd.dto.Response.AccessTokenResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.RegisterResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.TokenAlreadyExpiredException;
@@ -20,7 +20,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.apache.coyote.Response;
+import org.springframework.http.ResponseCookie;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,10 +56,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthResponse login(LoginRequest loginRequest) {
-
         UserDetails userDetails = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         String token = generateToken(userDetails);
 
+        return AuthResponse.builder()
+                .token(token)
+                .expiresIn(jwtExpiryMs)
+                .build();
+    }
+
+    @Override
+    public String createRefreshToken(LoginRequest loginRequest) {
+        UserDetails userDetails = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         // Kullanıcı doğrulaması - çünkü diğer türlü var olan tokeni silemiyoruz
         User user = userService.getUserByEmail(loginRequest.getEmail());
 
@@ -67,12 +76,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = generateRefreshToken(userDetails);
         // oluşturulan yeni refresh token databaseye kaydedildi
         refreshTokenService.createRefreshToken(user, refreshToken);
-
-        return AuthResponse.builder()
-                .token(token)
-                .refreshToken(refreshToken)
-                .expiresIn(30000L)  // Config üzerinden alınabilir
-                .build();
+        return ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(Duration.ofMillis(jwtExpireMsRefreshToken))
+                .build().toString();
     }
 
 
@@ -130,7 +139,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public RefreshTokenResponse refreshToken(String refreshToken) {
+    public AccessTokenResponse createAccessTokenByRefreshToken(String refreshToken) {
 
         /*
             1- Frontta saklı refresh token gelicek
@@ -165,7 +174,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         String accessToken = generateToken(userDetails);
         System.out.println("Access token oluşturuldu ve response...: " + accessToken);
-        return RefreshTokenResponse.builder()
+        return AccessTokenResponse.builder()
                 .token(accessToken)
                 .success(true)
                 .message("Access token created successfully")

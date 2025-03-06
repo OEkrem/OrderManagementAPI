@@ -3,12 +3,12 @@ package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +19,7 @@ public class HibernateOrderRepository implements OrderRepository {
     private final EntityManager entityManager;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Order> findAll() {
         Session session = entityManager.unwrap(Session.class);
         return session.createQuery("from Order", Order.class).list();
@@ -51,8 +51,28 @@ public class HibernateOrderRepository implements OrderRepository {
 
     @Override
     @Transactional
+    public void deleteAllOrders(List<Order> orders) {
+        Session session = entityManager.unwrap(Session.class);
+        for (Order order : orders) {
+            session.remove(order);
+        }
+        session.flush();
+        session.clear();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Optional<Order> getOrderById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return Optional.ofNullable(session.get(Order.class, id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> findByOrdersDateBefore(LocalDate date) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("select o from Order o where o.date < :date", Order.class)
+                .setParameter("date", date)
+                .list();
     }
 }

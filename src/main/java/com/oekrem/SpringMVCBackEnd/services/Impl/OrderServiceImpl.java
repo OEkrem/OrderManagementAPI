@@ -11,17 +11,21 @@ import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
+import com.oekrem.SpringMVCBackEnd.services.event.OrderCreatedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+
+    private final AmqpTemplate amqpTemplate; // RabbitMQ ile
 
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
@@ -51,6 +55,15 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
 
         Order savedOrder = orderRepository.addOrder(order);
+
+        // sipariş oluşturuldu
+        // Olay nesnesi
+        OrderCreatedEvent orderCreatedEvent = OrderCreatedEvent.builder()
+                .customerId(user.getId())
+                .orderId(savedOrder.getId())
+                .build();
+        amqpTemplate.convertAndSend("orderQueue", orderCreatedEvent);
+
         return orderMapper.toOrderResponse(savedOrder);
     }
 
@@ -76,6 +89,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void deleteAllOrders(List<Order> orders) {
+        orderRepository.deleteAllOrders(orders);
+    }
+
+    @Override
     @Transactional
     public OrderResponse getOrderById(Long id) {
         return orderMapper.toOrderResponse(validateOrder(id));
@@ -85,5 +103,10 @@ public class OrderServiceImpl implements OrderService {
     public Order validateOrder(Long id) {
         return orderRepository.getOrderById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id " + id));
+    }
+
+    @Override
+    public List<Order> findByOrdersDateBefore(LocalDate date) {
+        return orderRepository.findByOrdersDateBefore(date);
     }
 }
