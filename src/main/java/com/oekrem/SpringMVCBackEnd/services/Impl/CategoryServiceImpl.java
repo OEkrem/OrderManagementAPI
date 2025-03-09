@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.repository.CategoryRepository;
-import com.oekrem.SpringMVCBackEnd.dto.Mapper.CustomMapper.CategoryMapper;
+import com.oekrem.SpringMVCBackEnd.dto.Mapper.CategoryMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.CategoryResponse;
@@ -25,25 +25,25 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public List<CategoryResponse> findAll() {
-        return categoryRepository.findAll().stream().map(categoryMapper::toCategoryResponse).collect(Collectors.toList());
+        return categoryRepository.findAll().stream().map(categoryMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public CategoryResponse addCategory(CreateCategoryRequest createCategoryRequest) {
-        Category category = categoryMapper.toCategoryFromCreateCategoryRequest(createCategoryRequest);
+        Category category = categoryMapper.toCategoryFromCreateRequest(createCategoryRequest);
         Category addedCategory = categoryRepository.addCategory(category);
-        return categoryMapper.toCategoryResponse(addedCategory);
+        return categoryMapper.toResponse(addedCategory);
     }
 
     @Override
     @Transactional
     public CategoryResponse updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest) {
         validateCategory(id);
-        Category category = categoryMapper.toCategoryFromUpdateCategoryRequest(updateCategoryRequest);
+        Category category = categoryMapper.toCategoryFromUpdateRequest(updateCategoryRequest);
         category.setId(id);
         Category updatedCategory = categoryRepository.updateCategory(category);
-        return categoryMapper.toCategoryResponse(updatedCategory);
+        return categoryMapper.toResponse(updatedCategory);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryResponse getCategoryById(Long id) {
         Category category = validateCategory(id);
-        return categoryMapper.toCategoryResponse(category);
+        return categoryMapper.toResponse(category);
     }
 
     @Override

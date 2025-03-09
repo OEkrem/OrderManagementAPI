@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.repository.PaymentRepository;
-import com.oekrem.SpringMVCBackEnd.dto.Mapper.CustomMapper.PaymentMapper;
+import com.oekrem.SpringMVCBackEnd.dto.Mapper.PaymentMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
@@ -36,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest) {
         orderService.validateOrder(orderId);
 
-        Payment payment = paymentMapper.toPaymentFromCreatePaymentRequest(createPaymentRequest);
+        Payment payment = paymentMapper.toPaymentFromCreateRequest(createPaymentRequest);
         Order order = new Order(); order.setId(orderId);
         payment.setOrder(order);
 
@@ -49,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePaymentRequest) {
         orderService.validateOrder(orderId);
 
-        Payment payment = paymentMapper.toPaymentFromUpdatePaymentRequest(updatePaymentRequest);
+        Payment payment = paymentMapper.toPaymentFromUpdateRequest(updatePaymentRequest);
         Order order = new Order(); order.setId(orderId);
         payment.setOrder(order);
 

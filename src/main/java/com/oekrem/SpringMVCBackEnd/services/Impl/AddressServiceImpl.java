@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.repository.AddressRepository;
-import com.oekrem.SpringMVCBackEnd.dto.Mapper.CustomMapper.AddressMapper;
+import com.oekrem.SpringMVCBackEnd.dto.Mapper.AddressMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
@@ -12,7 +12,6 @@ import com.oekrem.SpringMVCBackEnd.services.AddressService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
-    private final ModelMapper modelMapper;
     private final AddressMapper addressMapper;
     private final AddressRepository addressRepository;
     private final UserService userService;
@@ -31,7 +29,7 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public List<AddressResponse> findAll() {
         List<Address> addressList = addressRepository.findAll();
-        return addressList.stream().map(address -> modelMapper.map(address, AddressResponse.class)).collect(Collectors.toList());
+        return addressList.stream().map(addressMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -40,18 +38,17 @@ public class AddressServiceImpl implements AddressService {
         Address address = addressRepository.getAddressById(id)
                 .orElseThrow(AddressNotFoundException::new);
 
-        return modelMapper.map(address, AddressResponse.class);
+        return addressMapper.toResponse(address);
     }
 
     @Override
     @Transactional
     public AddressResponse addAddress(Long userId, CreateAddressRequest address) {
         userService.validateUser(userId);
-        Address addressToAdd = addressMapper.toAddressFromCreateAddressRequest(address);
-        User user = new User(); user.setId(userId);
-        addressToAdd.setUser(user);
+        Address addressToAdd = addressMapper.toAddressFromCreateRequest(address);
+        addressToAdd.setUser(User.builder().id(userId).build());
         Address savedAddress = addressRepository.addAddress(addressToAdd);
-        return addressMapper.toAddressResponse(savedAddress);
+        return addressMapper.toResponse(savedAddress);
     }
 
     @Override
@@ -61,11 +58,11 @@ public class AddressServiceImpl implements AddressService {
         validateAddress(address.getId())
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
 
-        Address addressToUpdate = addressMapper.toAddressFromUpdateAddressRequest(address);
+        Address addressToUpdate = addressMapper.toAddressFromUpdateRequest(address);
         User user = new User(); user.setId(userId);
         addressToUpdate.setUser(user);
         Address updatedAddress = addressRepository.updateAddress(addressToUpdate);
-        return addressMapper.toAddressResponse(updatedAddress);
+        return addressMapper.toResponse(updatedAddress);
     }
 
     @Override
@@ -82,8 +79,8 @@ public class AddressServiceImpl implements AddressService {
     public List<AddressResponse> getAddressesByUserId(Long id) {
         userService.validateUser(id);
         List<Address> addressList = addressRepository.getAddressesByUserId(id);
-        System.out.println(addressList.stream().map(addressMapper::toAddressResponse).collect(Collectors.toList()));
-        return addressList.stream().map(addressMapper::toAddressResponse).collect(Collectors.toList());
+        System.out.println(addressList.stream().map(addressMapper::toResponse).collect(Collectors.toList()));
+        return addressList.stream().map(addressMapper::toResponse).collect(Collectors.toList());
     }
 
 

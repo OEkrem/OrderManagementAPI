@@ -72,7 +72,7 @@ public class OrderMapper {
             order.setUser(user);
             order.setPayment(paymentMapper.toPaymentFromResponse(orderAllResponse.getPayment()));
             order.setOrderDetail(
-                    orderAllResponse.getOrderDetailIdList().stream()
+                    orderAllResponse.getOrderDetailResponses().stream()
                             .map(u -> orderDetailMapper.toOrderDetailFromOrderDetailResponse(u))
                             .collect(Collectors.toList())
             );
@@ -91,9 +91,9 @@ public class OrderMapper {
             orderAllResponse.setUserId(order.getUser().getId());
 
             if (order.getOrderDetail() != null)
-                orderAllResponse.setOrderDetailIdList(order.getOrderDetail().stream().map(orderDetailMapper::toResponse).collect(Collectors.toList()));
+                orderAllResponse.setOrderDetailResponses(order.getOrderDetail().stream().map(orderDetailMapper::toResponse).collect(Collectors.toList()));
             else
-                orderAllResponse.setOrderDetailIdList(new LinkedList<OrderDetailResponse>());
+                orderAllResponse.setOrderDetailResponses(new LinkedList<OrderDetailResponse>());
 
             if (order.getPayment() != null)
                 orderAllResponse.setPayment(paymentMapper.toResponse(order.getPayment()));

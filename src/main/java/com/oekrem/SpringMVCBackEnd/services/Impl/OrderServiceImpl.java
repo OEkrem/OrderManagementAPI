@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
-import com.oekrem.SpringMVCBackEnd.dto.Mapper.CustomMapper.OrderMapper;
+import com.oekrem.SpringMVCBackEnd.dto.Mapper.OrderMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderAllResponse;
@@ -35,14 +35,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<OrderResponse> findAll() {
         List<Order> orders = orderRepository.findAll();
-        return orders.stream().map(orderMapper::toOrderResponse).collect(Collectors.toList());
+        return orders.stream().map(orderMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public List<OrderAllResponse> findAllOrders() {
         List<Order> orders = orderRepository.findAll();
-        return orders.stream().map(orderMapper::toOrderAllResponse).collect(Collectors.toList());
+        return orders.stream().map(orderMapper::toResponseAll).collect(Collectors.toList());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         userService.validateUser(id);
 
         User user = new User(); user.setId(id);
-        Order order = orderMapper.toOrderFromCreateOrderRequest(createOrderRequest);
+        Order order = orderMapper.toOrderFromCreateRequest(createOrderRequest);
         order.setUser(user);
 
         Order savedOrder = orderRepository.addOrder(order);
@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         amqpTemplate.convertAndSend("orderQueue", orderCreatedEvent);
 
-        return orderMapper.toOrderResponse(savedOrder);
+        return orderMapper.toResponse(savedOrder);
     }
 
     @Override
@@ -73,13 +73,13 @@ public class OrderServiceImpl implements OrderService {
         User user = userService.validateUser(id);
         Order orderValidated = validateOrder(updateOrderRequest.getId());
 
-        Order order = orderMapper.toOrderFromUpdateOrderRequest(updateOrderRequest);
+        Order order = orderMapper.toOrderFromUpdateRequest(updateOrderRequest);
         order.setUser(user);
         order.setOrderDetail(orderValidated.getOrderDetail());
         order.setPayment(orderValidated.getPayment());
         Order updatedOrder = orderRepository.updateOrder(order);
 
-        return orderMapper.toOrderResponse(updatedOrder);
+        return orderMapper.toResponse(updatedOrder);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse getOrderById(Long id) {
-        return orderMapper.toOrderResponse(validateOrder(id));
+        return orderMapper.toResponse(validateOrder(id));
     }
 
     @Override

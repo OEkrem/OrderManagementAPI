@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.repository.ProductRepository;
-import com.oekrem.SpringMVCBackEnd.dto.Mapper.CustomMapper.ProductMapper;
+import com.oekrem.SpringMVCBackEnd.dto.Mapper.ProductMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse addProduct(CreateProductRequest product) {
-        Product savedProduct = productRepository.addProduct(productMapper.toProductFromCreateProductRequest(product));
+        Product savedProduct = productRepository.addProduct(productMapper.toProductFromCreateRequest(product));
         return productMapper.toResponse(savedProduct);
     }
 
@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductResponse updateProduct(Long id, UpdateProductRequest product) {
         validateProduct(id);
-        Product productToUpdate = productMapper.toProductFromUpdateProductRequest(product);
+        Product productToUpdate = productMapper.toProductFromUpdateRequest(product);
         productToUpdate.setId(id);
 
         Product updatedProduct = productRepository.updateProduct(productToUpdate);

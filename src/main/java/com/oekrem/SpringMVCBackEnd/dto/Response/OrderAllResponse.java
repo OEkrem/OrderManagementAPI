@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderAllResponse {
     private Long id;
     private Long userId;
-    private List<OrderDetailResponse> orderDetailIdList;
+    private List<OrderDetailResponse> orderDetailResponses;
     private PaymentResponse payment;
     private LocalDate date;
     private Double total;

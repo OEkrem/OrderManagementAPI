@@ -1,7 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.repository.OrderDetailRepository;
-import com.oekrem.SpringMVCBackEnd.dto.Mapper.CustomMapper.OrderDetailMapper;
+import com.oekrem.SpringMVCBackEnd.dto.Mapper.OrderDetailMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
@@ -39,7 +39,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderDetailResponse addOrderDetail(Long orderId, CreateOrderDetailRequest createOrderDetailRequest) {
         orderService.validateOrder(orderId);
 
-        OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromCreateOrderDetailRequest(createOrderDetailRequest);
+        OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromCreateRequest(createOrderDetailRequest);
         Order order = new Order(); order.setId(orderId);
         orderDetail.setOrder(order);
 
@@ -53,7 +53,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderService.validateOrder(orderId);
         validateOrderDetail(updateOrderDetailRequest.getId());
 
-        OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromUpdateOrderDetailRequest(updateOrderDetailRequest);
+        OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromUpdateRequest(updateOrderDetailRequest);
         Order order = new Order(); order.setId(orderId);
         orderDetail.setOrder(order);
 
