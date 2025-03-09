@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchProductRequest;
 import com.oekrem.SpringMVCBackEnd.repository.ProductRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.ProductMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateProductRequest;
@@ -52,6 +53,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public ProductResponse patchProduct(Long id, PatchProductRequest patchProductRequest) {
+        Product validateProduct = validateProduct(id);
+
+        productMapper.patchProduct(patchProductRequest, validateProduct);
+        Product savedProduct = productRepository.updateProduct(validateProduct);
+        return productMapper.toResponse(savedProduct);
+    }
+
+    @Override
+    @Transactional
     public void deleteProduct(Long id) {
         validateProduct(id);
         productRepository.deleteProduct(id);
@@ -78,4 +89,5 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.getProductById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
     }
+
 }

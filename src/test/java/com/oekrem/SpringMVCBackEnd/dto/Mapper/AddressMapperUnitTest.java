@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.models.Address;
@@ -89,6 +90,30 @@ public class AddressMapperUnitTest {
         assertEquals(updateAddressRequest.getStreet(), address.getStreet());
         assertEquals(updateAddressRequest.getCountry(), address.getCountry());
         assertEquals(updateAddressRequest.getFloor(), address.getFloor());
+    }
+
+    @Test
+    public void shouldMapPatchAddressRequestToAddress(){
+        Address address = Address.builder().build();
+        PatchAddressRequest patchAddressRequest = PatchAddressRequest.builder()
+                .name("Address 1")
+                .doorNumber(4)
+                .buildingNumber("4")
+                .city("City 1")
+                .street("Street 1")
+                .country("Country 1")
+                .floor(4)
+                .build();
+
+        addressMapper.patchAddress(patchAddressRequest, address);
+
+        assertEquals(patchAddressRequest.name(), address.getName());
+        assertEquals(patchAddressRequest.doorNumber(), address.getDoorNumber());
+        assertEquals(patchAddressRequest.buildingNumber(), address.getBuildingNumber());
+        assertEquals(patchAddressRequest.city(), address.getCity());
+        assertEquals(patchAddressRequest.street(), address.getStreet());
+        assertEquals(patchAddressRequest.country(), address.getCountry());
+        assertEquals(patchAddressRequest.floor(), address.getFloor());
     }
 
 }

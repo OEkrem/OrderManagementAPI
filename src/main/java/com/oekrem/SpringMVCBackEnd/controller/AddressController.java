@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.services.AddressService;
@@ -46,11 +47,27 @@ public class AddressController {
         return ResponseEntity.ok(addressService.updateAddress(id, addressRequest));
     }
 
+    @PatchMapping("/users/{userId}")
+    public ResponseEntity<AddressResponse> patchAddress(@PathVariable Long userId, @RequestBody PatchAddressRequest patchAddressRequest){
+        return ResponseEntity.ok(addressService.patchAddress(userId ,patchAddressRequest));
+    }
+
     // address id üzerinden siliniyor
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id){
         addressService.deleteAddress(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    /*
+    @PatchMapping("/{id}")
+public ResponseEntity<AddressResponse> patchAddress(
+        @PathVariable Long id,
+        @AuthenticationPrincipal UserPrincipal userPrincipal,
+        @RequestBody PatchAddressRequest patchAddressRequest) {
+    return ResponseEntity.ok(addressService.patchAddress(id, userPrincipal.getId(), patchAddressRequest));
+}
+bu şekilde autheentication ile de yapılabiliyor knk sonra ekleriz
+     */
 
 }

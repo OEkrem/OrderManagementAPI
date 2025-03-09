@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record PatchAddressRequest (
+        Long id,
         String name,
         Integer doorNumber,
         Integer floor,

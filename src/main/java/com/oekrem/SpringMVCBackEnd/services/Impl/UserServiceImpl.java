@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
 import com.oekrem.SpringMVCBackEnd.repository.UserRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.UserMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
@@ -52,6 +53,15 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.updateUser(user);
         return userMapper.toResponse(updatedUser);
+    }
+
+    @Override
+    public UserResponse patchUser(Long id, PatchUserRequest patchUserRequest) {
+        User user = validateUser(id);
+
+        userMapper.patchUser(patchUserRequest, user);
+        User savedUser = userRepository.updateUser(user);
+        return userMapper.toResponse(savedUser);
     }
 
     @Override

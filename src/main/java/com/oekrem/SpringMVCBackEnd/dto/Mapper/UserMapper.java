@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.models.User;
@@ -17,5 +18,6 @@ public interface UserMapper {
     User toUserFromUpdateRequest(UpdateUserRequest updateUserRequest);
 
     @Mapping(target = "id", ignore = true)
-    void patchUser(UpdateUserRequest updateUserRequest, @MappingTarget UserResponse userResponse);
+    void patchUser(PatchUserRequest patchUserRequest, @MappingTarget User user);
+
 }

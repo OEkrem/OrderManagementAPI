@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderDetailRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.models.Order;
@@ -78,6 +79,27 @@ public class OrderDetailMapperUnitTest {
         assertEquals(updateOrderDetailRequest.getQuantity(), orderDetail.getQuantity());
         assertEquals(updateOrderDetailRequest.getQuantityType(), orderDetail.getQuantityType());
         assertEquals(updateOrderDetailRequest.getId(), orderDetail.getId());
+    }
+
+    @Test
+    public void shouldMapPatchOrderDetailToOrderDetail() {
+        PatchOrderDetailRequest patchOrderDetailRequest = PatchOrderDetailRequest.builder()
+                .id(1L)
+                .price(200D)
+                .productId(1L)
+                .quantity(BigDecimal.valueOf(1))
+                .quantityType(QuantityType.PACK)
+                .build();
+        OrderDetail orderDetail = OrderDetail.builder().id(1L).build();
+
+        orderDetailMapper.patchOrderDetail(patchOrderDetailRequest, orderDetail);
+
+        assertEquals(patchOrderDetailRequest.price(), orderDetail.getPrice());
+        assertEquals(patchOrderDetailRequest.productId(), orderDetail.getProduct().getId());
+        assertEquals(patchOrderDetailRequest.quantity(), orderDetail.getQuantity());
+        assertEquals(patchOrderDetailRequest.quantityType(), orderDetail.getQuantityType());
+        assertEquals(patchOrderDetailRequest.id(), orderDetail.getId());
+
     }
 
 }

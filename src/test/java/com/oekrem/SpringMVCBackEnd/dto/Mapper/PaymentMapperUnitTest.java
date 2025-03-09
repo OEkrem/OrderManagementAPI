@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.models.Order;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -83,6 +83,26 @@ public class PaymentMapperUnitTest {
         assertEquals(updatePaymentRequest.getAmount(), response.getAmount());
         assertEquals(updatePaymentRequest.getDate(), response.getDate());
         assertEquals(updatePaymentRequest.getDescription(), response.getDescription());
+    }
+
+    @Test
+    public void shouldMapPatchPaymentRequestToPayment(){
+        PatchPaymentRequest patchPaymentRequest = PatchPaymentRequest.builder()
+                .id(1L)
+                .paymentStatus(PaymentStatus.SUCCESSFUL)
+                .paymentMethod(PaymentMethod.PAYPAL)
+                .amount(200D)
+                .date(LocalDateTime.now())
+                .description("test")
+                .build();
+        Payment payment = Payment.builder().build();
+        paymentMapper.patchPayment(patchPaymentRequest, payment);
+
+        assertEquals(patchPaymentRequest.paymentStatus(), payment.getPaymentStatus());
+        assertEquals(patchPaymentRequest.paymentMethod(), payment.getPaymentMethod());
+        assertEquals(patchPaymentRequest.amount(), payment.getAmount());
+        assertEquals(patchPaymentRequest.date(), payment.getDate());
+        assertEquals(patchPaymentRequest.description(), payment.getDescription());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.repository.CategoryRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.CategoryMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateCategoryRequest;
@@ -44,6 +45,14 @@ public class CategoryServiceImpl implements CategoryService {
         category.setId(id);
         Category updatedCategory = categoryRepository.updateCategory(category);
         return categoryMapper.toResponse(updatedCategory);
+    }
+
+    @Override
+    public CategoryResponse patchCategory(Long id, PatchCategoryRequest patchCategoryRequest) {
+        Category category = validateCategory(id);
+        categoryMapper.patchCategory(patchCategoryRequest, category);
+        Category savedCategory = categoryRepository.updateCategory(category);
+        return categoryMapper.toResponse(savedCategory);
     }
 
     @Override

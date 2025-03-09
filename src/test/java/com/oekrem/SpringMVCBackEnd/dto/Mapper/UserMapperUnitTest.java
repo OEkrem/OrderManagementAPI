@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.models.Address;
@@ -84,6 +85,27 @@ public class UserMapperUnitTest {
         assertEquals(user.getEmail(), updateUserRequest.getEmail());
         assertEquals(user.getPassword(), updateUserRequest.getPassword());
         assertEquals(user.getPhone(), updateUserRequest.getPhone());
+    }
+
+    @Test
+    public void shouldMapPatchRequestToUser() {
+        PatchUserRequest patchUserRequest = PatchUserRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .username("johndoe")
+                .email("johndoe@gmail.com")
+                .password("password")
+                .phone("123456789")
+                .build();
+        User user = User.builder().build();
+        userMapper.patchUser(patchUserRequest, user);
+
+        assertEquals(patchUserRequest.firstName(), user.getFirstName());
+        assertEquals(patchUserRequest.lastName(), user.getLastName());
+        assertEquals(patchUserRequest.username(), user.getUsername());
+        assertEquals(patchUserRequest.email(), user.getEmail());
+        assertEquals(patchUserRequest.password(), user.getPassword());
+        assertEquals(patchUserRequest.phone(), user.getPhone());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.repository.OrderDetailRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.OrderDetailMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderDetailRequest;
@@ -59,6 +60,17 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         OrderDetail updatedOrderDetail = orderDetailRepository.updateOrderDetail(orderDetail);
         return orderDetailMapper.toResponse(updatedOrderDetail);
+    }
+
+    @Override
+    @Transactional
+    public OrderDetailResponse patchOrderDetail(Long orderId, PatchOrderDetailRequest patchOrderDetailRequest) {
+        orderService.validateOrder(orderId);
+        OrderDetail orderDetail = validateOrderDetail(patchOrderDetailRequest.id());
+
+        orderDetailMapper.patchOrderDetail(patchOrderDetailRequest, orderDetail);
+        OrderDetail savedOrderDetail = orderDetailRepository.updateOrderDetail(orderDetail);
+        return orderDetailMapper.toResponse(savedOrderDetail);
     }
 
     @Override

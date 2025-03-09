@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateProductRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
@@ -41,6 +42,11 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest updateProductRequest){
         return ResponseEntity.ok(productService.updateProduct(id, updateProductRequest));
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<ProductResponse> patchProduct(@PathVariable Long id, @RequestBody PatchProductRequest patchProductRequest){
+        return ResponseEntity.ok(productService.patchProduct(id, patchProductRequest));
     }
 
     @DeleteMapping("/{id}")

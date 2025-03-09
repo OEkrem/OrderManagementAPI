@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateProductRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.models.Product;
@@ -21,6 +22,7 @@ public interface ProductMapper {
     Product toProductFromUpdateRequest(UpdateProductRequest updateProductRequest);
 
     @Mapping(target = "id", ignore = true)
-    void patchProduct(UpdateProductRequest updateProductRequest, @MappingTarget Product product);
+    @Mapping(target = "category.id", source = "categoryId")
+    void patchProduct(PatchProductRequest patchProductRequest, @MappingTarget Product product);
 
 }

@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderRequest;
 import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.OrderMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderRequest;
@@ -47,15 +48,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponse addOrder(Long id, CreateOrderRequest createOrderRequest) {
-        userService.validateUser(id);
-
-        User user = new User(); user.setId(id);
+    public OrderResponse addOrder(Long userId, CreateOrderRequest createOrderRequest) {
+        User user = userService.validateUser(userId);
         Order order = orderMapper.toOrderFromCreateRequest(createOrderRequest);
         order.setUser(user);
 
         Order savedOrder = orderRepository.addOrder(order);
-
         // sipariş oluşturuldu
         // Olay nesnesi
         OrderCreatedEvent orderCreatedEvent = OrderCreatedEvent.builder()
@@ -69,8 +67,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
-        User user = userService.validateUser(id);
+    public OrderResponse updateOrder(Long userId, UpdateOrderRequest updateOrderRequest) {
+        User user = userService.validateUser(userId);
         Order orderValidated = validateOrder(updateOrderRequest.getId());
 
         Order order = orderMapper.toOrderFromUpdateRequest(updateOrderRequest);
@@ -80,6 +78,16 @@ public class OrderServiceImpl implements OrderService {
         Order updatedOrder = orderRepository.updateOrder(order);
 
         return orderMapper.toResponse(updatedOrder);
+    }
+
+    @Override
+    public OrderAllResponse patchOrder(Long userId, PatchOrderRequest patchOrderRequest) {
+        User user = userService.validateUser(userId);
+        Order orderValidated = validateOrder(patchOrderRequest.id());
+
+        orderMapper.patchOrder(patchOrderRequest, orderValidated);
+        Order savedORder = orderRepository.updateOrder(orderValidated);
+        return orderMapper.toResponseAll(savedORder);
     }
 
     @Override

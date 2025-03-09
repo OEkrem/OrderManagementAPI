@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
@@ -43,9 +44,15 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.updatePayment(orderId, updatePaymentRequest));
     }
 
+    @PatchMapping("/orders/{orderId}")
+    public ResponseEntity<PaymentResponse> patchPayment(@PathVariable Long orderId, @RequestBody PatchPaymentRequest patchPaymentRequest){
+        return ResponseEntity.ok(paymentService.patchPayment(orderId, patchPaymentRequest));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id){
         paymentService.deletePayment(id);
         return ResponseEntity.noContent().build();
     }
+
 }

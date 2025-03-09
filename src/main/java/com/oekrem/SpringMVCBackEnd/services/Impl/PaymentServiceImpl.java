@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.repository.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.PaymentMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
@@ -48,6 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePaymentRequest) {
         orderService.validateOrder(orderId);
+        validatePayment(updatePaymentRequest.getId());
 
         Payment payment = paymentMapper.toPaymentFromUpdateRequest(updatePaymentRequest);
         Order order = new Order(); order.setId(orderId);
@@ -55,6 +57,20 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment  updatedPayment = paymentRepository.updatePayment(payment);
         return paymentMapper.toResponse(updatedPayment);
+    }
+
+    @Override
+    @Transactional
+    public PaymentResponse patchPayment(Long orderId, PatchPaymentRequest patchPayment) {
+        Order order = orderService.validateOrder(orderId);
+        Payment patch = validatePayment(patchPayment.id());
+
+        if(order.getPayment() != null && order.getPayment().getId() != patch.getId())
+            throw new PaymentNotFoundException("Payment and Order are not matched.");
+
+        paymentMapper.patchPayment(patchPayment, patch);
+        Payment savedPayment = paymentRepository.updatePayment(patch);
+        return paymentMapper.toResponse(savedPayment);
     }
 
     @Override
@@ -85,6 +101,5 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.getPaymentByOrderId(orderId)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found by orderId"));
     }
-
 
 }

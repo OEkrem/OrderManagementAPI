@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateCategoryRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.models.Category;
@@ -17,6 +18,6 @@ public interface CategoryMapper {
     Category toCategoryFromUpdateRequest(UpdateCategoryRequest updateCategoryRequest);
 
     @Mapping(target = "id", ignore = true)
-    void patchCategory(UpdateCategoryRequest updateCategoryRequest, @MappingTarget Category category);
+    void patchCategory(PatchCategoryRequest patchCategoryRequest, @MappingTarget Category category);
 
 }

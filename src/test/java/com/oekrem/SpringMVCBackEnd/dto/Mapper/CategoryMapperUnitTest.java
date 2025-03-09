@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateCategoryRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.models.Category;
@@ -58,6 +59,20 @@ public class CategoryMapperUnitTest {
         assertNull(category.getId());
         assertEquals(updateCategoryRequest.getName(), category.getName());
         assertEquals(updateCategoryRequest.getDescription(), category.getDescription());
+    }
+
+    @Test
+    public void shouldMapPatchRequestToCategory(){
+        PatchCategoryRequest patchCategoryRequest = PatchCategoryRequest.builder()
+                .name("Test")
+                .description("Test")
+                .build();
+        Category category = Category.builder().id(1L).build();
+
+        categoryMapper.patchCategory(patchCategoryRequest, category);
+
+        assertEquals(category.getName(), patchCategoryRequest.name());
+        assertEquals(category.getDescription(), patchCategoryRequest.description());
     }
 
 }

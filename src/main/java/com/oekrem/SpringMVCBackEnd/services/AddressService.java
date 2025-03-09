@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.models.Address;
@@ -12,6 +13,7 @@ public interface AddressService {
     List<AddressResponse> findAll();
     AddressResponse addAddress(Long userId, CreateAddressRequest address);
     AddressResponse updateAddress(Long userId, UpdateAddressRequest address);
+    AddressResponse patchAddress(Long userId, PatchAddressRequest address);
     void deleteAddress(Long id);
     AddressResponse getAddressById(Long id);
 

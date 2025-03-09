@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderDetailRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
@@ -24,8 +25,12 @@ public interface OrderDetailMapper {
     OrderDetail toOrderDetailFromUpdateRequest(UpdateOrderDetailRequest orderDetailRequest);
 
     @Mapping(target = "id", ignore = true)
-    void patchOrderDetail(UpdateOrderDetailRequest updateOrderDetailRequest, @MappingTarget OrderDetail orderDetail);
+    @Mapping(target = "product.id", source = "productId")
+    void patchOrderDetail(PatchOrderDetailRequest patchOrderDetailRequest, @MappingTarget OrderDetail orderDetail);
 
     List<OrderDetailResponse> toResponseList(List<OrderDetail> orderDetails);
+
+    @Mapping(target = "product.id", source = "productId")
+    List<OrderDetail> toOrderDetailList(List<CreateOrderDetailRequest> createOrderDetailRequests);
 
 }

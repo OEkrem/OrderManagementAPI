@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
@@ -36,6 +37,11 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest){
         return ResponseEntity.ok(userService.updateUser(id, updateUserRequest));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> patchUser(@PathVariable Long id, @RequestBody PatchUserRequest patchUserRequest){
+        return ResponseEntity.ok(userService.patchUser(id, patchUserRequest));
     }
 
     @DeleteMapping("/{id}")

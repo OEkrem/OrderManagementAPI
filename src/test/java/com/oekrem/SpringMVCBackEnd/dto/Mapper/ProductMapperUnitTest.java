@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateProductRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.models.Category;
@@ -76,6 +77,25 @@ public class ProductMapperUnitTest {
         assertEquals(request.getPrice(), response.getPrice());
         assertEquals(request.getImage(), response.getImage());
         assertEquals(request.getCategoryId(), response.getCategory().getId());
+    }
+
+    @Test
+    public void shouldMapPatchRequestToProduct(){
+        PatchProductRequest request = PatchProductRequest.builder()
+                .name("Product Name")
+                .description("Product Description")
+                .price(100D)
+                .image("Product Image")
+                .categoryId(1L)
+                .build();
+        Product product = Product.builder().build();
+        productMapper.patchProduct(request, product);
+
+        assertEquals(request.name(), product.getName());
+        assertEquals(request.description(), product.getDescription());
+        assertEquals(request.price(), product.getPrice());
+        assertEquals(request.image(), product.getImage());
+        assertEquals(request.categoryId(), product.getCategory().getId());
     }
 
 }

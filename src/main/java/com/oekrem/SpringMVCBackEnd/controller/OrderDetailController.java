@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderDetailRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
@@ -43,9 +44,15 @@ public class OrderDetailController {
         return ResponseEntity.ok(orderDetailService.updateOrderDetail(orderId, updateOrderDetailRequest));
     }
 
+    @PatchMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDetailResponse> patchOrderDetail(@PathVariable Long orderId, @RequestBody PatchOrderDetailRequest patchOrderDetailRequest){
+        return ResponseEntity.ok(orderDetailService.patchOrderDetail(orderId, patchOrderDetailRequest));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderDetail(@PathVariable Long id){
         orderDetailService.deleteOrderDetail(id);
         return ResponseEntity.noContent().build();
     }
+
 }

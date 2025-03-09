@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record PatchPaymentRequest(
+        Long id,
         String description,
         Double amount,
         PaymentStatus paymentStatus,

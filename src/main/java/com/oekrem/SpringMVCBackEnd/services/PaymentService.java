@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
@@ -11,6 +12,7 @@ public interface PaymentService {
     List<PaymentResponse> findAll();
     PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest);
     PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePayment);
+    PaymentResponse patchPayment(Long orderId, PatchPaymentRequest patchPayment);
     void deletePayment(Long id);
     PaymentResponse getPaymentById(Long id);
     PaymentResponse getPaymentByOrderId(Long orderId);

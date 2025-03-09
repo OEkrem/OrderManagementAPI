@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.models.Address;
@@ -15,6 +16,6 @@ public interface AddressMapper {
     Address toAddressFromUpdateRequest(UpdateAddressRequest updateAddressRequest);
 
     @Mapping(target = "id", ignore = true)
-    void patchAdress(UpdateAddressRequest updateAddressRequest, @MappingTarget Address address);
+    void patchAddress(PatchAddressRequest patchAddressRequest, @MappingTarget Address address);
 
 }

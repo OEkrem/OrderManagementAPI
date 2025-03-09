@@ -6,8 +6,8 @@ import java.util.List;
 
 @Builder
 public record PatchOrderRequest (
-        Long userId,
-        List<CreateOrderDetailRequest>orderDetailResponses,
+        Long id,
+        List<CreateOrderDetailRequest> orderDetails,
         CreatePaymentRequest payment,
         Double total
 ){

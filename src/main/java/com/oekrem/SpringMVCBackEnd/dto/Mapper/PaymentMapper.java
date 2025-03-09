@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.dto.Mapper;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
@@ -16,6 +17,8 @@ public interface PaymentMapper {
     Payment toPaymentFromUpdateRequest(UpdatePaymentRequest updatePaymentRequest);
 
     @Mapping(target = "id", ignore = true)
-    void patchPayment(UpdatePaymentRequest updatePaymentRequest, @MappingTarget Payment payment);
+    void patchPayment(PatchPaymentRequest patchPaymentRequest, @MappingTarget Payment payment);
+
+
 
 }

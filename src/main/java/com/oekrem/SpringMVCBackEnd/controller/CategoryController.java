@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateCategoryRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.services.CategoryService;
@@ -38,9 +39,15 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.updateCategory(id, updateCategoryRequest));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoryResponse> patchCategory(@PathVariable Long id, @RequestBody PatchCategoryRequest patchCategoryRequest){
+        return ResponseEntity.ok(categoryService.patchCategory(id, patchCategoryRequest));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
+
 }
