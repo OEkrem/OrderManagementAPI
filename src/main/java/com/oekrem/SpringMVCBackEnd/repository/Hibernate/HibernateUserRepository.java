@@ -3,11 +3,13 @@ package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 import com.oekrem.SpringMVCBackEnd.repository.UserRepository;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +22,18 @@ public class HibernateUserRepository implements UserRepository {
 
     @Override
     @Transactional
-    public List<User> findAll(/*int pageNumber, int pageSize*/) {
+    public Page<User> findAll(Pageable pageable) {
         Session session = entityManager.unwrap(Session.class);
-        Query<User> query = session.createQuery("select distinct u from User u", User.class);
-        //query.setFirstResult((pageNumber - 1) * pageSize); // Hangi kayıttan başlayacağını belirler
-        //query.setMaxResults(pageSize);
-        return query.list(); // getResultList hibernate 5 ile daha uyumlu imiş, 6 ise list
+
+        List<User> users = session.createQuery("FROM User", User.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM User o", Long.class)
+                .getSingleResult();
+
+        return new PageImpl<>(users, pageable, totalOrders);
     }
 
     @Override

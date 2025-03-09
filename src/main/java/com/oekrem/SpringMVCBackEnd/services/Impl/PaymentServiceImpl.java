@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
+import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import com.oekrem.SpringMVCBackEnd.repository.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.PaymentMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
@@ -11,12 +12,12 @@ import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +29,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public List<PaymentResponse> findAll() {
-        return paymentRepository.findAll().stream().map(paymentMapper::toResponse).collect(Collectors.toList());
+    public Page<PaymentResponse> findAll(int page, int size, PaymentStatus status) {
+        Pageable pageable = PageRequest.of(page, size);
+        if(status != null)
+            return paymentRepository.findByPaymentStatus(pageable, status).map(paymentMapper::toResponse);
+        else
+            return paymentRepository.findAll(pageable).map(paymentMapper::toResponse);
     }
 
     @Override

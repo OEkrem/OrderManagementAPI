@@ -5,11 +5,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.PatchCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateCategoryRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.models.Category;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface CategoryService {
-    List<CategoryResponse> findAll();
+    Page<CategoryResponse> findAll(int page, int size);
     CategoryResponse addCategory(CreateCategoryRequest createCategoryRequest);
     CategoryResponse updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest);
     CategoryResponse patchCategory(Long id, PatchCategoryRequest patchCategoryRequest);

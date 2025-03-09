@@ -6,11 +6,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orderdetails")
@@ -20,18 +19,17 @@ public class OrderDetailController {
     private final OrderDetailService orderDetailService;
 
     @GetMapping
-    public List<OrderDetailResponse> getOrderDetails(){
-        return orderDetailService.findAll();
+    public ResponseEntity<Page<OrderDetailResponse>> getOrderDetails(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long orderId
+    ){
+        return ResponseEntity.ok(orderDetailService.findAll(page, size, orderId));
     }
 
     @GetMapping("/{id}")
-    public OrderDetailResponse getOrderDetailById(@PathVariable Long id){
-        return orderDetailService.getOrderDetailById(id);
-    }
-
-    @GetMapping("/orders/{orderId}")
-    public List<OrderDetailResponse> getOrderDetailsByOrderId(@PathVariable Long orderId){
-        return orderDetailService.getOrderDetailsByOrderId(orderId);
+    public ResponseEntity<OrderDetailResponse> getOrderDetailById(@PathVariable Long id){
+        return ResponseEntity.ok(orderDetailService.getOrderDetailById(id));
     }
 
     @PostMapping("/orders/{orderId}")

@@ -5,11 +5,11 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
-
-import java.util.List;
+import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
+import org.springframework.data.domain.Page;
 
 public interface PaymentService {
-    List<PaymentResponse> findAll();
+    Page<PaymentResponse> findAll(int page, int size, PaymentStatus status);
     PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest);
     PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePayment);
     PaymentResponse patchPayment(Long orderId, PatchPaymentRequest patchPayment);

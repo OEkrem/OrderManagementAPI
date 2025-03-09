@@ -5,6 +5,9 @@ import com.oekrem.SpringMVCBackEnd.models.Order;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +23,35 @@ public class HibernateOrderRepository implements OrderRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> findAll() {
+    public Page<Order> findAllByUserId(Pageable pageable, Long userId) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from Order", Order.class).list();
+
+        List<Order> orders = session.createQuery("FROM Order o WHERE o.user.id = :userId", Order.class)
+                .setParameter("userId", userId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM Order o WHERE o.user.id = :userId", Long.class)
+                .setParameter("userId", userId)
+                .getSingleResult();
+
+        return new PageImpl<>(orders, pageable, totalOrders);
+    }
+
+    @Override
+    public Page<Order> findAll(Pageable pageable) {
+        Session session = entityManager.unwrap(Session.class);
+
+        List<Order> orders = session.createQuery("FROM Order", Order.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM Order o", Long.class)
+                .getSingleResult();
+
+        return new PageImpl<>(orders, pageable, totalOrders);
     }
 
     @Override

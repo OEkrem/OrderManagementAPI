@@ -1,14 +1,14 @@
 package com.oekrem.SpringMVCBackEnd.repository;
 
 import com.oekrem.SpringMVCBackEnd.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
-
 
 public interface UserRepository {
 
-    List<User> findAll(/*int pageNumber, int pageSize*/);
+    Page<User> findAll(Pageable pageable);
     User addUser(User user);
     User updateUser(User user);
     void deleteUser(Long id);

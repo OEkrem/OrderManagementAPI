@@ -13,14 +13,16 @@ import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import com.oekrem.SpringMVCBackEnd.services.event.OrderCreatedEvent;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,16 +36,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderResponse> findAll() {
-        List<Order> orders = orderRepository.findAll();
-        return orders.stream().map(orderMapper::toResponse).collect(Collectors.toList());
+    public Page<OrderResponse> findAll(int page, int size, Long userId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders;
+        if(userId != null)
+            orders = orderRepository.findAllByUserId(pageable, userId);
+        else
+            orders = orderRepository.findAll(pageable);
+
+        return orders.map(orderMapper::toResponse);
     }
 
     @Override
     @Transactional
-    public List<OrderAllResponse> findAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        return orders.stream().map(orderMapper::toResponseAll).collect(Collectors.toList());
+    public Page<OrderAllResponse> findAllOrders(int page, int size, Long userId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders;
+        if(userId != null)
+            orders = orderRepository.findAllByUserId(pageable, userId);
+        else
+            orders = orderRepository.findAll(pageable);
+        return orders.map(orderMapper::toResponseAll);
     }
 
     @Override

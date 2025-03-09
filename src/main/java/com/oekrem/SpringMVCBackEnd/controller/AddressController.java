@@ -6,11 +6,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.services.AddressService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/addresses")
@@ -19,21 +18,18 @@ public class AddressController {
 
     private final AddressService addressService;
 
-
     @GetMapping
-    public List<AddressResponse> getAddresses(){
-        return addressService.findAll();
+    public ResponseEntity<Page<AddressResponse>>getAddresses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long userId
+    ){
+        return ResponseEntity.ok(addressService.findAll(page, size, userId));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AddressResponse> getAddressById(@PathVariable Long id){
         return ResponseEntity.ok(addressService.getAddressById(id));
-    }
-
-
-    @GetMapping("/users/{id}")
-    public List<AddressResponse> getAddressesByUserId(@PathVariable Long id){
-        return addressService.getAddressesByUserId(id);
     }
 
     @PostMapping("/users/{id}")

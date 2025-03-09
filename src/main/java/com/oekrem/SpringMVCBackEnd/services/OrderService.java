@@ -6,13 +6,14 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderAllResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderResponse;
 import com.oekrem.SpringMVCBackEnd.models.Order;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderResponse> findAll();
-    List<OrderAllResponse> findAllOrders();
+    Page<OrderResponse> findAll(int page, int size, Long userId);
+    Page<OrderAllResponse> findAllOrders(int page, int size, Long userId);
     OrderResponse addOrder(Long userId, CreateOrderRequest createOrderRequest);
     OrderResponse updateOrder(Long userId, UpdateOrderRequest updateOrderRequest);
     OrderAllResponse patchOrder(Long userId, PatchOrderRequest patchOrderRequest);

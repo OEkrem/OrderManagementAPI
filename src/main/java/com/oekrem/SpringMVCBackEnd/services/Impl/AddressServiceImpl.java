@@ -12,13 +12,14 @@ import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.AddressService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +31,17 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public List<AddressResponse> findAll() {
-        List<Address> addressList = addressRepository.findAll();
-        return addressList.stream().map(addressMapper::toResponse).collect(Collectors.toList());
+    public Page<AddressResponse> findAll(int page, int size, Long userId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Address> addressList;
+        if (userId != null) {
+            userService.validateUser(userId);
+            addressList = addressRepository.getAddressesByUserId(pageable, userId);
+        }
+        else
+            addressList = addressRepository.findAll(pageable);
+
+        return addressList.map(addressMapper::toResponse);
     }
 
     @Override
@@ -89,15 +98,6 @@ public class AddressServiceImpl implements AddressService {
                 .orElseThrow(() -> new AddressNotFoundException("There is no address with this id:" + id));
 
         addressRepository.deleteAddress(id);
-    }
-
-    @Override
-    @Transactional
-    public List<AddressResponse> getAddressesByUserId(Long id) {
-        userService.validateUser(id);
-        List<Address> addressList = addressRepository.getAddressesByUserId(id);
-        //System.out.println(addressList.stream().map(addressMapper::toResponse).collect(Collectors.toList()));
-        return addressList.stream().map(addressMapper::toResponse).collect(Collectors.toList());
     }
 
     @Override

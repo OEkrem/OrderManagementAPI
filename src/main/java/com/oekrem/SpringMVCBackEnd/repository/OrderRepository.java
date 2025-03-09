@@ -1,13 +1,16 @@
 package com.oekrem.SpringMVCBackEnd.repository;
 
 import com.oekrem.SpringMVCBackEnd.models.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderRepository {
-    List<Order> findAll();
+    Page<Order> findAllByUserId(Pageable pageable, Long userId);
+    Page<Order> findAll(Pageable pageable);
     Order addOrder(Order order);
     Order updateOrder(Order order);
     void deleteOrder(Long id);

@@ -9,12 +9,12 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.CategoryResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.CategoryExceptions.CategoryNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.Category;
 import com.oekrem.SpringMVCBackEnd.services.CategoryService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +25,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryResponse> findAll() {
-        return categoryRepository.findAll().stream().map(categoryMapper::toResponse).collect(Collectors.toList());
+    public Page<CategoryResponse> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        return categoryPage.map(categoryMapper::toResponse);
     }
 
     @Override

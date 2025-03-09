@@ -3,11 +3,13 @@ package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 import com.oekrem.SpringMVCBackEnd.repository.OrderDetailRepository;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +22,34 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
 
     @Override
     @Transactional
-    public List<OrderDetail> findAll() {
+    public Page<OrderDetail> findAll(Pageable pageable) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from OrderDetail", OrderDetail.class).list();
+        List<OrderDetail> orderDetails = session.createQuery("FROM OrderDetail", OrderDetail.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM OrderDetail o", Long.class)
+                .getSingleResult();
+
+        return new PageImpl<>(orderDetails, pageable, totalOrders);
+    }
+
+    @Override
+    @Transactional
+    public Page<OrderDetail> findByOrderId(Pageable pageable, Long orderId) {
+        Session session = entityManager.unwrap(Session.class);
+        List<OrderDetail> orderDetails = session.createQuery("FROM OrderDetail o WHERE o.order.id = :orderId", OrderDetail.class)
+                .setParameter("orderId", orderId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM OrderDetail o WHERE o.order.id = :orderId", Long.class)
+                .setParameter("orderId", orderId)
+                .getSingleResult();
+
+        return new PageImpl<>(orderDetails, pageable, totalOrders);
     }
 
     @Override
@@ -46,7 +73,7 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
     public void deleteOrderDetail(Long id) {
         Session session = entityManager.unwrap(Session.class);
         OrderDetail orderDetailToDelete = session.get(OrderDetail.class, id);
-        session.delete(orderDetailToDelete);
+        session.remove(orderDetailToDelete);
     }
 
     @Override
@@ -64,6 +91,5 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
                 .setParameter("orderId", orderId)
                 .list();
     }
-
 
 }

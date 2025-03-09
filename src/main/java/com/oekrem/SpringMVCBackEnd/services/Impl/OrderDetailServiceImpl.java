@@ -11,12 +11,12 @@ import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,11 +28,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
-    public List<OrderDetailResponse> findAll() {
-        List<OrderDetail> orderDetails = orderDetailRepository.findAll();
-        return orderDetails.stream()
-                .map(orderDetailMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<OrderDetailResponse> findAll(int page, int size, Long orderId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderDetail> orderDetails;
+        if(orderId != null)
+            orderDetails = orderDetailRepository.findByOrderId(pageable, orderId);
+        else
+            orderDetails = orderDetailRepository.findAll(pageable);
+        return orderDetails.map(orderDetailMapper::toResponse);
     }
 
     @Override
@@ -85,15 +88,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderDetailResponse getOrderDetailById(Long id) {
         return orderDetailMapper.toResponse(validateOrderDetail(id));
     }
-
-    @Override
-    public List<OrderDetailResponse> getOrderDetailsByOrderId(Long orderId) {
-        List<OrderDetail> orderDetails = orderDetailRepository.getOrderDetailsByOrderId(orderId);
-        return orderDetails.stream()
-                .map(orderDetailMapper::toResponse)
-                .collect(Collectors.toList());
-    }
-
 
     @Override
     @Transactional

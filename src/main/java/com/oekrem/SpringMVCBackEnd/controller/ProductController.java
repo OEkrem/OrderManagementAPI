@@ -6,11 +6,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -20,18 +19,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponse> getProducts(){
-        return productService.findAll();
+    public ResponseEntity<Page<ProductResponse>> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long categoryId
+    ){
+        return ResponseEntity.ok(productService.findAll(page, size, categoryId));
     }
 
     @GetMapping("/{id}")
-    public ProductResponse getProductById(@PathVariable Long id){
-        return productService.getProductById(id);
-    }
-
-    @GetMapping("/categories/{id}")
-    public List<ProductResponse> getProductsByCategory(@PathVariable Long id){
-        return productService.getProductsByCategoryId(id);
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id){
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PostMapping

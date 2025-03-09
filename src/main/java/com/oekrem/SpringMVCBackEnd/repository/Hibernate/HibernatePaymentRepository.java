@@ -1,13 +1,16 @@
 package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import com.oekrem.SpringMVCBackEnd.repository.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +23,29 @@ public class HibernatePaymentRepository implements PaymentRepository {
 
     @Override
     @Transactional
-    public List<Payment> findAll() {
+    public Page<Payment> findAll(Pageable pageable) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from Payment", Payment.class).list();
+        List<Payment> payments = session.createQuery("from Payment", Payment.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+        Long totalPayments = session.createQuery("select count(p) from Payment p", Long.class)
+                .getSingleResult();
+        return new PageImpl<>(payments, pageable, totalPayments);
+    }
+
+    @Override
+    public Page<Payment> findByPaymentStatus(Pageable pageable, PaymentStatus paymentStatus) {
+        Session session = entityManager.unwrap(Session.class);
+        List<Payment> payments = session.createQuery("from Payment o where o.paymentStatus = :status", Payment.class)
+                .setParameter("status", paymentStatus)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+        Long totalPayments = session.createQuery("select count(p) from Payment p where p.paymentStatus = :paymentStatus", Long.class)
+                .setParameter("paymentStatus", paymentStatus)
+                .getSingleResult();
+        return new PageImpl<>(payments, pageable, totalPayments);
     }
 
     @Override
@@ -46,7 +69,7 @@ public class HibernatePaymentRepository implements PaymentRepository {
     public void deletePayment(Long id) {
         Session session = entityManager.unwrap(Session.class);
         Payment paymentToDelete = session.get(Payment.class, id);
-        session.delete(paymentToDelete);
+        session.remove(paymentToDelete);
     }
 
     @Override
@@ -60,6 +83,10 @@ public class HibernatePaymentRepository implements PaymentRepository {
     @Transactional
     public Optional<Payment> getPaymentByOrderId(Long orderId){
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from Payment where orderId = :orderId").setParameter("orderId", orderId).list().stream().findFirst();
+        return session.createQuery("from Payment o where o.order.id = :orderId", Payment.class)
+                .setParameter("orderId", orderId)
+                .list()
+                .stream()
+                .findFirst();
     }
 }

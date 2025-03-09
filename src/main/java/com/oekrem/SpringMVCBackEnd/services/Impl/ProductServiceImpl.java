@@ -8,29 +8,29 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateProductRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.ProductExceptions.ProductNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.Product;
-import com.oekrem.SpringMVCBackEnd.services.CategoryService;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryService categoryService;
     private final ProductMapper productMapper;
 
     @Override
     @Transactional
-    public List<ProductResponse> findAll() {
-        return productRepository.findAll().stream()
-                .map(productMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<ProductResponse> findAll(int page, int size, Long categoryId) {
+        Pageable pageable = PageRequest.of(page, size);
+        if(categoryId != null)
+            return productRepository.findByCategoryId(pageable, categoryId).map(productMapper::toResponse);
+        else
+            return productRepository.findAll(pageable).map(productMapper::toResponse);
     }
 
     @Override
@@ -72,15 +72,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductResponse getProductById(Long id) {
         return productMapper.toResponse(validateProduct(id));
-    }
-
-    @Override
-    @Transactional
-    public List<ProductResponse> getProductsByCategoryId(Long categoryId) {
-        categoryService.validateCategory(categoryId);
-        return productRepository.getProductsByCategoryId(categoryId).stream()
-                .map(productMapper::toResponse)
-                .collect(Collectors.toList());
     }
 
     @Override

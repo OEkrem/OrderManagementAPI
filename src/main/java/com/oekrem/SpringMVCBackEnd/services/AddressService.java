@@ -5,19 +5,17 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.PatchAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateAddressRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.models.Address;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface AddressService {
-    List<AddressResponse> findAll();
+    Page<AddressResponse> findAll(int page, int size, Long userId);
     AddressResponse addAddress(Long userId, CreateAddressRequest address);
     AddressResponse updateAddress(Long userId, UpdateAddressRequest address);
     AddressResponse patchAddress(Long userId, PatchAddressRequest address);
     void deleteAddress(Long id);
     AddressResponse getAddressById(Long id);
-
-    List<AddressResponse> getAddressesByUserId(Long id);
 
     Optional<Address> validateAddress(Long id);
 

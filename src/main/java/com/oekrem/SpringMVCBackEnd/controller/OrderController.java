@@ -7,11 +7,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.OrderAllResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderResponse;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -21,18 +20,27 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public List<OrderResponse> getOrders(){
-        return orderService.findAll();
+    public ResponseEntity<Page<OrderResponse>> getOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long userId
+            //@RequestParam(required = false) PaymentStatus paymentStatus
+            ){
+        return ResponseEntity.ok(orderService.findAll(page, size, userId));
     }
 
     @GetMapping("/all")
-    public List<OrderAllResponse> getOrdersAll(){
-        return orderService.findAllOrders();
+    public ResponseEntity<Page<OrderAllResponse>> getOrdersAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long userId
+    ){
+        return ResponseEntity.ok(orderService.findAllOrders(page, size, userId));
     }
 
     @GetMapping("/{id}")
-    public OrderResponse getOrderById(@PathVariable Long id){
-        return orderService.getOrderById(id);
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id){
+        return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @PostMapping("/users/{userId}")

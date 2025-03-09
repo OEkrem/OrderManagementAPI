@@ -10,13 +10,14 @@ import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.EMailTakenException
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.UserNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +28,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserResponse> findAll() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(userMapper::toResponse).collect(Collectors.toList());
+    public Page<UserResponse> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(userMapper::toResponse);
     }
 
     @Override

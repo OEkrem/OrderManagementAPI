@@ -3,11 +3,13 @@ package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 import com.oekrem.SpringMVCBackEnd.repository.AddressRepository;
 import com.oekrem.SpringMVCBackEnd.models.Address;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +22,31 @@ public class HibernateAddressRepository implements AddressRepository {
 
     @Override
     @Transactional
-    public List<Address> findAll() {
+    public Page<Address> findAll(Pageable pageable) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("from Address", Address.class).list();
+        List<Address> addresses = session.createQuery("from Address", Address.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalAddresses = session.createQuery("Select count(a) from Address a", Long.class)
+                .getSingleResult();
+
+        return new PageImpl<>(addresses, pageable, totalAddresses);
+    }
+
+    @Override
+    @Transactional
+    public Page<Address> getAddressesByUserId(Pageable pageable, Long userId) {
+        Session session = entityManager.unwrap(Session.class);
+        List<Address> addresses = session.createQuery("select u from Address u where u.user.id = :userId", Address.class)
+                .setParameter("userId", userId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+        Long totalAddresses = session.createQuery("Select count(a) from Address a", Long.class)
+                .getSingleResult();
+        return new PageImpl<>(addresses, pageable, totalAddresses);
     }
 
     @Override
@@ -56,12 +80,4 @@ public class HibernateAddressRepository implements AddressRepository {
         return Optional.ofNullable(session.get(Address.class, id));
     }
 
-    @Override
-    @Transactional
-    public List<Address> getAddressesByUserId(Long id) {
-        Session session = entityManager.unwrap(Session.class);
-        List<Address> addresses = session.createQuery("select u from Address u where u.user.id = :id", Address.class)
-                .setParameter("id", id).list();
-        return addresses;
-    }
 }

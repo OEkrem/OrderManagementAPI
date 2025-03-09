@@ -6,11 +6,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -20,13 +19,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<UserResponse> getUsers(){
-        return userService.findAll();
+    public ResponseEntity<Page<UserResponse>> getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        return ResponseEntity.ok(userService.findAll(page, size));
     }
 
     @GetMapping("/{id}")
-    public UserResponse getUserById(@PathVariable Long id){
-        return userService.getUserById(id);
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping
@@ -35,12 +37,18 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest){
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable Long id,
+            @RequestBody UpdateUserRequest updateUserRequest
+    ){
         return ResponseEntity.ok(userService.updateUser(id, updateUserRequest));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> patchUser(@PathVariable Long id, @RequestBody PatchUserRequest patchUserRequest){
+    public ResponseEntity<UserResponse> patchUser(
+            @PathVariable Long id,
+            @RequestBody PatchUserRequest patchUserRequest
+    ){
         return ResponseEntity.ok(userService.patchUser(id, patchUserRequest));
     }
 
