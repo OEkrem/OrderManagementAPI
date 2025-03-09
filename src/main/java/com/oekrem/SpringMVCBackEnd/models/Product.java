@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class Product {
 
     private String description;
 
-    private BigDecimal price;
+    private Double price;
 
     private String image;
 

@@ -31,7 +31,7 @@ public class OrderDetail {
 
     private BigDecimal quantity;
 
-    private BigDecimal price; // ürünfiyatı x quantity cevabı olacak aslında buradan da oluşalabiliyor olalım diye yazdım.
+    private Double price; // ürünfiyatı x quantity cevabı olacak aslında buradan da oluşalabiliyor olalım diye yazdım.
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 public class CreatePaymentRequest {
 
     private String description;
-    private BigDecimal amount;
+    private Double amount;
     private PaymentStatus paymentStatus;
     private PaymentMethod paymentMethod;
     private LocalDateTime date;

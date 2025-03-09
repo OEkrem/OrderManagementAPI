@@ -17,7 +17,7 @@ public class CreateOrderDetailRequest {
     private Long productId;
     private QuantityType quantityType;
     private BigDecimal quantity;
-    private BigDecimal price;
+    private Double price;
     //private Long orderId; // bu bilgi path variable ile alınacak
 
 }

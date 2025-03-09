@@ -32,7 +32,7 @@ public class PaymentMapperUnitTest {
                 .paymentStatus(PaymentStatus.SUCCESSFUL)
                 .paymentMethod(PaymentMethod.PAYPAL)
                 .order(Order.builder().id(1L).build())
-                .amount(BigDecimal.valueOf(200))
+                .amount(200D)
                 .date(LocalDateTime.now())
                 .description("test")
                 .build();
@@ -52,7 +52,7 @@ public class PaymentMapperUnitTest {
         CreatePaymentRequest createPaymentRequest = CreatePaymentRequest.builder()
                 .paymentStatus(PaymentStatus.SUCCESSFUL)
                 .paymentMethod(PaymentMethod.PAYPAL)
-                .amount(BigDecimal.valueOf(200))
+                .amount(200D)
                 .date(LocalDateTime.now())
                 .description("test")
                 .build();
@@ -71,7 +71,7 @@ public class PaymentMapperUnitTest {
                 .id(1L)
                 .paymentStatus(PaymentStatus.SUCCESSFUL)
                 .paymentMethod(PaymentMethod.PAYPAL)
-                .amount(BigDecimal.valueOf(200))
+                .amount(200D)
                 .date(LocalDateTime.now())
                 .description("test")
                 .build();

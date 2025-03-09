@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +29,7 @@ public class ProductMapperUnitTest {
                 .id(1L)
                 .name("Product Name")
                 .description("Product Description")
-                .price(BigDecimal.valueOf(100))
+                .price(100D)
                 .image("Product Image")
                 .category(Category.builder().id(1L).build())
                 .orderDetail(List.of(OrderDetail.builder().id(1L).build()))
@@ -50,7 +49,7 @@ public class ProductMapperUnitTest {
         CreateProductRequest request = CreateProductRequest.builder()
                 .name("Product Name")
                 .description("Product Description")
-                .price(BigDecimal.valueOf(100))
+                .price(100D)
                 .image("Product Image")
                 .categoryId(1L)
                 .build();
@@ -67,7 +66,7 @@ public class ProductMapperUnitTest {
         UpdateProductRequest request = UpdateProductRequest.builder()
                 .name("Product Name")
                 .description("Product Description")
-                .price(BigDecimal.valueOf(100))
+                .price(100D)
                 .image("Product Image")
                 .categoryId(1L)
                 .build();

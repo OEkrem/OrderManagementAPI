@@ -18,7 +18,7 @@ public class UpdateOrderDetailRequest {
     private Long productId;
     private QuantityType quantityType;
     private BigDecimal quantity;
-    private BigDecimal price;
+    private Double price;
     //private Long orderId; // bu bilgi pathvariable olarak alınacak
 
 }

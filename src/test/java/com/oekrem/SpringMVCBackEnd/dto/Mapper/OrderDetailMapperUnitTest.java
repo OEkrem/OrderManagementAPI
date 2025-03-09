@@ -29,8 +29,8 @@ public class OrderDetailMapperUnitTest {
     public void shouldMapOrderDetailToOrderDetailResponse() {
         OrderDetail orderDetail = OrderDetail.builder()
                 .id(1L)
-                .price(BigDecimal.valueOf(200))
-                .product(Product.builder().id(1L).name("ff").price(BigDecimal.valueOf(1)).description("tt").image("rr").build())
+                .price(200D)
+                .product(Product.builder().id(1L).name("ff").price(200D).description("tt").image("rr").build())
                 .order(Order.builder().id(1L).user(User.builder().id(1L).build()).build())
                 .quantity(BigDecimal.valueOf(1))
                 .quantityType(QuantityType.PACK)
@@ -50,7 +50,7 @@ public class OrderDetailMapperUnitTest {
     @Test
     public void shouldMapCreateOrderDetailToOrderDetail() {
         CreateOrderDetailRequest createOrderDetailRequest = CreateOrderDetailRequest.builder()
-                .price(BigDecimal.valueOf(200))
+                .price(200D)
                 .productId(1L)
                 .quantity(BigDecimal.valueOf(1))
                 .quantityType(QuantityType.PACK)
@@ -67,7 +67,7 @@ public class OrderDetailMapperUnitTest {
     public void shouldMapUpdateOrderDetailToOrderDetailResponse() {
         UpdateOrderDetailRequest updateOrderDetailRequest = UpdateOrderDetailRequest.builder()
                 .id(1L)
-                .price(BigDecimal.valueOf(200))
+                .price(200D)
                 .productId(1L)
                 .quantity(BigDecimal.valueOf(1))
                 .quantityType(QuantityType.PACK)
