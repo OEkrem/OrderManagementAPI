@@ -15,9 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,17 +36,16 @@ public class OrderMapperUnitTest {
         Order order = Order.builder()
                 .id(1L)
                 .user(User.builder().id(1L).build())
-                .orderDetail(List.of(OrderDetail.builder().id(1L).build(),OrderDetail.builder().id(2L).build()))
+                .orderDetails(List.of(OrderDetail.builder().id(1L).build(),OrderDetail.builder().id(2L).build()))
                 .payment(Payment.builder().id(1L).build())
                 .date(LocalDate.now())
                 .total(300D)
                 .build();
         OrderResponse orderResponse = orderMapper.toResponse(order);
 
-        assertEquals(order.getId(), orderResponse.getId());
-        assertEquals(order.getUser().getId(), orderResponse.getUserId());
-        assertEquals(order.getDate(), orderResponse.getDate());
-        assertEquals(order.getTotal(), orderResponse.getTotal());
+        assertEquals(order.getId(), orderResponse.id());
+        assertEquals(order.getUser().getId(), orderResponse.userId());
+        assertEquals(order.getDate(), orderResponse.date());
     }
 
     @Test
@@ -56,12 +53,12 @@ public class OrderMapperUnitTest {
         Order order = Order.builder()
                 .id(1L)
                 .user(User.builder().id(1L).build())
-                .orderDetail(List.of(OrderDetail.builder().id(1L).build(),OrderDetail.builder().id(2L).build()))
+                .orderDetails(List.of(OrderDetail.builder().id(1L).build(),OrderDetail.builder().id(2L).build()))
                 .payment(Payment.builder().id(1L).build())
                 .date(LocalDate.now())
                 .total(300D)
                 .build();
-        List<OrderDetailResponse> orderDetailResponseList = orderDetailMapper.toResponseList(order.getOrderDetail());
+        List<OrderDetailResponse> orderDetailResponseList = orderDetailMapper.toResponseList(order.getOrderDetails());
 
         OrderAllResponse response = orderMapper.toResponseAll(order);
 
@@ -77,50 +74,37 @@ public class OrderMapperUnitTest {
     @Test
     public void shouldMapCreateRequestToOrder(){
         CreateOrderRequest orderRequest = CreateOrderRequest.builder()
-                .date(LocalDate.now())
-                .total(300D)
                 .build();
         Order order = orderMapper.toOrderFromCreateRequest(orderRequest);
 
         assertNull(order.getId());
         assertNull(order.getUser());
         assertNull(order.getPayment());
-        assertNull(order.getOrderDetail());
-        assertEquals(order.getDate(), orderRequest.getDate());
-        assertEquals(order.getTotal(), orderRequest.getTotal());
     }
 
     @Test
     public void shouldMapUpdateRequestToOrder(){
         UpdateOrderRequest orderRequest = UpdateOrderRequest.builder()
                 .id(1L)
-                .date(LocalDate.now())
-                .total(300D)
                 .build();
         Order order = orderMapper.toOrderFromUpdateRequest(orderRequest);
 
-        assertEquals(order.getId(), orderRequest.getId());
+        assertEquals(order.getId(), orderRequest.id());
         assertNull(order.getUser());
         assertNull(order.getPayment());
-        assertNull(order.getOrderDetail());
-        assertEquals(order.getDate(), orderRequest.getDate());
-        assertEquals(order.getTotal(), orderRequest.getTotal());
+        assertNull(order.getOrderDetails());
     }
 
     @Test
     public void shouldMapPatchOrderRequestToOrder(){
         PatchOrderRequest orderRequest = PatchOrderRequest.builder()
-                .id(1L)
                 .payment(CreatePaymentRequest.builder()
-                        .date(LocalDateTime.now())
-                        .amount(300D)
-                        .description(" -- ")
                         .paymentMethod(PaymentMethod.UNKNOWN)
                         .paymentStatus(PaymentStatus.PENDING)
                         .build())
                 .orderDetails(List.of(
-                        CreateOrderDetailRequest.builder().productId(1L).price(30D).quantity(BigDecimal.ONE).quantityType(QuantityType.BOX).build(),
-                        CreateOrderDetailRequest.builder().productId(2L).price(40D).quantity(BigDecimal.ONE).quantityType(QuantityType.BOX).build()
+                        CreateOrderDetailRequest.builder().productId(1L).quantity(1).quantityType(QuantityType.BOX).build(),
+                        CreateOrderDetailRequest.builder().productId(2L).quantity(1).quantityType(QuantityType.BOX).build()
                 ))
                 .build();
         Order order = Order.builder().build();
@@ -130,7 +114,7 @@ public class OrderMapperUnitTest {
 
         assertEquals(
                 orderRequest.orderDetails().stream().map(orderDetailMapper::toOrderDetailFromCreateRequest).collect(Collectors.toList()),
-                order.getOrderDetail()
+                order.getOrderDetails()
         );
         assertEquals(paymentMapper.toPaymentFromCreateRequest(orderRequest.payment()), order.getPayment());
     }

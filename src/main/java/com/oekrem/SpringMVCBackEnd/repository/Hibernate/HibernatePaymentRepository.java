@@ -53,6 +53,7 @@ public class HibernatePaymentRepository implements PaymentRepository {
     public Payment addPayment(Payment payment) {
         Session session = entityManager.unwrap(Session.class);
         session.persist(payment);
+        session.flush(); // -----------------------------------------
         return payment;
     }
 
@@ -60,8 +61,7 @@ public class HibernatePaymentRepository implements PaymentRepository {
     @Transactional
     public Payment updatePayment(Payment payment) {
         Session session = entityManager.unwrap(Session.class);
-        session.merge(payment);
-        return payment;
+        return session.merge(payment);
     }
 
     @Override

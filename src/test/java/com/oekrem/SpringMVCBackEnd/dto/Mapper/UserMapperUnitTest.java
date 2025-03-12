@@ -60,12 +60,12 @@ public class UserMapperUnitTest {
                 .build();
         User user = userMapper.toUserFromCreateRequest(createUserRequest);
 
-        assertEquals(user.getFirstName(), createUserRequest.getFirstName());
-        assertEquals(user.getLastName(), createUserRequest.getLastName());
-        assertEquals(user.getUsername(), createUserRequest.getUsername());
-        assertEquals(user.getEmail(), createUserRequest.getEmail());
-        assertEquals(user.getPassword(), createUserRequest.getPassword());
-        assertEquals(user.getPhone(), createUserRequest.getPhone());
+        assertEquals(user.getFirstName(), createUserRequest.firstName());
+        assertEquals(user.getLastName(), createUserRequest.lastName());
+        assertEquals(user.getUsername(), createUserRequest.username());
+        assertEquals(user.getEmail(), createUserRequest.email());
+        assertEquals(user.getPassword(), createUserRequest.password());
+        assertEquals(user.getPhone(), createUserRequest.phone());
     }
 
     @Test
@@ -79,12 +79,12 @@ public class UserMapperUnitTest {
                 .phone("123456789")
                 .build();
         User user = userMapper.toUserFromUpdateRequest(updateUserRequest);
-        assertEquals(user.getFirstName(), updateUserRequest.getFirstName());
-        assertEquals(user.getLastName(), updateUserRequest.getLastName());
-        assertEquals(user.getUsername(), updateUserRequest.getUsername());
-        assertEquals(user.getEmail(), updateUserRequest.getEmail());
-        assertEquals(user.getPassword(), updateUserRequest.getPassword());
-        assertEquals(user.getPhone(), updateUserRequest.getPhone());
+        assertEquals(user.getFirstName(), updateUserRequest.firstName());
+        assertEquals(user.getLastName(), updateUserRequest.lastName());
+        assertEquals(user.getUsername(), updateUserRequest.username());
+        assertEquals(user.getEmail(), updateUserRequest.email());
+        assertEquals(user.getPassword(), updateUserRequest.password());
+        assertEquals(user.getPhone(), updateUserRequest.phone());
     }
 
     @Test

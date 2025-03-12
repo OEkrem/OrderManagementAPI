@@ -4,7 +4,6 @@ import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface OrderDetailRepository {
@@ -15,5 +14,4 @@ public interface OrderDetailRepository {
     void deleteOrderDetail(Long id);
     Optional<OrderDetail> getOrderDetailById(Long id);
 
-    List<OrderDetail> getOrderDetailsByOrderId(Long orderId);
 }

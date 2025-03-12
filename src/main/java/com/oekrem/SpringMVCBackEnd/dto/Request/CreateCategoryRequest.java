@@ -1,17 +1,15 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class CreateCategoryRequest {
-
-    private String name;
-    private String description;
+public record CreateCategoryRequest (
+        @NotBlank(message = "Category Name is required")
+        String name,
+        @Size(min = 3, max = 3000, message = "Description must be between {min} - {max} characters")
+        String description
+){
 
 }

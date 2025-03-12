@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse addUser(CreateUserRequest createUserRequest) {
-        if(userRepository.findUserByEmail(createUserRequest.getEmail()).isPresent())
+        if(userRepository.findUserByEmail(createUserRequest.email()).isPresent())
             throw new EMailTakenException("Email already exists");
 
         User user = userMapper.toUserFromCreateRequest(createUserRequest);

@@ -56,7 +56,8 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
     @Transactional
     public OrderDetail addOrderDetail(OrderDetail orderDetail) {
         Session session = entityManager.unwrap(Session.class);
-        session.merge(orderDetail);
+        session.persist(orderDetail);
+        session.flush(); // ---------------------------------------------------------
         return orderDetail;
     }
 
@@ -64,8 +65,7 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
     @Transactional
     public OrderDetail updateOrderDetail(OrderDetail orderDetail) {
         Session session = entityManager.unwrap(Session.class);
-        session.merge(orderDetail);
-        return orderDetail;
+        return session.merge(orderDetail);
     }
 
     @Override
@@ -81,15 +81,6 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
     public Optional<OrderDetail> getOrderDetailById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return Optional.ofNullable(session.get(OrderDetail.class, id));
-    }
-
-    @Override
-    @Transactional
-    public List<OrderDetail> getOrderDetailsByOrderId(Long orderId) {
-        Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("select u from OrderDetail u where order.id = :orderId",OrderDetail.class)
-                .setParameter("orderId", orderId)
-                .list();
     }
 
 }

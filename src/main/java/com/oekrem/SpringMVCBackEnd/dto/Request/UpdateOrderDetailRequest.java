@@ -1,12 +1,11 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.QuantityType;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +13,12 @@ import java.math.BigDecimal;
 @Builder
 public class UpdateOrderDetailRequest {
 
-    private Long id;
+    @NotNull(message = "Product id is required")
     private Long productId;
-    private QuantityType quantityType;
-    private BigDecimal quantity;
-    private Double price;
-    //private Long orderId; // bu bilgi pathvariable olarak alınacak
+
+    @Builder.Default
+    private QuantityType quantityType = QuantityType.UNKNOWN;
+    @Builder.Default
+    private Integer quantity = 0;
 
 }

@@ -1,14 +1,19 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
+import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
+import jakarta.validation.Valid;
 import lombok.Builder;
 
 import java.util.List;
 
 @Builder
 public record PatchOrderRequest (
-        Long id,
+
+        @Valid
         List<CreateOrderDetailRequest> orderDetails,
+        @Valid
         CreatePaymentRequest payment,
-        Double total
+
+        OrderStatus status
 ){
 }

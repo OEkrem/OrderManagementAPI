@@ -1,6 +1,8 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
+import com.oekrem.SpringMVCBackEnd.models.Order;
+import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import com.oekrem.SpringMVCBackEnd.repository.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.PaymentMapper;
@@ -8,9 +10,7 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.PaymentExceptions.PaymentNotFoundException;
-import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
-import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
-    private final OrderService orderService;
 
     @Override
     @Transactional
@@ -39,12 +38,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest) {
-        orderService.validateOrder(orderId);
-
+    public PaymentResponse addPayment(Order order, CreatePaymentRequest createPaymentRequest) {
         Payment payment = paymentMapper.toPaymentFromCreateRequest(createPaymentRequest);
-        Order order = new Order(); order.setId(orderId);
         payment.setOrder(order);
+
+        payment.setAmount(order.getOrderDetails().stream().mapToDouble(OrderDetail::getPrice).sum());
+        order.setTotal(payment.getAmount());
 
         Payment savedPayment = paymentRepository.addPayment(payment);
         return paymentMapper.toResponse(savedPayment);
@@ -52,26 +51,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePaymentRequest) {
-        orderService.validateOrder(orderId);
-        validatePayment(updatePaymentRequest.getId());
+    public PaymentResponse updatePayment(Long paymentId, UpdatePaymentRequest updatePaymentRequest) {
+        validatePayment(paymentId);
 
         Payment payment = paymentMapper.toPaymentFromUpdateRequest(updatePaymentRequest);
-        Order order = new Order(); order.setId(orderId);
-        payment.setOrder(order);
-
         Payment  updatedPayment = paymentRepository.updatePayment(payment);
         return paymentMapper.toResponse(updatedPayment);
     }
 
     @Override
     @Transactional
-    public PaymentResponse patchPayment(Long orderId, PatchPaymentRequest patchPayment) {
-        Order order = orderService.validateOrder(orderId);
-        Payment patch = validatePayment(patchPayment.id());
-
-        if(order.getPayment() != null && order.getPayment().getId() != patch.getId())
-            throw new PaymentNotFoundException("Payment and Order are not matched.");
+    public PaymentResponse patchPayment(Long paymentId, PatchPaymentRequest patchPayment) {
+        Payment patch = validatePayment(paymentId);
 
         paymentMapper.patchPayment(patchPayment, patch);
         Payment savedPayment = paymentRepository.updatePayment(patch);
@@ -91,20 +82,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponse getPaymentByOrderId(Long orderId) {
-        return paymentMapper.toResponse(validatePaymentByOrderId(orderId));
-    }
-
-    @Override
     public Payment validatePayment(Long id) {
         return paymentRepository.getPaymentById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
-    }
-
-    @Override
-    public Payment validatePaymentByOrderId(Long orderId) {
-        return paymentRepository.getPaymentByOrderId(orderId)
-                .orElseThrow(() -> new PaymentNotFoundException("Payment not found by orderId"));
     }
 
 }

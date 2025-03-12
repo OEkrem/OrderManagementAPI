@@ -45,8 +45,8 @@ public class CategoryMapperUnitTest {
         Category category = categoryMapper.toCategoryFromCreateRequest(createCategoryRequest);
 
         assertNull(category.getId());
-        assertEquals(createCategoryRequest.getName(), category.getName());
-        assertEquals(createCategoryRequest.getDescription(), category.getDescription());
+        assertEquals(createCategoryRequest.name(), category.getName());
+        assertEquals(createCategoryRequest.description(), category.getDescription());
     }
 
     @Test

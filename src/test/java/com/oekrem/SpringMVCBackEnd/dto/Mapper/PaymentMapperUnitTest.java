@@ -34,7 +34,6 @@ public class PaymentMapperUnitTest {
                 .order(Order.builder().id(1L).build())
                 .amount(200D)
                 .date(LocalDateTime.now())
-                .description("test")
                 .build();
         PaymentResponse response = paymentMapper.toResponse(payment);
 
@@ -44,7 +43,6 @@ public class PaymentMapperUnitTest {
         assertEquals(response.getOrderId(), payment.getOrder().getId());
         assertEquals(response.getAmount(), payment.getAmount());
         assertEquals(response.getDate(), payment.getDate());
-        assertEquals(response.getDescription(), payment.getDescription());
     }
 
     @Test
@@ -52,57 +50,36 @@ public class PaymentMapperUnitTest {
         CreatePaymentRequest createPaymentRequest = CreatePaymentRequest.builder()
                 .paymentStatus(PaymentStatus.SUCCESSFUL)
                 .paymentMethod(PaymentMethod.PAYPAL)
-                .amount(200D)
-                .date(LocalDateTime.now())
-                .description("test")
                 .build();
         Payment response = paymentMapper.toPaymentFromCreateRequest(createPaymentRequest);
 
-        assertEquals(createPaymentRequest.getPaymentStatus(), response.getPaymentStatus());
-        assertEquals(createPaymentRequest.getPaymentMethod(), response.getPaymentMethod());
-        assertEquals(createPaymentRequest.getAmount(), response.getAmount());
-        assertEquals(createPaymentRequest.getDate(), response.getDate());
-        assertEquals(createPaymentRequest.getDescription(), response.getDescription());
+        assertEquals(createPaymentRequest.paymentStatus(), response.getPaymentStatus());
+        assertEquals(createPaymentRequest.paymentMethod(), response.getPaymentMethod());
     }
 
     @Test
     public void shouldMapUpdateRequestToPayment(){
         UpdatePaymentRequest updatePaymentRequest = UpdatePaymentRequest.builder()
-                .id(1L)
                 .paymentStatus(PaymentStatus.SUCCESSFUL)
                 .paymentMethod(PaymentMethod.PAYPAL)
-                .amount(200D)
-                .date(LocalDateTime.now())
-                .description("test")
                 .build();
         Payment response = paymentMapper.toPaymentFromUpdateRequest(updatePaymentRequest);
 
-        assertEquals(updatePaymentRequest.getId(), response.getId());
-        assertEquals(updatePaymentRequest.getPaymentStatus(), response.getPaymentStatus());
-        assertEquals(updatePaymentRequest.getPaymentMethod(), response.getPaymentMethod());
-        assertEquals(updatePaymentRequest.getAmount(), response.getAmount());
-        assertEquals(updatePaymentRequest.getDate(), response.getDate());
-        assertEquals(updatePaymentRequest.getDescription(), response.getDescription());
+        assertEquals(updatePaymentRequest.paymentStatus(), response.getPaymentStatus());
+        assertEquals(updatePaymentRequest.paymentMethod(), response.getPaymentMethod());
     }
 
     @Test
     public void shouldMapPatchPaymentRequestToPayment(){
         PatchPaymentRequest patchPaymentRequest = PatchPaymentRequest.builder()
-                .id(1L)
                 .paymentStatus(PaymentStatus.SUCCESSFUL)
                 .paymentMethod(PaymentMethod.PAYPAL)
-                .amount(200D)
-                .date(LocalDateTime.now())
-                .description("test")
                 .build();
         Payment payment = Payment.builder().build();
         paymentMapper.patchPayment(patchPaymentRequest, payment);
 
         assertEquals(patchPaymentRequest.paymentStatus(), payment.getPaymentStatus());
         assertEquals(patchPaymentRequest.paymentMethod(), payment.getPaymentMethod());
-        assertEquals(patchPaymentRequest.amount(), payment.getAmount());
-        assertEquals(patchPaymentRequest.date(), payment.getDate());
-        assertEquals(patchPaymentRequest.description(), payment.getDescription());
     }
 
 }

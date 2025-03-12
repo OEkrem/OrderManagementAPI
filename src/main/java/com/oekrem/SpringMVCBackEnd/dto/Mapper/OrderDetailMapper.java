@@ -14,7 +14,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface OrderDetailMapper {
 
-    @Mapping(source = "order.id", target = "orderId")
     @Mapping(source = "product.id", target = "productId")
     OrderDetailResponse toResponse(OrderDetail orderDetail);
 

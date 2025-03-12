@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class PaymentResponse {
 
     private Long id;
-    private String description;
     private Double amount;
     private PaymentStatus paymentStatus;
     private PaymentMethod paymentMethod;

@@ -1,21 +1,27 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
-
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UpdateProductRequest {
+public record UpdateProductRequest (
 
-    private String name;
-    private Long categoryId;
-    private String description;
-    private Double price;
-    private String image;
+        @NotBlank(message = "Name is required")
+        String name,
 
+        @NotNull(message = "Category is required")
+        Long categoryId,
+
+        //@NotNull(message = "Description is required")
+        @Size(min = 3, max = 3000, message = "Description must be between {min} - {max} characters")
+        String description,
+
+        @NotNull(message = "Price is required")
+        Double price,
+
+        //@NotNull(message = "Image is required")
+        String image
+){
 }

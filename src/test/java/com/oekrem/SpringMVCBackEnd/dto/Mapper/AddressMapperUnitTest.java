@@ -59,19 +59,18 @@ public class AddressMapperUnitTest {
 
         Address address = addressMapper.toAddressFromCreateRequest(createAddressRequest);
 
-        assertEquals(createAddressRequest.getName(), address.getName());
-        assertEquals(createAddressRequest.getDoorNumber(), address.getDoorNumber());
-        assertEquals(createAddressRequest.getBuildingNumber(), address.getBuildingNumber());
-        assertEquals(createAddressRequest.getCity(), address.getCity());
-        assertEquals(createAddressRequest.getStreet(), address.getStreet());
-        assertEquals(createAddressRequest.getCountry(), address.getCountry());
-        assertEquals(createAddressRequest.getFloor(), address.getFloor());
+        assertEquals(createAddressRequest.name(), address.getName());
+        assertEquals(createAddressRequest.doorNumber(), address.getDoorNumber());
+        assertEquals(createAddressRequest.buildingNumber(), address.getBuildingNumber());
+        assertEquals(createAddressRequest.city(), address.getCity());
+        assertEquals(createAddressRequest.street(), address.getStreet());
+        assertEquals(createAddressRequest.country(), address.getCountry());
+        assertEquals(createAddressRequest.floor(), address.getFloor());
     }
 
     @Test
     public void shouldMapUpdateRequestToAddress(){
         UpdateAddressRequest updateAddressRequest = UpdateAddressRequest.builder()
-                .id(1L)
                 .name("Address 1")
                 .doorNumber(4)
                 .buildingNumber("4")
@@ -83,13 +82,13 @@ public class AddressMapperUnitTest {
 
         Address address = addressMapper.toAddressFromUpdateRequest(updateAddressRequest);
 
-        assertEquals(updateAddressRequest.getName(), address.getName());
-        assertEquals(updateAddressRequest.getDoorNumber(), address.getDoorNumber());
-        assertEquals(updateAddressRequest.getBuildingNumber(), address.getBuildingNumber());
-        assertEquals(updateAddressRequest.getCity(), address.getCity());
-        assertEquals(updateAddressRequest.getStreet(), address.getStreet());
-        assertEquals(updateAddressRequest.getCountry(), address.getCountry());
-        assertEquals(updateAddressRequest.getFloor(), address.getFloor());
+        assertEquals(updateAddressRequest.name(), address.getName());
+        assertEquals(updateAddressRequest.doorNumber(), address.getDoorNumber());
+        assertEquals(updateAddressRequest.buildingNumber(), address.getBuildingNumber());
+        assertEquals(updateAddressRequest.city(), address.getCity());
+        assertEquals(updateAddressRequest.street(), address.getStreet());
+        assertEquals(updateAddressRequest.country(), address.getCountry());
+        assertEquals(updateAddressRequest.floor(), address.getFloor());
     }
 
     @Test

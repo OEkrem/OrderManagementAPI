@@ -27,31 +27,31 @@ public class AddressController {
         return ResponseEntity.ok(addressService.findAll(page, size, userId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AddressResponse> getAddressById(@PathVariable Long id){
-        return ResponseEntity.ok(addressService.getAddressById(id));
+    @GetMapping("/{addressId}")
+    public ResponseEntity<AddressResponse> getAddressById(@PathVariable Long addressId){
+        return ResponseEntity.ok(addressService.getAddressById(addressId));
     }
 
-    @PostMapping("/users/{id}")
-    public ResponseEntity<AddressResponse> addAddress(@PathVariable Long id, @RequestBody CreateAddressRequest addressRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.addAddress(id, addressRequest));
+    @PostMapping
+    public ResponseEntity<AddressResponse> addAddress(@RequestBody CreateAddressRequest addressRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.addAddress(addressRequest));
     }
 
     // user_id ve address body'ye ihtiyacımız var
-    @PutMapping("/users/{id}")
-    public ResponseEntity<AddressResponse> updateAddress(@PathVariable Long id, @RequestBody UpdateAddressRequest addressRequest){
-        return ResponseEntity.ok(addressService.updateAddress(id, addressRequest));
+    @PutMapping("/{addressId}")
+    public ResponseEntity<AddressResponse> updateAddress(@PathVariable Long addressId, @RequestBody UpdateAddressRequest addressRequest){
+        return ResponseEntity.ok(addressService.updateAddress(addressId, addressRequest));
     }
 
-    @PatchMapping("/users/{userId}")
-    public ResponseEntity<AddressResponse> patchAddress(@PathVariable Long userId, @RequestBody PatchAddressRequest patchAddressRequest){
-        return ResponseEntity.ok(addressService.patchAddress(userId ,patchAddressRequest));
+    @PatchMapping("/{addressId}")
+    public ResponseEntity<AddressResponse> patchAddress(@PathVariable Long addressId, @RequestBody PatchAddressRequest patchAddressRequest){
+        return ResponseEntity.ok(addressService.patchAddress(addressId ,patchAddressRequest));
     }
 
     // address id üzerinden siliniyor
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long id){
-        addressService.deleteAddress(id);
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId){
+        addressService.deleteAddress(addressId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

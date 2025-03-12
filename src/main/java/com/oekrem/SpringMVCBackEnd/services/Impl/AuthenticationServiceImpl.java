@@ -56,7 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthResponse login(LoginRequest loginRequest) {
-        UserDetails userDetails = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        UserDetails userDetails = authenticate(loginRequest.email(), loginRequest.password());
         String token = generateToken(userDetails);
 
         return AuthResponse.builder()
@@ -67,9 +67,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public String createRefreshToken(LoginRequest loginRequest) {
-        UserDetails userDetails = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        UserDetails userDetails = authenticate(loginRequest.email(), loginRequest.password());
         // Kullanıcı doğrulaması - çünkü diğer türlü var olan tokeni silemiyoruz
-        User user = userService.getUserByEmail(loginRequest.getEmail());
+        User user = userService.getUserByEmail(loginRequest.email());
 
         // kullanıcı refresh tokenleri silindi
         refreshTokenService.deleteRefreshTokensByUserId(user.getId());
@@ -98,7 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
          */
 
         // E mail zaten var mı kontrolü yaıldı.
-        userService.validateUserEmail(registerRequest.getEmail()).ifPresent(
+        userService.validateUserEmail(registerRequest.email()).ifPresent(
                 p -> {throw new EMailTakenException("E-mail already exists");
                 }
         );
@@ -106,11 +106,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         //  Kullanıcı veri tabanina kaydedildi..
         UserResponse savedUser = userService.addUser(
                 CreateUserRequest.builder()
-                        .email(registerRequest.getEmail())
+                        .email(registerRequest.email())
                         .firstName(null)
                         .lastName(null)
-                        .username(registerRequest.getUsername())
-                        .password(passwordEncoder.encode(registerRequest.getPassword()))
+                        .username(registerRequest.username())
+                        .password(passwordEncoder.encode(registerRequest.password()))
                         .phone(null)
                         .build()
         );

@@ -55,11 +55,11 @@ public class ProductMapperUnitTest {
                 .categoryId(1L)
                 .build();
         Product response = productMapper.toProductFromCreateRequest(request);
-        assertEquals(request.getName(), response.getName());
-        assertEquals(request.getDescription(), response.getDescription());
-        assertEquals(request.getPrice(), response.getPrice());
-        assertEquals(request.getImage(), response.getImage());
-        assertEquals(request.getCategoryId(), response.getCategory().getId());
+        assertEquals(request.name(), response.getName());
+        assertEquals(request.description(), response.getDescription());
+        assertEquals(request.price(), response.getPrice());
+        assertEquals(request.image(), response.getImage());
+        assertEquals(request.categoryId(), response.getCategory().getId());
     }
 
     @Test
@@ -72,11 +72,11 @@ public class ProductMapperUnitTest {
                 .categoryId(1L)
                 .build();
         Product response = productMapper.toProductFromUpdateRequest(request);
-        assertEquals(request.getName(), response.getName());
-        assertEquals(request.getDescription(), response.getDescription());
-        assertEquals(request.getPrice(), response.getPrice());
-        assertEquals(request.getImage(), response.getImage());
-        assertEquals(request.getCategoryId(), response.getCategory().getId());
+        assertEquals(request.name(), response.getName());
+        assertEquals(request.description(), response.getDescription());
+        assertEquals(request.price(), response.getPrice());
+        assertEquals(request.image(), response.getImage());
+        assertEquals(request.categoryId(), response.getCategory().getId());
     }
 
     @Test

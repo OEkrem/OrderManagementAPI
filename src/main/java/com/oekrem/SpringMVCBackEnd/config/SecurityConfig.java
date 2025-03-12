@@ -47,11 +47,32 @@ public class SecurityConfig {
                         // Application Options
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/payments/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/orderdetails/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").authenticated()
+
+                        // aşağısı hep authenticated() olacak ama şimdilik devamke
+                        .requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/payments/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orderdetails/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/payments/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/orders/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/orderdetails/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
+
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/payments/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/orders/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/orderdetails/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").permitAll()
+
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/payments/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/orderdetails/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf-> csrf.disable())

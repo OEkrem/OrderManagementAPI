@@ -1,7 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.models;
 
-import com.oekrem.SpringMVCBackEnd.models.enums.PaymentMethod;
-import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
+import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,36 +27,67 @@ public class Order {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<OrderDetail> orderDetail = new LinkedList<>();
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new LinkedList<>();
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.MERGE, orphanRemoval = true)
     private Payment payment;
 
     @Temporal(TemporalType.DATE)
     private LocalDate date;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     //@Transient kullanılabilir belki
     private Double total; // aslında hesaplanabilir ancak tek sorguyla kolaylıkla ulaşılabilir olması faydalı diye yazdım
 
+    public void addOrderDetail(OrderDetail detail) {
+        orderDetails.add(detail);
+        detail.setOrder(this);
+    }
+
+    public void removeOrderDetail(OrderDetail detail) {
+        orderDetails.remove(detail);
+        detail.setOrder(null);
+    }
+
     @PrePersist
     protected void onCreate() {
+        System.out.println("Order created");
         this.date = LocalDate.now();
-        if(!orderDetail.isEmpty()){
-            orderDetail.forEach(d -> this.total += d.getPrice());
+        if(orderDetails != null && !orderDetails.isEmpty()) {
+            orderDetails.forEach(d -> this.total += d.getPrice());
         }else{
             this.total = 0.0;
         }
-        if(payment == null) {
+        /*if(payment == null) {
             payment = Payment.builder()
                     .order(Order.this)
                     .paymentMethod(PaymentMethod.UNKNOWN)
                     .paymentStatus(PaymentStatus.PENDING)
-                    .description("-")
                     .date(LocalDateTime.now())
                     .amount(this.total)
                     .build();
-        }
+        }else payment.setAmount(this.total);*/
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        System.out.println("Order updated");
+        if(orderDetails != null && !orderDetails.isEmpty()){
+            orderDetails.forEach(d -> this.total += d.getPrice());
+        }else{
+            this.total = 0.0;
+        }
+        /*if(payment == null) {
+            payment = Payment.builder()
+                    .order(Order.this)
+                    .paymentMethod(PaymentMethod.UNKNOWN)
+                    .paymentStatus(PaymentStatus.PENDING)
+                    .date(LocalDateTime.now())
+                    .amount(this.total)
+                    .build();
+        }else payment.setAmount(this.total);*/
+    }
 }

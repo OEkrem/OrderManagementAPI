@@ -12,10 +12,12 @@ import org.mapstruct.*;
 public interface OrderMapper {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "date",  target = "date")
+    @Mapping(source = "id", target = "id")
     OrderResponse toResponse(Order order);
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "orderDetail", target = "orderDetailResponses")
+    @Mapping(source = "orderDetails", target = "orderDetailResponses")
     @Mapping(source = "payment", target = "payment")
     OrderAllResponse toResponseAll(Order order);
 
@@ -23,7 +25,7 @@ public interface OrderMapper {
     Order toOrderFromUpdateRequest(UpdateOrderRequest updateOrderRequest);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "orderDetails", target = "orderDetail")
+    @Mapping(source = "orderDetails", target = "orderDetails")
     @Mapping(source = "payment", target = "payment")
     void patchOrder(PatchOrderRequest patchOrderRequest, @MappingTarget Order order);
 

@@ -1,24 +1,32 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
-import lombok.AllArgsConstructor;
+import com.oekrem.SpringMVCBackEnd.validation.ValidPassword;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class CreateUserRequest {
+public record CreateUserRequest (
 
-    private String username;
-    private String password;
+        @NotBlank(message = "Username is required")
+        String username,
 
-    private String firstName;
-    private String lastName;
+        @NotBlank(message = "Password is required")
+        @ValidPassword
+        String password,
 
-    private String email;
-    private String phone;
+        String firstName,
+        String lastName,
+
+        @NotBlank(message = "Email is required")
+        @Email(message = "Please enter a valid email")
+        String email,
+
+        @Pattern(regexp = "^\\+?[0-9]{1,4}?[\\s\\-]?\\(?\\d{1,4}?\\)?[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}$",
+                message = "Please enter a valid phone")
+        String phone
+
+){
 
 }

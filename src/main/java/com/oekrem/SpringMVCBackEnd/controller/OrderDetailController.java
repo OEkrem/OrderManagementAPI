@@ -1,13 +1,9 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
-import com.oekrem.SpringMVCBackEnd.dto.Request.CreateOrderDetailRequest;
-import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
-import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +28,7 @@ public class OrderDetailController {
         return ResponseEntity.ok(orderDetailService.getOrderDetailById(id));
     }
 
-    @PostMapping("/orders/{orderId}")
+    /*@PostMapping("/orders/{orderId}")
     public ResponseEntity<OrderDetailResponse> addOrderDetail(@PathVariable Long orderId,@RequestBody CreateOrderDetailRequest createOrderDetailRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailService.addOrderDetail(orderId, createOrderDetailRequest));
     }
@@ -45,7 +41,7 @@ public class OrderDetailController {
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderDetailResponse> patchOrderDetail(@PathVariable Long orderId, @RequestBody PatchOrderDetailRequest patchOrderDetailRequest){
         return ResponseEntity.ok(orderDetailService.patchOrderDetail(orderId, patchOrderDetailRequest));
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderDetail(@PathVariable Long id){

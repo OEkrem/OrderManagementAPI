@@ -58,7 +58,7 @@ public class HibernateOrderRepository implements OrderRepository {
     @Transactional
     public Order addOrder(Order order) {
         Session session = entityManager.unwrap(Session.class);
-        session.merge(order);
+        session.persist(order);
         return order;
     }
 

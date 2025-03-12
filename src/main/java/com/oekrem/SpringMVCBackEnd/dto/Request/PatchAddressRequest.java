@@ -1,10 +1,11 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
 public record PatchAddressRequest (
-        Long id,
+
         String name,
         Integer doorNumber,
         Integer floor,

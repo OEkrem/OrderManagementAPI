@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -46,8 +45,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public AddressResponse getAddressById(Long id) {
-        Address address = addressRepository.getAddressById(id)
+    public AddressResponse getAddressById(Long addressId) {
+        Address address = addressRepository.getAddressById(addressId)
                 .orElseThrow(AddressNotFoundException::new);
 
         return addressMapper.toResponse(address);
@@ -55,53 +54,50 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public AddressResponse addAddress(Long userId, CreateAddressRequest address) {
-        userService.validateUser(userId);
+    public AddressResponse addAddress(CreateAddressRequest address) {
+        userService.validateUser(address.userId());
         Address addressToAdd = addressMapper.toAddressFromCreateRequest(address);
-        addressToAdd.setUser(User.builder().id(userId).build());
+        addressToAdd.setUser(User.builder().id(address.userId()).build());
         Address savedAddress = addressRepository.addAddress(addressToAdd);
         return addressMapper.toResponse(savedAddress);
     }
 
     @Override
     @Transactional
-    public AddressResponse updateAddress(Long userId, UpdateAddressRequest address) {
-        User user = userService.validateUser(userId);
-        validateAddress(address.getId())
+    public AddressResponse updateAddress(Long addressId, UpdateAddressRequest address) {
+        validateAddress(addressId)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
 
         Address addressToUpdate = addressMapper.toAddressFromUpdateRequest(address);
-        addressToUpdate.setUser(user);
         Address updatedAddress = addressRepository.updateAddress(addressToUpdate);
         return addressMapper.toResponse(updatedAddress);
     }
 
     @Override
     @Transactional
-    public AddressResponse patchAddress(Long userId, PatchAddressRequest address) {
-        User user = userService.validateUser(userId);
-        Address ad = validateAddress(address.id())
+    public AddressResponse patchAddress(Long addressId, PatchAddressRequest address) {
+        Address ad = validateAddress(addressId)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
 
-        if(ad.getUser() != null && !Objects.equals(ad.getUser().getId(), user.getId()))
-            throw new AddressNotFoundException("User and Address not matching each other. Please use valid user.");
+        /*if(ad.getUser() != null && !Objects.equals(ad.getUser().getId(), ad.getUser().getId()))
+            throw new AddressNotFoundException("User and Address not matching each other. Please use valid user.");*/
 
         addressMapper.patchAddress(address, ad);
-        addressRepository.updateAddress(ad);
-        return addressMapper.toResponse(ad);
+        Address patchedAddress = addressRepository.updateAddress(ad);
+        return addressMapper.toResponse(patchedAddress);
     }
 
     @Override
     @Transactional
-    public void deleteAddress(Long id) {
-        addressRepository.getAddressById(id)
-                .orElseThrow(() -> new AddressNotFoundException("There is no address with this id:" + id));
+    public void deleteAddress(Long addressId) {
+        addressRepository.getAddressById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("There is no address with this id:" + addressId));
 
-        addressRepository.deleteAddress(id);
+        addressRepository.deleteAddress(addressId);
     }
 
     @Override
-    public Optional<Address> validateAddress(Long id) {
-        return addressRepository.getAddressById(id);
+    public Optional<Address> validateAddress(Long addressId) {
+        return addressRepository.getAddressById(addressId);
     }
 }

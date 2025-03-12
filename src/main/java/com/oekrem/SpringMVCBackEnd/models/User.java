@@ -1,14 +1,15 @@
 package com.oekrem.SpringMVCBackEnd.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.*;
 
-@Data
+//@Data  --> içerisinde toString metodu içerdiği için refreshToken ile sonsuz döngüye girdi kanka
+@Getter
+@Setter
+@EqualsAndHashCode
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

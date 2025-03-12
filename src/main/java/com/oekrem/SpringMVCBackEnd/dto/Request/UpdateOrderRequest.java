@@ -1,20 +1,26 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
-import lombok.AllArgsConstructor;
+import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UpdateOrderRequest {
+public record UpdateOrderRequest (
+        @NotNull(message = "Order id is required")
+        Long id,
 
-    private Long id;
-    private LocalDate date;
-    private Double total;
+        @Valid
+        List<CreateOrderDetailRequest> orderDetails,
+        @Valid
+        CreatePaymentRequest payment,
 
+        OrderStatus status
+
+        /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate date,
+        Double total*/
+){
 }

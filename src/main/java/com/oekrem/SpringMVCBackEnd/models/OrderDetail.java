@@ -22,19 +22,26 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderDetails")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // tabi ilerde belki değişebilir
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Enumerated(EnumType.STRING)
     private QuantityType quantityType;
 
-    private BigDecimal quantity;
+    private Integer quantity;
 
     private Double price; // ürünfiyatı x quantity cevabı olacak aslında buradan da oluşalabiliyor olalım diye yazdım.
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    @PrePersist
+    protected void onCreate() {
+        this.quantityType = this.quantityType == null ? QuantityType.UNKNOWN : this.quantityType;
+        this.quantity = this.quantity == null ? 0 : this.quantity;
+        this.price = this.product != null ? (this.product.getPrice()*this.quantity) : 0.0D;
+    }
 
 }

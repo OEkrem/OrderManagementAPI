@@ -10,14 +10,15 @@ import org.springframework.data.domain.Page;
 import java.util.Optional;
 
 public interface AddressService {
-    Page<AddressResponse> findAll(int page, int size, Long userId);
-    AddressResponse addAddress(Long userId, CreateAddressRequest address);
-    AddressResponse updateAddress(Long userId, UpdateAddressRequest address);
-    AddressResponse patchAddress(Long userId, PatchAddressRequest address);
-    void deleteAddress(Long id);
-    AddressResponse getAddressById(Long id);
 
-    Optional<Address> validateAddress(Long id);
+    Page<AddressResponse> findAll(int page, int size, Long userId);
+    AddressResponse addAddress(CreateAddressRequest address);
+    AddressResponse updateAddress(Long addressId, UpdateAddressRequest address);
+    AddressResponse patchAddress(Long addressId, PatchAddressRequest address);
+    void deleteAddress(Long addressId);
+    AddressResponse getAddressById(Long addressId);
+
+    Optional<Address> validateAddress(Long addressId);
 
 
 }

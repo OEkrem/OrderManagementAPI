@@ -1,23 +1,25 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UpdateAddressRequest {
+public record UpdateAddressRequest (
 
-    private Long id;
-    private String name;
-    private Integer doorNumber;
-    private Integer floor;
-    private String buildingNumber;
-    private String street;
-    private String city;
-    private String country;
-
+        @NotBlank(message = "Address name is required")
+        String name,
+        @NotNull(message = "Door Number is required")
+        Integer doorNumber,
+        @NotNull(message = "Floor is required")
+        Integer floor,
+        @NotBlank(message = "Building Number is required")
+        String buildingNumber,
+        @NotBlank(message = "Street is required")
+        String street,
+        @NotBlank(message = "City is required")
+        String city,
+        @NotBlank(message = "Country is required")
+        String country
+){
 }
