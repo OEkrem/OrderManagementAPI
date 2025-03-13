@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
 
                         // aşağısı hep authenticated() olacak ama şimdilik devamke
-                        .requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").permitAll()
+                        /*.requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/payments/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/orderdetails/**").permitAll()
@@ -71,7 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/payments/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/orderdetails/**").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").permitAll()*/
 
                         .anyRequest().authenticated()
                 )

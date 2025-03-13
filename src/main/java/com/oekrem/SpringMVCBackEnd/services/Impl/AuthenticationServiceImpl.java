@@ -118,19 +118,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // ilk oturum için accesstoken oluşturuluyor
         UserDetails savedUserDetails = new OrderUserDetails(User.builder()
-                .id(savedUser.getId()).email(savedUser.getEmail()).password(savedUser.getPassword()).username(savedUser.getUsername())
+                .id(savedUser.id()).email(savedUser.email()).password(savedUser.password()).username(savedUser.username())
                 .firstName(null).lastName(null).phone(null).addresses(null).build());
         String accessToken = generateToken(savedUserDetails);
 
         // Access Token oluşturuldu ve response...
         return RegisterResponse.builder()
-                .id(savedUser.getId())
-                .username(savedUser.getUsername())
-                .email(savedUser.getEmail())
-                .firstName(savedUser.getFirstName())
-                .lastName(savedUser.getLastName())
-                .phone(savedUser.getPhone())
-                .password(savedUser.getPassword())
+                .id(savedUser.id())
+                .username(savedUser.username())
+                .email(savedUser.email())
+                .firstName(savedUser.firstName())
+                .lastName(savedUser.lastName())
+                .phone(savedUser.phone())
+                .password(savedUser.password())
                 .accessToken(accessToken)
                 .success(true)
                 .message("Success")

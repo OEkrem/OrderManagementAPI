@@ -1,24 +1,22 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.QuantityType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UpdateOrderDetailRequest {
+public record UpdateOrderDetailRequest (
 
-    @NotNull(message = "Product id is required")
-    private Long productId;
+        @NotNull(message = "Product id is required")
+        @Schema(name = "productId", example = "1")
+        Long productId,
 
-    @Builder.Default
-    private QuantityType quantityType = QuantityType.UNKNOWN;
-    @Builder.Default
-    private Integer quantity = 0;
+        @Schema(name = "quantityType", example = "BOX")
+        QuantityType quantityType,
+        @Schema(name = "quantity", example = "1")
+        Integer quantity
+
+){
 
 }

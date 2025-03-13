@@ -2,24 +2,26 @@ package com.oekrem.SpringMVCBackEnd.dto.Response;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentMethod;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class PaymentResponse {
-
-    private Long id;
-    private Double amount;
-    private PaymentStatus paymentStatus;
-    private PaymentMethod paymentMethod;
-    private LocalDateTime date;
-    private Long orderId;
+@Schema(name = "Payment Response Model", description = "it is a response of payment information")
+public record PaymentResponse (
+        @Schema(name = "Payment id")
+        Long id,
+        @Schema(name = "Amount of pay")
+        Double amount,
+        @Schema(name = "Payment status", example = "PENDING")
+        PaymentStatus paymentStatus,
+        @Schema(name = "Payment method", example = "CREDIT_CARD")
+        PaymentMethod paymentMethod,
+        @Schema(name = "Date of created payment")
+        LocalDateTime date,
+        @Schema(name = "Order id")
+        Long orderId
+){
 
 }

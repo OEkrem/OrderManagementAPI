@@ -39,55 +39,29 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    //@Transient kullanılabilir belki
     private Double total; // aslında hesaplanabilir ancak tek sorguyla kolaylıkla ulaşılabilir olması faydalı diye yazdım
-
-    public void addOrderDetail(OrderDetail detail) {
-        orderDetails.add(detail);
-        detail.setOrder(this);
-    }
-
-    public void removeOrderDetail(OrderDetail detail) {
-        orderDetails.remove(detail);
-        detail.setOrder(null);
-    }
 
     @PrePersist
     protected void onCreate() {
-        System.out.println("Order created");
+        //System.out.println("Order created");
         this.date = LocalDate.now();
         if(orderDetails != null && !orderDetails.isEmpty()) {
             orderDetails.forEach(d -> this.total += d.getPrice());
         }else{
             this.total = 0.0;
         }
-        /*if(payment == null) {
-            payment = Payment.builder()
-                    .order(Order.this)
-                    .paymentMethod(PaymentMethod.UNKNOWN)
-                    .paymentStatus(PaymentStatus.PENDING)
-                    .date(LocalDateTime.now())
-                    .amount(this.total)
-                    .build();
-        }else payment.setAmount(this.total);*/
     }
 
     @PreUpdate
     protected void onUpdate() {
-        System.out.println("Order updated");
+        //System.out.println("Order updated");
         if(orderDetails != null && !orderDetails.isEmpty()){
             orderDetails.forEach(d -> this.total += d.getPrice());
         }else{
             this.total = 0.0;
         }
-        /*if(payment == null) {
-            payment = Payment.builder()
-                    .order(Order.this)
-                    .paymentMethod(PaymentMethod.UNKNOWN)
-                    .paymentStatus(PaymentStatus.PENDING)
-                    .date(LocalDateTime.now())
-                    .amount(this.total)
-                    .build();
-        }else payment.setAmount(this.total);*/
+        if(payment != null) {
+            payment.setAmount(this.total);
+        }/*else payment.setAmount(this.total);*/
     }
 }
