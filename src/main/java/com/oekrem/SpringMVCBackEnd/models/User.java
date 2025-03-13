@@ -37,4 +37,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private RefreshToken refreshToken;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
+
 }

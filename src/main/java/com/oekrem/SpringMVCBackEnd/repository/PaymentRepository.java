@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.repository;
 
 import com.oekrem.SpringMVCBackEnd.models.Payment;
+import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,7 @@ public interface PaymentRepository {
     void deletePayment(Long id);
     Optional<Payment> getPaymentById(Long id);
     Optional<Payment> getPaymentByOrderId(Long orderId);
+
+
+    Optional<User> getOwnerById(Long id);
 }

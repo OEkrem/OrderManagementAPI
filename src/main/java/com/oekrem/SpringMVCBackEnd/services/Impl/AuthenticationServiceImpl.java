@@ -33,9 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -119,6 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // ilk oturum için accesstoken oluşturuluyor
         UserDetails savedUserDetails = new OrderUserDetails(User.builder()
                 .id(savedUser.id()).email(savedUser.email()).password(savedUser.password()).username(savedUser.username())
+                .roles(Set.of("ROLE_USER"))
                 .firstName(null).lastName(null).phone(null).addresses(null).build());
         String accessToken = generateToken(savedUserDetails);
 

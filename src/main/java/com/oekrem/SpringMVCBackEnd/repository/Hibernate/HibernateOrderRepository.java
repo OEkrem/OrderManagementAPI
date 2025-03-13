@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import jakarta.persistence.EntityManager;
@@ -94,6 +95,16 @@ public class HibernateOrderRepository implements OrderRepository {
     public Optional<Order> getOrderById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return Optional.ofNullable(session.get(Order.class, id));
+    }
+
+    @Override
+    public Optional<User> getOwnerById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("select u From User u where u.id = " +
+                        "(select o.user.id from Order o where o.user.id = :id)", User.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import com.oekrem.SpringMVCBackEnd.repository.PaymentRepository;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
@@ -88,5 +89,16 @@ public class HibernatePaymentRepository implements PaymentRepository {
                 .list()
                 .stream()
                 .findFirst();
+    }
+
+    @Override
+    public Optional<User> getOwnerById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("select u From User u where u.id = " +
+                                "(select o.user.id from Order o where o.id = " +
+                                "(select p.order.id from Payment p where p.id = :id))",
+                        User.class)
+                .setParameter("id", id)
+                .getResultStream().findFirst();
     }
 }

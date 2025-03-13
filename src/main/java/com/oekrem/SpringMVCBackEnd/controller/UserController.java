@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,9 +35,10 @@ public class UserController {
                             array = @ArraySchema(schema = @Schema(implementation = UserResponse.class)))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing parameters)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only Admins can get users")
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins can get users")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UserResponse>> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -50,10 +52,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid User id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can access"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can access"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
@@ -64,10 +67,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing user details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins can create a user"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins can create a user"),
             @ApiResponse(responseCode = "409", description = "Conflict, User could not be created")
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> addUser(@RequestBody CreateUserRequest createUserRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(createUserRequest));
     }
@@ -78,10 +82,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing user details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins and owners can update"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins and owners can update"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
             @RequestBody UpdateUserRequest updateUserRequest
@@ -95,10 +100,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing user details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can patch"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can patch"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
     public ResponseEntity<UserResponse> patchUser(
             @PathVariable Long id,
             @RequestBody PatchUserRequest patchUserRequest
@@ -111,10 +117,11 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "User deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid user id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can delete"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can delete"),
             @ApiResponse(responseCode = "404", description = "Order Not Found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();

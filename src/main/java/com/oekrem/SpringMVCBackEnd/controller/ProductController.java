@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -61,10 +62,11 @@ public class ProductController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing product details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins can be create a product"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins can be create a product"),
             @ApiResponse(responseCode = "409", description = "Conflict, Product could not be created")
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponse> addProduct(@RequestBody CreateProductRequest createProductRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(createProductRequest));
     }
@@ -75,10 +77,11 @@ public class ProductController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing product details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins can update the product"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins can update the product"),
             @ApiResponse(responseCode = "404", description = "Product Not Found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest updateProductRequest){
         return ResponseEntity.ok(productService.updateProduct(id, updateProductRequest));
     }
@@ -89,10 +92,11 @@ public class ProductController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing product details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins can patch the product"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins can patch the product"),
             @ApiResponse(responseCode = "404", description = "Product Not Found"),
     })
     @PatchMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponse> patchProduct(@PathVariable Long id, @RequestBody PatchProductRequest patchProductRequest){
         return ResponseEntity.ok(productService.patchProduct(id, patchProductRequest));
     }
@@ -102,10 +106,11 @@ public class ProductController {
             @ApiResponse(responseCode = "204", description = "Product deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid product id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins can delete the product"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins can delete the product"),
             @ApiResponse(responseCode = "404", description = "Product Not Found"),
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();

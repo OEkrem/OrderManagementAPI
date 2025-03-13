@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity  // pre authorize için de bu yeterli
 public class SecurityConfig {
 
     @Bean
@@ -49,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
 
                         // aşağısı hep authenticated() olacak ama şimdilik devamke
-                        /*.requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/payments/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/orderdetails/**").permitAll()
@@ -71,7 +72,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/payments/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/orders/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/orderdetails/**").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").permitAll()*/
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").permitAll()
 
                         .anyRequest().authenticated()
                 )

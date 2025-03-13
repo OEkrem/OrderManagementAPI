@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.repository;
 
 import com.oekrem.SpringMVCBackEnd.models.Address;
+import com.oekrem.SpringMVCBackEnd.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +15,6 @@ public interface AddressRepository {
     Address updateAddress(Address address);
     void deleteAddress(Long id);
     Optional<Address> getAddressById(Long id);
+
+    Optional<User> getOwnerById(Long id);
 }

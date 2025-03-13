@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.repository;
 
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
+import com.oekrem.SpringMVCBackEnd.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,5 +14,7 @@ public interface OrderDetailRepository {
     OrderDetail updateOrderDetail(OrderDetail orderDetail);
     void deleteOrderDetail(Long id);
     Optional<OrderDetail> getOrderDetailById(Long id);
+
+    Optional<User> getOwnerById(Long id);
 
 }

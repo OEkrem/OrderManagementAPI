@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,9 +37,10 @@ public class AddressController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid query parameters)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, authentication required (JWT token required)"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, user does not have access"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners access addresses"),
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#userId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
     public ResponseEntity<Page<AddressResponse>>getAddresses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -55,11 +57,11 @@ public class AddressController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid address id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, authentication required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have access"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners access address"),
             @ApiResponse(responseCode = "404", description = "Address not found"),
     })
     @GetMapping("/{addressId}")
-    //@PreAuthorize("hasRole('ADMIN') or @addressSecurity.isOwner(#addressId)")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#addressId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ADDRESS ,authentication.name)")
     public ResponseEntity<AddressResponse> getAddressById(@PathVariable Long addressId){
         return ResponseEntity.ok(addressService.getAddressById(addressId));
     }
@@ -72,7 +74,6 @@ public class AddressController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing address details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, authentication required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, user does not have permission to add an address"),
             @ApiResponse(responseCode = "409", description = "Conflict, Address could not be created")
     })
     @PostMapping
@@ -88,10 +89,11 @@ public class AddressController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing address details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, authentication required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to update address"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can update address"),
             @ApiResponse(responseCode = "404", description = "Address Not Found")
     })
     @PutMapping("/{addressId}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#addressId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ADDRESS ,authentication.name)")
     public ResponseEntity<AddressResponse> updateAddress(@PathVariable Long addressId, @RequestBody @Valid UpdateAddressRequest addressRequest){
         return ResponseEntity.ok(addressService.updateAddress(addressId, addressRequest));
     }
@@ -104,10 +106,11 @@ public class AddressController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing address details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, authentication required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to patch address"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can patch address"),
             @ApiResponse(responseCode = "404", description = "Address Not Found")
     })
     @PatchMapping("/{addressId}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#addressId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ADDRESS ,authentication.name)")
     public ResponseEntity<AddressResponse> patchAddress(@PathVariable Long addressId, @RequestBody @Valid PatchAddressRequest patchAddressRequest){
         return ResponseEntity.ok(addressService.patchAddress(addressId ,patchAddressRequest));
     }
@@ -117,10 +120,11 @@ public class AddressController {
             @ApiResponse(responseCode = "204", description = "Address deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid address id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, authentication required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only admins and address owners can delete"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins and address owners can delete"),
             @ApiResponse(responseCode = "404", description = "Address Not Found")
     })
     @DeleteMapping("/{addressId}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#addressId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ADDRESS ,authentication.name)")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId){
         addressService.deleteAddress(addressId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

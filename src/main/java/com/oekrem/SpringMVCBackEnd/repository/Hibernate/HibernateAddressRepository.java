@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 
+import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.repository.AddressRepository;
 import com.oekrem.SpringMVCBackEnd.models.Address;
 import jakarta.persistence.EntityManager;
@@ -78,6 +79,15 @@ public class HibernateAddressRepository implements AddressRepository {
     public Optional<Address> getAddressById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return Optional.ofNullable(session.get(Address.class, id));
+    }
+
+    @Override
+    public Optional<User> getOwnerById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("select u From User u where u.id = " +
+                                                "(Select a.user.id from Address a where a.id = :id)", User.class)
+                .setParameter("id", id)
+                .getResultStream().findFirst();
     }
 
 }

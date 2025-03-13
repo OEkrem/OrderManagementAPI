@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -63,10 +64,11 @@ public class CategoryController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing category details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required or failed"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to create category"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins can create a category"),
             @ApiResponse(responseCode = "409", description = "Conflict, New category could not be created")
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryResponse> addCategory(@RequestBody CreateCategoryRequest createCategoryRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.addCategory(createCategoryRequest));
     }
@@ -78,10 +80,11 @@ public class CategoryController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing category details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required or failed"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to update category"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins can update the category"),
             @ApiResponse(responseCode = "404", description = "Category Not Found")
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody UpdateCategoryRequest updateCategoryRequest){
         return ResponseEntity.ok(categoryService.updateCategory(id, updateCategoryRequest));
     }
@@ -93,10 +96,11 @@ public class CategoryController {
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing category details)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required or failed"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to patch category"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to patch category"),
             @ApiResponse(responseCode = "404", description = "Category Not Found")
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryResponse> patchCategory(@PathVariable Long id, @RequestBody PatchCategoryRequest patchCategoryRequest){
         return ResponseEntity.ok(categoryService.patchCategory(id, patchCategoryRequest));
     }
@@ -106,10 +110,11 @@ public class CategoryController {
             @ApiResponse(responseCode = "204", description = "Category deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid category id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required or failed"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to delete category"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to delete category"),
             @ApiResponse(responseCode = "404", description = "Category Not Found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();

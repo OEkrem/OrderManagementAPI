@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +35,11 @@ public class OrderController {
                             array = @ArraySchema(schema = @Schema(implementation = OrderAllResponse.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing order parameters)"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication required (JWT token)")
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to get orders")
+            @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication required (JWT token)"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins and owners can get orders")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#userId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
     public ResponseEntity<Page<OrderAllResponse>> getOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -51,10 +53,11 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successful",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication required (JWT Token)"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and order owners can get order"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and order owners can get order"),
             @ApiResponse(responseCode = "404", description = "Order Not Found")
     })
     @GetMapping("/{orderId}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#orderId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ORDER ,authentication.name)")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long orderId){
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
@@ -132,10 +135,11 @@ public class OrderController {
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid Order id format)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
-            //@ApiResponse(responseCode = "403", description = "Forbidden, User does not have permission to add payment"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only admins and owners can delete an order"),
             @ApiResponse(responseCode = "404", description = "Order Not Found"),
     })
     @DeleteMapping("/{orderId}")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#orderId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ORDER ,authentication.name)")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId){
         orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
