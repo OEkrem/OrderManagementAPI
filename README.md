@@ -1,13 +1,15 @@
-# ORDER MANAGMENT API
-  - Bu API, sipariş süreçlerini kolaylaştırmak için geliştirilmiş olup, sipariş oluşturma, güncelleme, kullanıcı yönetimi gibi özellikler sunar.
+# ORDER MANAGMENT API v1.2
+ - Java ve Spring Framework kullanılarak MVC tasarım deseni ile geliştirilmiş, RESTful API aracılığıyla iletişim kuran, monolitik bir e-ticaret platformunun backend uygulamasıdır.
+ - Pagination ve filtering yapıları ile lazy loading uygulanarak performans optimizasyonu sağlanmıştır.
+ - HTTP Cookies üzerinden saklanan Refresh Token ve Access Token mekanizması ile güvenlik artırılmıştır.
 
 ## PROJE YAPISI
 ```
 src/
 ├── aspects/             # Uygulama genelinde AOP (Aspect-Oriented Programming) işlemlerini yönetir
-├── config/              # Uygulama yapılandırmalarını içerir (AppConfig, ModelMapperConfig vb.)
+├── config/              # Uygulama yapılandırmalarını içerir (SecurityConfig, OpenApiConfig vb.)
 ├── controller/          # API endpoint'lerini yöneten controller sınıfları
-├── dto/                 # Response, Request ve CustomMapper sınıflarını içerir
+├── dto/                 # Response, Request ve Mapper sınıflarını içerir
 ├── email/               # E-posta ile ilgili işlemleri yöneten sınıflar
 ├── exceptions/          # Özel istisnaları yönetir
 ├── helppostman/         # Postman üzerinden CRUD işlemleri için yardımcı dokümantasyon
@@ -15,210 +17,111 @@ src/
 ├── repository/          # Hibernate işlemleri ve interface sınıfları ile veritabanı bağlantısı sağlar
 ├── scheduler/           # Zamanlanmış görevleri (Scheduled Jobs) yöneten sınıflar
 ├── security/            # Güvenlik yapılandırmaları ve yetkilendirme işlemleri (JWT, Authentication, vb.)
-└── services/            # İş mantığını yöneten servis sınıfları
+├── services/            # İş mantığını yöneten servis sınıfları
+└── validation/          # Custom validation sınıflarını içerir
 ```
 
 ## Kullanılan Teknolojiler 🚀
  - Java 21
  - Spring Boot
  - Spring Data JPA – MySQL (Geliştirme), H2 (Test)
- - Spring Security – JWT Refresh-Access token ile kimlik doğrulama
+ - Spring AOP - Aspects
+ - Spring Security – Authentication ve Authorization with JWT Refresh-Access Token
  - Spring Boot Mail – E-posta işlemleri için
- - RabbitMQ – Olay yönetimi (Event Handling)
  - Mockito – Birim testler için
- - Lombok – Kod sadeleştirme (Getter, Setter, Constructor vb.)
+ - MapStruct - Dto / entity dönüşümleri için
  - Validation – Giriş doğrulama işlemleri için
- - ModelMapper 3.2.2 – Nesne dönüşümleri (Tercihe bağlı)
+ - Lombok – Kod sadeleştirme (Getter, Setter, Constructor vb.)
+ - Swagger - Api dokümentasyonu için
+ - RabbitMQ – Olay yönetimi (Event Handling)
  - Maven – Bağımlılık yönetimi ve proje yapısı
+
+## Uygulanan Yapılar ve Teknikler
+- Pagination & Filtering Design
+- DTO Kullanımı
+- Builder Design Pattern
+- Docker Compose ile Kolay Kurulum – Uygulama ve bağımlılıklarını tek komutla başlatmak için
+
 
 ## API Dokümentasyonu
 Models: **`User`**, **`Address`**, **`Category`**, **`Product`**, **`Order`**, **`OrderDetail`**, **`Payment`**
+ - API dokümantasyonu için Swagger UI'yi kullanabilirsiniz:
+🔗 http://localhost:8090/swagger-ui.html
 
-## USER PROCESS
-- ### User READ
-  - GET - /api/users
-  - GET - /api/users/{id}
-- ### User ADD
-  - POST - /api/users
-    {
-        "username": "deneme37",
-        "password": "sifre",
-        "firstName": "firstName",
-        "lastName": "lasname",
-        "email": "firstname@example.com",
-        "phone": "5323212121"
-    }
-- ### User UPDATE
-  - PUT - /api/users/{id}
-    {
-        "username": "deneme37",
-        "password": "sifre",
-        "firstName": "firstName",
-        "lastName": "lasname",
-        "email": "firstname@example.com",
-        "phone": "5323212121"
-    }
-- ### User DELETE
-  - DELETE - /api/users/{id}
+### Kurulum ve Çalıştırma
+ - ``mvn clean install``
+ - ``docker-compose up`` 
+ - ``mvn spring-boot:run``
 
+---
 
-## ADDRESSES PROCESS
-- ### Address READ
-  - GET - /api/addresses
-  - GET - /api/addresses/{id}
-  - GET - /api/addresses/users/{id}
-- ### Address ADD
-  - POST - /api/addresses/users/{id}
-    {
-        "name": "Address Name",
-        "doorNumber": 5,
-        "floor": 0,
-        "buildingNumber": "58",
-        "street": "Street Name",
-        "city": "City Name",
-        "country": "Country Name"
-    }
-- ### Address UPDATE
-  - PUT - /api/addresses/users/{userId}
-    {
-        "id": 4,
-        "name": "Address Name",
-        "doorNumber": 5,
-        "floor": 0,
-        "buildingNumber": "No1",
-        "street": "Street",
-        "city": "City",
-        "country": "Country"
-    }
-- ### Address DELETE
-  - DELETE - /api/addresses/{id}
+# Example Workflow
+### 1️⃣ Kullanıcı Kaydı - Register
+**Endpoint:** `POST /api/v1/auth/register`  
+**Request Body:**
+```json
+{
+    "username": "john_doe",
+    "password": "password123",
+    "email": "john@example.com"
+}
+```
+Response:
+``
+    "message": "Kullanıcı başarıyla oluşturuldu."
+``
 
+### 2️⃣ Kullanıcı Girişi - Login
+**Endpoint:** `POST /api/v1/auth/login`  
+**Request Body:**
+```json
+{
+      "email": "jhon@example.com",
+      "password": "password123"
+}
+```
+**Response:** `accessToken` and `expiresIn` 
 
-## CATEGORY PROCESS
-- ### Category READ
-  - GET - /api/categories
-  - GET - /api/categories/{id}
-- ### Category ADD
-  - POST - /api/categories
-    {
-        "name": "Category Name",
-        "description": "Category Description"
-    }
-- ### Category UPDATE
-  - PUT - /api/categories/{id}
-    {
-        "name": "Category Name",
-        "description": "Category Description"
-    }
-- ### Category DELETE
-  - DELETE - /api/categories/{id}
+### 3️⃣ Sipariş Oluşturma - Create Order
+**Endpoint:** `POST /api/v1/orders`  
+**Request Body:**
+```json
+{
+      "userId": "16"
+}
+```
+**Response:** `id` `userId` `date` `orderStatus`
 
+### 4️⃣ Siparişe Ürün Ekleme - Add OrderDetail
+**EndPoint:** ``PATCH /api/v1/orders/{orderId}/orderdetail``  
+**Path Variable:** `orderId`
+```json
+{
+      "productId": "1",
+      "quantityType": "BOX",
+      "quantity": "1"
+}
+```
+**Response:** `id` `productId` `quantityType` `quantity` `price`
 
-## PRODUCT PROCESS
-- ### Product READ
-  - GET - /api/products
-  - GET - /api/products/{id}
-
-- ### Product ADD
-  - GET - /api/products
-    {
-        "name": "Phone Name",
-        "categoryId": 11,
-        "description": "Telephone Description",
-        "price": 7000.00,
-        "image": "image/url/phone.jpeg"
-    }
-- ### Product UPDATE
-  - PUT - api/products/id
-    {
-        "name": "Phone Name",
-        "categoryId": 11,
-        "description": "Phone Description",
-        "price": 7000.00,
-        "image": "image/url/phone.jpeg"
-    }
-- ### Product DELETE
-  - Delete - api/products/id
-
-
-## ORDER PROCESS
-- ### READ  ORDER
-  - GET - /api/orders
-  - GET - /api/orders/{orderId}
-  - GET - /api/orders/all
-- ### ADD  ORDER
-  - POST - /api/orders/users/{userId}
-    {
-        "date": "2024-02-07",
-        "total": 150
-    }
-- ### UPDATE  ORDER
-  - PUT - /api/orders/users/{userId}
-    {
-        "id": 1,
-        "date": "2024-02-07",
-        "total": 150
-    }
-- ### DELETE  ORDER
-  - DELETE - /api/orders/{orderId}
-
-
-## ORDERDETAIL PROCESS
-- ### READ  ORDERDETAIL
-  - GET - /api/orderdetails
-  - GET - /api/orderdetails/{id}
-  - GET - /api/orderdetails/orders/{orderId}
-
-- ### ADD  ORDERDETAIL
-  - POST - /api/orderdetails/orders/{orderId}
-    {
-        "productId": 1,
-        "quantityType": "PIECE",
-        "quantity": 1,
-        "price": 150
-    }
-
-- ### UPDATE  ORDERDETAIL
-  - PUT - /api/orderdetails/orders/{orderId}
-    {
-        "id": 1,
-        "productId": 1,
-        "quantityType": "PIECE",
-        "quantity": 1,
-        "price": 150
-    }
-
-- ### DELETE  ORDERDETAIL
-  - DELETE - /api/orderdetails/{id}
-
-
-## PAYMENT PROCESS
-- ### READ  PAYMENT
-  - GET - /api/payments
-  - GET - /api/payments/{id}
-- ### ADD  PAYMENT
-  -  POST - /api/payments/orders/{orderId}
-  {
-      "description": "Payment Description",
-      "amount": 150,
+### 5️⃣ Ödeme Tamamlama - Add Payment
+**EndPoint:** ``PATCH /api/v1/orders/{orderId}/payment``  
+**Path Variable:** `orderId`
+```json
+{
+      "orderId": "1",
       "paymentStatus": "PENDING",
-      "paymentMethod": "CREDIT_CARD",
-      "date": "2024-02-07T14:30:00"
-  }
-- ### UPDATE  PAYMENT
-  - PUT - /api/payments/orders/{orderId}
-  {
-      "id": 1,
-      "description": "Payment Description",
-      "amount": 150,
-      "paymentStatus": "PENDING",
-      "paymentMethod": "CREDIT_CARD",
-      "date": "2024-02-07T14:30:00"
-  }
-- ### DELETE  PAYMENT
-  - DELETE - /api/payments/{id}
+      "paymentMethod": "BANK_TRANSFER"
+}
+```
+**Response:** `id` `amount` `paymentStatus` `paymentMethod` `date` `orderId`
 
+### 6️⃣ Siparişi Onayla - Confirm Order
+**EndPoint:** ``PATCH /api/v1/orders/{orderId}/confirm``  
+**Path Variable:** `orderId`  
+**Response:** `id` `userId` `date` `orderStatus`
 
+---
 
 ## İLETİŞİM
 E-posta: oekremyildirim@outlook.com  
