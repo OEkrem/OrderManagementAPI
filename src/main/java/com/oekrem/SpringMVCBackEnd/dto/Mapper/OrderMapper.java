@@ -21,7 +21,11 @@ public interface OrderMapper {
     @Mapping(source = "payment", target = "payment")
     OrderAllResponse toResponseAll(Order order);
 
+    @Mapping(target = "user.id", source = "userId")
     Order toOrderFromCreateRequest(CreateOrderRequest createOrderRequest);
+
+    @Mapping(target = "orderDetails", source = "orderDetails")
+    @Mapping(target = "payment", source = "payment")
     Order toOrderFromUpdateRequest(UpdateOrderRequest updateOrderRequest);
 
     @Mapping(target = "id", ignore = true)

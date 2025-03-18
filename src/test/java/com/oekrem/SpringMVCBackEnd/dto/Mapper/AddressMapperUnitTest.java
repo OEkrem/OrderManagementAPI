@@ -35,14 +35,14 @@ public class AddressMapperUnitTest {
 
         AddressResponse response = addressMapper.toResponse(address);
 
-        assertEquals(address.getId(), response.getId());
-        assertEquals(address.getName(), response.getName());
-        assertEquals(address.getDoorNumber(), response.getDoorNumber());
-        assertEquals(address.getBuildingNumber(), response.getBuildingNumber());
-        assertEquals(address.getCity(), response.getCity());
-        assertEquals(address.getStreet(), response.getStreet());
-        assertEquals(address.getCountry(), response.getCountry());
-        assertEquals(address.getFloor(), response.getFloor());
+        assertEquals(address.getId(), response.id());
+        assertEquals(address.getName(), response.name());
+        assertEquals(address.getDoorNumber(), response.doorNumber());
+        assertEquals(address.getBuildingNumber(), response.buildingNumber());
+        assertEquals(address.getCity(), response.city());
+        assertEquals(address.getStreet(), response.street());
+        assertEquals(address.getCountry(), response.country());
+        assertEquals(address.getFloor(), response.floor());
     }
 
     @Test

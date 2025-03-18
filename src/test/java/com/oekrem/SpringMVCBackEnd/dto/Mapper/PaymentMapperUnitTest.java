@@ -37,12 +37,12 @@ public class PaymentMapperUnitTest {
                 .build();
         PaymentResponse response = paymentMapper.toResponse(payment);
 
-        assertEquals(response.getId(), payment.getId());
-        assertEquals(response.getPaymentStatus(), payment.getPaymentStatus());
-        assertEquals(response.getPaymentMethod(), payment.getPaymentMethod());
-        assertEquals(response.getOrderId(), payment.getOrder().getId());
-        assertEquals(response.getAmount(), payment.getAmount());
-        assertEquals(response.getDate(), payment.getDate());
+        assertEquals(response.id(), payment.getId());
+        assertEquals(response.paymentStatus(), payment.getPaymentStatus());
+        assertEquals(response.paymentMethod(), payment.getPaymentMethod());
+        assertEquals(response.orderId(), payment.getOrder().getId());
+        assertEquals(response.amount(), payment.getAmount());
+        assertEquals(response.date(), payment.getDate());
     }
 
     @Test

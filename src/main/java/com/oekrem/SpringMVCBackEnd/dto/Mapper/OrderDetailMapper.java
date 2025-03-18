@@ -27,6 +27,7 @@ public interface OrderDetailMapper {
     @Mapping(target = "product.id", source = "productId")
     void patchOrderDetail(PatchOrderDetailRequest patchOrderDetailRequest, @MappingTarget OrderDetail orderDetail);
 
+    @Mapping(target = "product.id", source = "productId")
     List<OrderDetailResponse> toResponseList(List<OrderDetail> orderDetails);
 
     @Mapping(target = "product.id", source = "productId")

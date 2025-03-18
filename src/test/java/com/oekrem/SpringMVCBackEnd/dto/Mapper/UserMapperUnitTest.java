@@ -39,13 +39,13 @@ public class UserMapperUnitTest {
 
         UserResponse userResponse = userMapper.toResponse(user);
 
-        assertEquals(userResponse.getId(), user.getId());
-        assertEquals(userResponse.getFirstName(), user.getFirstName());
-        assertEquals(userResponse.getLastName(), user.getLastName());
-        assertEquals(userResponse.getUsername(), user.getUsername());
-        assertEquals(userResponse.getEmail(), user.getEmail());
-        assertEquals(userResponse.getPassword(), user.getPassword());
-        assertEquals(userResponse.getPhone(), user.getPhone());
+        assertEquals(userResponse.id(), user.getId());
+        assertEquals(userResponse.firstName(), user.getFirstName());
+        assertEquals(userResponse.lastName(), user.getLastName());
+        assertEquals(userResponse.username(), user.getUsername());
+        assertEquals(userResponse.email(), user.getEmail());
+        assertEquals(userResponse.password(), user.getPassword());
+        assertEquals(userResponse.phone(), user.getPhone());
     }
 
     @Test

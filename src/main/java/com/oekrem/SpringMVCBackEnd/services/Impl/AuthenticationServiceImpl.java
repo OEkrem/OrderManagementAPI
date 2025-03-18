@@ -10,7 +10,6 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.TokenAlreadyExpiredException;
 import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.UserRegistrationException;
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.EMailTakenException;
-import com.oekrem.SpringMVCBackEnd.models.RefreshToken;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.security.OrderUserDetails;
 import com.oekrem.SpringMVCBackEnd.services.AuthenticationService;
@@ -48,8 +47,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long jwtExpiryMs = 900000L; // 15dk
-    private Long jwtExpireMsRefreshToken =  2*86400000L; // 2 gün
+    private final Long jwtExpiryMs = 900000L; // 15dk
+    private final Long jwtExpireMsRefreshToken =  2*86400000L; // 2 gün
 
     @Override
     @Transactional
@@ -167,7 +166,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // token not found doğrulaması yapıldı
         //RefreshToken existedToken = refreshTokenService.getRefreshTokenByToken(refreshToken); --> veritabanından böyle çekmek hataya sebep oldu
         String email = extractUsername(newRefreshToken);
-        RefreshToken existedToken = refreshTokenService.getRefreshTokenByUserEmail(email);
         //System.out.println("Existed token çekildi: " + existedToken.getRefreshToken() + "/ Userid: " + existedToken.getUser().getId());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);

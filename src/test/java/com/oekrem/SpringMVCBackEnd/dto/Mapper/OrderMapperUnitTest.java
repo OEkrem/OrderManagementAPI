@@ -62,12 +62,12 @@ public class OrderMapperUnitTest {
 
         OrderAllResponse response = orderMapper.toResponseAll(order);
 
-        assertEquals(response.getId(), order.getId());
-        assertEquals(response.getUserId(), order.getUser().getId());
-        assertEquals(response.getDate(), order.getDate());
-        assertEquals(response.getTotal(), order.getTotal());
-        assertEquals(response.getOrderDetailResponses(), orderDetailResponseList);
-        assertEquals(response.getPayment().getId(), order.getPayment().getId());
+        assertEquals(response.id(), order.getId());
+        assertEquals(response.userId(), order.getUser().getId());
+        assertEquals(response.date(), order.getDate());
+        assertEquals(response.total(), order.getTotal());
+        assertEquals(response.orderDetailResponses(), orderDetailResponseList);
+        assertEquals(response.payment().id(), order.getPayment().getId());
 
     }
 
@@ -78,8 +78,8 @@ public class OrderMapperUnitTest {
         Order order = orderMapper.toOrderFromCreateRequest(orderRequest);
 
         assertNull(order.getId());
-        assertNull(order.getUser());
         assertNull(order.getPayment());
+        assertEquals(order.getUser().getId(), orderRequest.userId());
     }
 
     @Test

@@ -37,12 +37,12 @@ public class ProductMapperUnitTest {
                 .build();
         ProductResponse response = productMapper.toResponse(product);
 
-        assertEquals(product.getId(), response.getId());
-        assertEquals(product.getName(), response.getName());
-        assertEquals(product.getDescription(), response.getDescription());
-        assertEquals(product.getPrice(), response.getPrice());
-        assertEquals(product.getImage(), response.getImage());
-        assertEquals(product.getCategory().getId(), response.getCategory_id());
+        assertEquals(product.getId(), response.id());
+        assertEquals(product.getName(), response.name());
+        assertEquals(product.getDescription(), response.description());
+        assertEquals(product.getPrice(), response.price());
+        assertEquals(product.getImage(), response.image());
+        assertEquals(product.getCategory().getId(), response.category_id());
     }
 
     @Test

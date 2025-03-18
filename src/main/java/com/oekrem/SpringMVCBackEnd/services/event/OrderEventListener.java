@@ -18,9 +18,9 @@ public class OrderEventListener {
     @RabbitListener(queues = "orderQueue")
     public void handleOrderCreatedEvent(OrderCreatedEvent event) {
         UserResponse user = userService.getUserById(event.getCustomerId());
-        String siparisMesaji = "Sayın " + user.getEmail() + "\nSiparişiniz alınmıştır.\nBizi tercih ettiğiniz için teşşekürler :)";
+        String siparisMesaji = "Sayın " + user.email() + "\nSiparişiniz alınmıştır.\nBizi tercih ettiğiniz için teşşekürler :)";
         emailService.sendSimpleEmail(EMailRequest.builder()
-                .to(user.getEmail())
+                .to(user.email())
                 .subject("Sipariş Oluşturuldu")
                 .content(siparisMesaji)
                 .build());

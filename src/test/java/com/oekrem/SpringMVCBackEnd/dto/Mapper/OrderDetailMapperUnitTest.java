@@ -67,9 +67,9 @@ public class OrderDetailMapperUnitTest {
                 .quantityType(QuantityType.PACK)
                 .build();
         OrderDetail orderDetail = orderDetailMapper.toOrderDetailFromUpdateRequest(updateOrderDetailRequest);
-        assertEquals(updateOrderDetailRequest.getProductId(), orderDetail.getProduct().getId());
-        assertEquals(updateOrderDetailRequest.getQuantity(), orderDetail.getQuantity());
-        assertEquals(updateOrderDetailRequest.getQuantityType(), orderDetail.getQuantityType());
+        assertEquals(updateOrderDetailRequest.productId(), orderDetail.getProduct().getId());
+        assertEquals(updateOrderDetailRequest.quantity(), orderDetail.getQuantity());
+        assertEquals(updateOrderDetailRequest.quantityType(), orderDetail.getQuantityType());
     }
 
     @Test

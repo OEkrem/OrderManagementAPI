@@ -2,7 +2,6 @@ package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.LoginRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.RegisterRequest;
-import com.oekrem.SpringMVCBackEnd.dto.Response.AddressResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AuthResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.AccessTokenResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.RegisterResponse;

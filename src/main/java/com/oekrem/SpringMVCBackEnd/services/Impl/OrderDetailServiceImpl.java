@@ -11,7 +11,6 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.OrderDetailExceptions.OrderDetailNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
-import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
 import lombok.RequiredArgsConstructor;

@@ -13,12 +13,11 @@ public interface PaymentMapper {
     @Mapping(target = "orderId", source = "order.id")
     PaymentResponse toResponse(Payment payment);
 
+    @Mapping(target = "order.id", source = "orderId")
     Payment toPaymentFromCreateRequest(CreatePaymentRequest createPaymentRequest);
     Payment toPaymentFromUpdateRequest(UpdatePaymentRequest updatePaymentRequest);
 
     @Mapping(target = "id", ignore = true)
     void patchPayment(PatchPaymentRequest patchPaymentRequest, @MappingTarget Payment payment);
-
-
 
 }

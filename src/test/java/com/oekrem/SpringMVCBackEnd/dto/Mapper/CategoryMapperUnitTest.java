@@ -31,9 +31,9 @@ public class CategoryMapperUnitTest {
                 .build();
         CategoryResponse response = categoryMapper.toResponse(category);
 
-        assertEquals(category.getId(), response.getId());
-        assertEquals(category.getName(), response.getName());
-        assertEquals(category.getDescription(), response.getDescription());
+        assertEquals(category.getId(), response.id());
+        assertEquals(category.getName(), response.name());
+        assertEquals(category.getDescription(), response.description());
     }
 
     @Test
@@ -57,8 +57,8 @@ public class CategoryMapperUnitTest {
                 .build();
         Category category = categoryMapper.toCategoryFromUpdateRequest(updateCategoryRequest);
         assertNull(category.getId());
-        assertEquals(updateCategoryRequest.getName(), category.getName());
-        assertEquals(updateCategoryRequest.getDescription(), category.getDescription());
+        assertEquals(updateCategoryRequest.name(), category.getName());
+        assertEquals(updateCategoryRequest.description(), category.getDescription());
     }
 
     @Test

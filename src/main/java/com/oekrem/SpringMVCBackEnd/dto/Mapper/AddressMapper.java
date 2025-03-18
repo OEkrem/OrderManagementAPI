@@ -12,6 +12,7 @@ public interface AddressMapper {
 
     @Mapping(target = "userId", source = "user.id")
     AddressResponse toResponse(Address address);
+    @Mapping(target = "user.id", source = "userId")
     Address toAddressFromCreateRequest(CreateAddressRequest createAddressRequest);
     Address toAddressFromUpdateRequest(UpdateAddressRequest updateAddressRequest);
 

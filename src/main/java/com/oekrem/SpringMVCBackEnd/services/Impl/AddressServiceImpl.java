@@ -32,15 +32,15 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public Page<AddressResponse> findAll(int page, int size, Long userId) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Address> addressList;
+        Page<Address> addressPage;
         if (userId != null) {
             userService.validateUser(userId);
-            addressList = addressRepository.getAddressesByUserId(pageable, userId);
+            addressPage = addressRepository.getAddressesByUserId(pageable, userId);
         }
         else
-            addressList = addressRepository.findAll(pageable);
+            addressPage = addressRepository.findAll(pageable);
 
-        return addressList.map(addressMapper::toResponse);
+        return addressPage.map(addressMapper::toResponse);
     }
 
     @Override
