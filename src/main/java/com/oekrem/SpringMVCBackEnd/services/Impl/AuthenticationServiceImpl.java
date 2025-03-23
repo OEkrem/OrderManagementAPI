@@ -10,8 +10,8 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.TokenAlreadyExpiredException;
 import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.UserRegistrationException;
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.EMailTakenException;
-import com.oekrem.SpringMVCBackEnd.models.RefreshToken;
 import com.oekrem.SpringMVCBackEnd.models.User;
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import com.oekrem.SpringMVCBackEnd.security.OrderUserDetails;
 import com.oekrem.SpringMVCBackEnd.services.AuthenticationService;
 import com.oekrem.SpringMVCBackEnd.services.RefreshTokenService;
@@ -21,6 +21,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +34,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,13 +50,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long jwtExpiryMs = 900000L; // 15dk
-    private Long jwtExpireMsRefreshToken =  2*86400000L; // 2 gün
+    private final Long jwtExpiryMs = 900000L; // 15dk 900000
+    private final Long jwtExpireMsRefreshToken =  2*86400000L; // 2 gün
 
     @Override
     @Transactional
     public AuthResponse login(LoginRequest loginRequest) {
-        UserDetails userDetails = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        UserDetails userDetails = authenticate(loginRequest.email(), loginRequest.password());
         String token = generateToken(userDetails);
 
         return AuthResponse.builder()
@@ -66,22 +66,35 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String createRefreshToken(LoginRequest loginRequest) {
-        UserDetails userDetails = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+    public ResponseCookie logout(){
+        return ResponseCookie.from("refreshToken", "")
+                .path("/")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
+                .maxAge(0)
+                .build();
+    }
+
+    @Override
+    public ResponseCookie createRefreshToken(LoginRequest loginRequest) {
+        UserDetails userDetails = authenticate(loginRequest.email(), loginRequest.password());
         // Kullanıcı doğrulaması - çünkü diğer türlü var olan tokeni silemiyoruz
-        User user = userService.getUserByEmail(loginRequest.getEmail());
+        User user = userService.getUserByEmail(loginRequest.email());
 
         // kullanıcı refresh tokenleri silindi
         refreshTokenService.deleteRefreshTokensByUserId(user.getId());
         String refreshToken = generateRefreshToken(userDetails);
         // oluşturulan yeni refresh token databaseye kaydedildi
         refreshTokenService.createRefreshToken(user, refreshToken);
+
         return ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
                 .path("/")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
                 .maxAge(Duration.ofMillis(jwtExpireMsRefreshToken))
-                .build().toString();
+                .build();
     }
 
 
@@ -98,40 +111,45 @@ public class AuthenticationServiceImpl implements AuthenticationService {
          */
 
         // E mail zaten var mı kontrolü yaıldı.
-        userService.validateUserEmail(registerRequest.getEmail()).ifPresent(
+        userService.validateUserEmail(registerRequest.email()).ifPresent(
                 p -> {throw new EMailTakenException("E-mail already exists");
                 }
         );
 
+        // 2. Kullanıcıya varsayılan roller atanıyor (Veritabanına kaydedilecek)
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.ROLE_USER);
+        //roles.add(Role.ROLE_ADMIN);
+
         //  Kullanıcı veri tabanina kaydedildi..
         UserResponse savedUser = userService.addUser(
                 CreateUserRequest.builder()
-                        .email(registerRequest.getEmail())
-                        .firstName(null)
-                        .lastName(null)
-                        .username(registerRequest.getUsername())
-                        .password(passwordEncoder.encode(registerRequest.getPassword()))
-                        .phone(null)
+                        .email(registerRequest.email())
+                        .username(registerRequest.username())
+                        .password(passwordEncoder.encode(registerRequest.password()))
+                        .roles(roles)
                         .build()
         );
         if(savedUser == null) { throw new UserRegistrationException("User registration failed");}
 
         // ilk oturum için accesstoken oluşturuluyor
         UserDetails savedUserDetails = new OrderUserDetails(User.builder()
-                .id(savedUser.getId()).email(savedUser.getEmail()).password(savedUser.getPassword()).username(savedUser.getUsername())
-                .firstName(null).lastName(null).phone(null).addresses(null).build());
+                .id(savedUser.id()).email(savedUser.email()).password(savedUser.password()).username(savedUser.username())
+                .roles(roles)
+                .build());
         String accessToken = generateToken(savedUserDetails);
 
         // Access Token oluşturuldu ve response...
         return RegisterResponse.builder()
-                .id(savedUser.getId())
-                .username(savedUser.getUsername())
-                .email(savedUser.getEmail())
-                .firstName(savedUser.getFirstName())
-                .lastName(savedUser.getLastName())
-                .phone(savedUser.getPhone())
-                .password(savedUser.getPassword())
+                .id(savedUser.id())
+                .username(savedUser.username())
+                .email(savedUser.email())
+                .firstName(savedUser.firstName())
+                .lastName(savedUser.lastName())
+                .phone(savedUser.phone())
+                .password(savedUser.password())
                 .accessToken(accessToken)
+                .roles(savedUser.roles())
                 .success(true)
                 .message("Success")
                 .build();
@@ -149,7 +167,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             5- Üretilen yeni accesstoken frontta geri iletilecek
          */
 
-
         //System.out.println("Refresh Token: " + refreshToken);
         // gelen refreshToken isteğinin formatı kontrol ediliyor. Başındaki ve sonundaki "" ifadeleri kaldırıldı.. Yoksa extract metodunda hata veriyordu.
         String newRefreshToken = null;
@@ -160,15 +177,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
         // Token geçerlilik süresi kontrol ediliyor.
-        if(isTokenExpired(newRefreshToken))
+        if(isTokenExpired(newRefreshToken)){
             throw new TokenAlreadyExpiredException("Refresh token expired: " + refreshToken);
+        }
         //System.out.println("Existed token expire olmuş mu kontrol edildi");
 
 
         // token not found doğrulaması yapıldı
         //RefreshToken existedToken = refreshTokenService.getRefreshTokenByToken(refreshToken); --> veritabanından böyle çekmek hataya sebep oldu
         String email = extractUsername(newRefreshToken);
-        RefreshToken existedToken = refreshTokenService.getRefreshTokenByUserEmail(email);
         //System.out.println("Existed token çekildi: " + existedToken.getRefreshToken() + "/ Userid: " + existedToken.getUser().getId());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
@@ -192,6 +209,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        // Kullanıcının rollerini (yetkilerini) ekle
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", roles);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
@@ -204,6 +227,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+
+        // Kullanıcının rollerini (yetkilerini) ekle
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", roles);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

@@ -1,20 +1,24 @@
 package com.oekrem.SpringMVCBackEnd.services;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
+import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
-
-import java.util.List;
+import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
+import org.springframework.data.domain.Page;
 
 public interface PaymentService {
-    List<PaymentResponse> findAll();
-    PaymentResponse addPayment(Long orderId, CreatePaymentRequest createPaymentRequest);
-    PaymentResponse updatePayment(Long orderId, UpdatePaymentRequest updatePayment);
-    void deletePayment(Long id);
-    PaymentResponse getPaymentById(Long id);
-    PaymentResponse getPaymentByOrderId(Long orderId);
+    Page<PaymentResponse> findAll(int page, int size, PaymentStatus status);
+    PaymentResponse updatePayment(Long paymentId, UpdatePaymentRequest updatePayment);
+    PaymentResponse patchPayment(Long paymentId, PatchPaymentRequest patchPayment);
+    void deletePayment(Long paymentId);
+    PaymentResponse getPaymentById(Long paymentId);
 
-    Payment validatePayment(Long id);
-    Payment validatePaymentByOrderId(Long orderId);
+    Payment validatePayment(Long paymentId);
+
+
+    // For OrderService
+    PaymentResponse addPayment(Order order, CreatePaymentRequest createPaymentRequest);
 }

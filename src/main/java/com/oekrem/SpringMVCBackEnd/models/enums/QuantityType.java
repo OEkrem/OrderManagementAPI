@@ -10,7 +10,8 @@ public enum QuantityType {
     GRAM("Gram"),        // Gram
     KILOGRAM("Kilogram"), // Kilogram
     LITER("Liter"),      // Litre
-    MILLILITER("Milliliter"); // Mililitre
+    MILLILITER("Milliliter"), // Mililitre
+    UNKNOWN("Unknown");
 
     private final String displayName; // String karşılığı
 

@@ -1,23 +1,25 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.QuantityType;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class CreateOrderDetailRequest {
+@Schema(name = "Create Order Detail Request", description = "every product added to the cart will be created with this model")
+public record CreateOrderDetailRequest (
 
-    private Long productId;
-    private QuantityType quantityType;
-    private BigDecimal quantity;
-    private BigDecimal price;
-    //private Long orderId; // bu bilgi path variable ile alınacak
+        @NotNull(message = "Product is required")
+        @Schema(name = "productId", example = "1")
+        Long productId,
+
+        @NotNull(message = "Quantity Type is required")
+        @Schema(name = "quantityType", example = "PIECE")
+        QuantityType quantityType,
+
+        @NotNull(message = "Quantity is required")
+        @Schema(name = "quantity", example = "1")
+        Integer quantity
+){
 
 }

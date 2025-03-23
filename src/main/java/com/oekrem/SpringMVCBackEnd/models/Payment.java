@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -24,22 +23,28 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment")
     private Long id;
 
-    @Column(length = 255)
-    private String description;
-
-    private BigDecimal amount;
+    private Double amount;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private PaymentMethod paymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime date;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDateTime.now();
+        this.paymentStatus = this.paymentStatus == null ? PaymentStatus.PENDING : this.paymentStatus;
+        this.paymentMethod = this.paymentMethod == null ? PaymentMethod.UNKNOWN : this.paymentMethod;
+        this.amount = this.amount == null ? 0.0 : this.amount;
+    }
 
 }

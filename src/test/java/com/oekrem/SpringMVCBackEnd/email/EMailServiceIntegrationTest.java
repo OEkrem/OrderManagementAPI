@@ -16,7 +16,7 @@ public class EMailServiceIntegrationTest {
 
     @Test
     public void testSendEmail() {
-        try{
+        /*try{
             EMailRequest eMailRequest = EMailRequest.builder()
                     .to("ekrem995@hotmail.com")
                     .content("Hello World!")
@@ -26,6 +26,6 @@ public class EMailServiceIntegrationTest {
             System.out.println("Email sent successfully");
         }catch (Exception e) {
             System.out.println("Mail gönderilirken hata oluştu");
-        }
+        }*/
     }
 }

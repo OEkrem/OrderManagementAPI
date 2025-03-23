@@ -1,15 +1,16 @@
 package com.oekrem.SpringMVCBackEnd.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+//@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = "user")
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

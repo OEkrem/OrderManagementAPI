@@ -1,25 +1,39 @@
 package com.oekrem.SpringMVCBackEnd.dto.Response;
 
-import lombok.AllArgsConstructor;
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.Set;
+
 @Builder
-public class RegisterResponse {
-    private Long id;
-    private String username;
-    private String password;
+@Schema(name = "Register Response Model")
+public record RegisterResponse (
+        @Schema(name = "User id")
+        Long id,
+        @Schema(name = "User name")
+        String username,
+        @Schema(name = "Password")
+        String password,
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phone;
+        @Schema(name = "Firstname")
+        String firstName,
+        @Schema(name = "Lastname")
+        String lastName,
+        @Schema(name = "Email")
+        String email,
+        @Schema(name = "Phone")
+        String phone,
 
-    private boolean success;
-    private String accessToken;
-    private String message;
+        @Schema(name = "Status of register")
+        boolean success,
+        @Schema(name = "Access token")
+        String accessToken,
+        @Schema(name = "Message")
+        String message,
+
+        @Schema(name = "Roles")
+        Set<Role> roles
+){
+
 }

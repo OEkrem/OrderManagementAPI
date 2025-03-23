@@ -2,25 +2,22 @@ package com.oekrem.SpringMVCBackEnd.dto.Request;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentMethod;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UpdatePaymentRequest {
+@Schema(name = "Update Payment Request Model")
+public record UpdatePaymentRequest (
 
-    private Long id;
-    private String description;
-    private BigDecimal amount;
-    private PaymentStatus paymentStatus;
-    private PaymentMethod paymentMethod;
-    private LocalDateTime date;
+        @Schema(name = "amount", example = "299.0")
+        Double amount,
+        // amount bilgisi belki kaldırılabilir, ancak ilerde promosyon kodu ile indirim gelirse diye saklıyorum ama tabi yine gerek olmayabilir
 
+        @Schema(name = "paymentStatus", example = "PENDING")
+        PaymentStatus paymentStatus,
+        @Schema(name = "paymentMethod", example = "PAYPAL")
+        PaymentMethod paymentMethod
+
+){
 }

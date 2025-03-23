@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.repository;
 
 import com.oekrem.SpringMVCBackEnd.models.RefreshToken;
+import com.oekrem.SpringMVCBackEnd.models.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;

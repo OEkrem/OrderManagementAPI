@@ -3,7 +3,6 @@ package com.oekrem.SpringMVCBackEnd.services;
 import com.oekrem.SpringMVCBackEnd.models.RefreshToken;
 import com.oekrem.SpringMVCBackEnd.models.User;
 
-
 public interface RefreshTokenService {
 
     RefreshToken createRefreshToken(User user, String refreshToken);

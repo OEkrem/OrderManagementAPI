@@ -1,21 +1,17 @@
 package com.oekrem.SpringMVCBackEnd.dto.Request;
 
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class CreateOrderRequest {
+@Schema(name = "Create Order Request Model", description = "the model used to create an empty order for user")
+public record CreateOrderRequest (
 
-    /*private List<CreateOrderDetailRequest> orderDetailList;
-    private CreatePaymentRequest payment;*/
-    private LocalDate date;
-    private Double total;
+        @NotNull(message = "UserId is required")
+        @Schema(name = "userId", example = "1")
+        Long userId
 
+){
+    // mapper, test sınıfları değiştirilecek
 }

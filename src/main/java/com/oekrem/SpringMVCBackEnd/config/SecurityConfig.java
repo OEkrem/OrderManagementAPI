@@ -13,6 +13,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -21,7 +23,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity  // pre authorize için de bu yeterli
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -40,21 +43,34 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests( auth -> auth
+                        // Doc Options
+                        .requestMatchers(
+                                "/v3/api-docs/**",    // OpenAPI JSON dosyası
+                                "/swagger-ui/**",     // Swagger UI statik dosyaları
+                                "/swagger-ui.html"    // Ana Swagger sayfası
+                        ).permitAll()
+
                         // Security Options
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
                         // Application Options
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/payments/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/orderdetails/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").authenticated()
+
+                        // aşağısı hep authenticated() olacak ama şimdilik devamke
+                        /*.requestMatchers(HttpMethod.GET, "/api/v1/addresses/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/payments/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orderdetails/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMIN")
+                         */
+
                         .anyRequest().authenticated()
                 )
-                .csrf(csrf-> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

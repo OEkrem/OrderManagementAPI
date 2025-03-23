@@ -1,23 +1,23 @@
 package com.oekrem.SpringMVCBackEnd.dto.Response;
 
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class ProductResponse {
-
-    private Long id;
-    private String name;
-    private Long category_id;
-    private String description;
-    private BigDecimal price;
-    private String image;
+@Schema(name = "Product Response Model")
+public record ProductResponse (
+        @Schema(name = "Product id")
+        Long id,
+        @Schema(name = "Product name")
+        String name,
+        @Schema(name = "Category id")
+        Long category_id,
+        @Schema(name = "Description")
+        String description,
+        @Schema(name = "Price of product")
+        Double price,
+        @Schema(name = "İmage url of product")
+        String image
+){
 
 }
