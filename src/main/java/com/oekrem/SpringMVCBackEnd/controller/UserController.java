@@ -56,10 +56,26 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER, authentication.name)")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
+
+    @Operation(summary = "Get User By Email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Invalid Email format)"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Only Admins and Owners can access"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
+    })
+    @GetMapping("/email")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#email, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER, authentication.name)")
+    public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.getUserResponseByEmail(email));
+    }
+
 
     @Operation(summary = "Create User")
     @ApiResponses(value = {

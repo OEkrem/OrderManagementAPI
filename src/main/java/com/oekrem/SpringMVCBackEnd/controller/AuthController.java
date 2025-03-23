@@ -41,8 +41,25 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, authenticationService.createRefreshToken(loginRequest))
+                .header(HttpHeaders.SET_COOKIE, authenticationService.createRefreshToken(loginRequest).toString())
                 .body(authenticationService.login(loginRequest));
+    }
+
+
+    @Operation(summary = "Log out user and clear cookies",
+            description = "This is only for clear refresh token cookie")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, authenticationService.logout().toString())
+                .body("Logged out successfully");
     }
 
     @Operation(summary = "Register a new user account",

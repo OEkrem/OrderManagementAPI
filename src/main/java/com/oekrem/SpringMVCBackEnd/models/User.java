@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.models;
 
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import java.util.*;
 //@Data  --> içerisinde toString metodu içerdiği için refreshToken ile sonsuz döngüye girdi kanka
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "refreshToken")
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,6 +39,7 @@ public class User {
     private RefreshToken refreshToken;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles;
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
 }

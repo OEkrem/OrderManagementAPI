@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import com.oekrem.SpringMVCBackEnd.repository.UserRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.UserMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateUserRequest;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
             throw new EMailTakenException("Email already exists");
 
         User user = userMapper.toUserFromCreateRequest(createUserRequest);
+        user.setRoles(Set.of(Role.ROLE_USER));
 
         User savedUser = userRepository.addUser(user);
         return userMapper.toResponse(savedUser);
@@ -77,6 +80,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse getUserById(Long id) {
         User user = validateUser(id);
+        return userMapper.toResponse(user);
+    }
+
+    @Override
+    public UserResponse getUserResponseByEmail(String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found") );
         return userMapper.toResponse(user);
     }
 
