@@ -16,7 +16,7 @@ public class OrderUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return user.getRoles().stream().map(role-> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
     @Override

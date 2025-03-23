@@ -1,7 +1,10 @@
 package com.oekrem.SpringMVCBackEnd.dto.Response;
 
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+
+import java.util.Set;
 
 @Builder
 @Schema(name = "Register Response Model")
@@ -27,7 +30,10 @@ public record RegisterResponse (
         @Schema(name = "Access token")
         String accessToken,
         @Schema(name = "Message")
-        String message
+        String message,
+
+        @Schema(name = "Roles")
+        Set<Role> roles
 ){
 
 }

@@ -11,6 +11,7 @@ import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.TokenAlreadyExp
 import com.oekrem.SpringMVCBackEnd.exceptions.SecurityExceptions.UserRegistrationException;
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.EMailTakenException;
 import com.oekrem.SpringMVCBackEnd.models.User;
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import com.oekrem.SpringMVCBackEnd.security.OrderUserDetails;
 import com.oekrem.SpringMVCBackEnd.services.AuthenticationService;
 import com.oekrem.SpringMVCBackEnd.services.RefreshTokenService;
@@ -20,6 +21,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private final Long jwtExpiryMs = 900000L; // 15dk
+    private final Long jwtExpiryMs = 900000L; // 15dk 900000
     private final Long jwtExpireMsRefreshToken =  2*86400000L; // 2 gün
 
     @Override
@@ -63,7 +66,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String createRefreshToken(LoginRequest loginRequest) {
+    public ResponseCookie logout(){
+        return ResponseCookie.from("refreshToken", "")
+                .path("/")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
+                .maxAge(0)
+                .build();
+    }
+
+    @Override
+    public ResponseCookie createRefreshToken(LoginRequest loginRequest) {
         UserDetails userDetails = authenticate(loginRequest.email(), loginRequest.password());
         // Kullanıcı doğrulaması - çünkü diğer türlü var olan tokeni silemiyoruz
         User user = userService.getUserByEmail(loginRequest.email());
@@ -73,12 +87,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = generateRefreshToken(userDetails);
         // oluşturulan yeni refresh token databaseye kaydedildi
         refreshTokenService.createRefreshToken(user, refreshToken);
+
         return ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
                 .path("/")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
                 .maxAge(Duration.ofMillis(jwtExpireMsRefreshToken))
-                .build().toString();
+                .build();
     }
 
 
@@ -100,15 +116,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 }
         );
 
+        // 2. Kullanıcıya varsayılan roller atanıyor (Veritabanına kaydedilecek)
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.ROLE_USER);
+        //roles.add(Role.ROLE_ADMIN);
+
         //  Kullanıcı veri tabanina kaydedildi..
         UserResponse savedUser = userService.addUser(
                 CreateUserRequest.builder()
                         .email(registerRequest.email())
-                        .firstName(null)
-                        .lastName(null)
                         .username(registerRequest.username())
                         .password(passwordEncoder.encode(registerRequest.password()))
-                        .phone(null)
+                        .roles(roles)
                         .build()
         );
         if(savedUser == null) { throw new UserRegistrationException("User registration failed");}
@@ -116,8 +135,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // ilk oturum için accesstoken oluşturuluyor
         UserDetails savedUserDetails = new OrderUserDetails(User.builder()
                 .id(savedUser.id()).email(savedUser.email()).password(savedUser.password()).username(savedUser.username())
-                .roles(Set.of("ROLE_USER"))
-                .firstName(null).lastName(null).phone(null).addresses(null).build());
+                .roles(roles)
+                .build());
         String accessToken = generateToken(savedUserDetails);
 
         // Access Token oluşturuldu ve response...
@@ -130,6 +149,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .phone(savedUser.phone())
                 .password(savedUser.password())
                 .accessToken(accessToken)
+                .roles(savedUser.roles())
                 .success(true)
                 .message("Success")
                 .build();
@@ -147,7 +167,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             5- Üretilen yeni accesstoken frontta geri iletilecek
          */
 
-
         //System.out.println("Refresh Token: " + refreshToken);
         // gelen refreshToken isteğinin formatı kontrol ediliyor. Başındaki ve sonundaki "" ifadeleri kaldırıldı.. Yoksa extract metodunda hata veriyordu.
         String newRefreshToken = null;
@@ -158,8 +177,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
         // Token geçerlilik süresi kontrol ediliyor.
-        if(isTokenExpired(newRefreshToken))
+        if(isTokenExpired(newRefreshToken)){
             throw new TokenAlreadyExpiredException("Refresh token expired: " + refreshToken);
+        }
         //System.out.println("Existed token expire olmuş mu kontrol edildi");
 
 
@@ -189,6 +209,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        // Kullanıcının rollerini (yetkilerini) ekle
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", roles);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
@@ -201,6 +227,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+
+        // Kullanıcının rollerini (yetkilerini) ekle
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", roles);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

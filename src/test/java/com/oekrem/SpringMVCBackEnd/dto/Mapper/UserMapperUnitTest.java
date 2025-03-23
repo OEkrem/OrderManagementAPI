@@ -6,11 +6,13 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateUserRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.UserResponse;
 import com.oekrem.SpringMVCBackEnd.models.Address;
 import com.oekrem.SpringMVCBackEnd.models.User;
+import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,6 +35,7 @@ public class UserMapperUnitTest {
                 .email("johndoe@gmail.com")
                 .password("password")
                 .phone("123456789")
+                .roles(Set.of(Role.ROLE_USER, Role.ROLE_ADMIN))
                 .addresses(List.of(Address.builder().id(1L).build()))
                 .refreshToken(null)
                 .build();
@@ -46,6 +49,7 @@ public class UserMapperUnitTest {
         assertEquals(userResponse.email(), user.getEmail());
         assertEquals(userResponse.password(), user.getPassword());
         assertEquals(userResponse.phone(), user.getPhone());
+        assertEquals(userResponse.roles(), user.getRoles());
     }
 
     @Test
@@ -57,6 +61,7 @@ public class UserMapperUnitTest {
                 .email("johndoe@gmail.com")
                 .password("password")
                 .phone("123456789")
+                .roles(Set.of(Role.ROLE_USER, Role.ROLE_ADMIN))
                 .build();
         User user = userMapper.toUserFromCreateRequest(createUserRequest);
 
@@ -66,6 +71,7 @@ public class UserMapperUnitTest {
         assertEquals(user.getEmail(), createUserRequest.email());
         assertEquals(user.getPassword(), createUserRequest.password());
         assertEquals(user.getPhone(), createUserRequest.phone());
+        assertEquals(user.getRoles(), createUserRequest.roles());
     }
 
     @Test

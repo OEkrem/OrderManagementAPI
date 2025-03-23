@@ -17,6 +17,7 @@ public interface UserService {
     UserResponse patchUser(Long id, PatchUserRequest patchUserRequest);
     void deleteUser(Long id);
     UserResponse getUserById(Long id);
+    UserResponse getUserResponseByEmail(String email);
     User getUserByEmail(String email);
 
     User validateUser(Long id);
