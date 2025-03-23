@@ -12,7 +12,6 @@ src/
 ├── dto/                 # Response, Request ve Mapper sınıflarını içerir
 ├── email/               # E-posta ile ilgili işlemleri yöneten sınıflar
 ├── exceptions/          # Özel istisnaları yönetir
-├── helppostman/         # Postman üzerinden CRUD işlemleri için yardımcı dokümantasyon
 ├── models/              # Veritabanı model sınıfları (User, Order, vb.)
 ├── repository/          # Hibernate işlemleri ve interface sınıfları ile veritabanı bağlantısı sağlar
 ├── scheduler/           # Zamanlanmış görevleri (Scheduled Jobs) yöneten sınıflar
