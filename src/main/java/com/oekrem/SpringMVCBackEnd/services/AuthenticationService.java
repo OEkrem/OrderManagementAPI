@@ -18,9 +18,8 @@ public interface AuthenticationService {
     AccessTokenResponse createAccessTokenByRefreshToken(String refreshToken);
 
     UserDetails authenticate(String email, String password);
-    String generateToken(UserDetails userDetails);
+    String generateToken(UserDetails userDetails, Long expireMs);
     UserDetails validateToken(String token);
 
-    String generateRefreshToken(UserDetails userDetails);
     boolean isTokenExpired(String token);
 }

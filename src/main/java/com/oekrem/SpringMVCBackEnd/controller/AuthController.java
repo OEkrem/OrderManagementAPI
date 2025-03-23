@@ -45,9 +45,18 @@ public class AuthController {
                 .body(authenticationService.login(loginRequest));
     }
 
+
+    @Operation(summary = "Log out user and clear cookies",
+            description = "This is only for clear refresh token cookie")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
-        System.out.println("Logout istemi");
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, authenticationService.logout().toString())
                 .body("Logged out successfully");
@@ -82,8 +91,6 @@ public class AuthController {
     })
     @PostMapping("/refresh")
     public ResponseEntity<AccessTokenResponse> refreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
-        System.out.println("Gelen Refresh token: " + refreshToken); // null
-        //return ResponseEntity.ok(AccessTokenResponse.builder().token(refreshToken).message("BackEnd'e yolladığım efresh Token").success(true).build());
         if (refreshToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(AccessTokenResponse.builder().message("Refresh Token is not found!").build());
         }

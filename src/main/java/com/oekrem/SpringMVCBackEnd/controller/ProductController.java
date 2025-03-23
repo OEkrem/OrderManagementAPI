@@ -39,7 +39,7 @@ public class ProductController {
     public ResponseEntity<Page<ProductResponse>> getProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Long categoryId // product name,
+            @RequestParam(required = false) Long categoryId
     ){
         return ResponseEntity.ok(productService.findAll(page, size, categoryId));
     }
