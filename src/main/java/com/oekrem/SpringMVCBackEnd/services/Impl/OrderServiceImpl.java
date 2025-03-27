@@ -42,17 +42,20 @@ public class OrderServiceImpl implements OrderService {
             orders = orderRepository.findAllByUserId(pageable, userId);
         else
             orders = orderRepository.findAll(pageable);
-
         return orders.map(orderMapper::toResponse);
     }
 
     @Override
     @Transactional
-    public Page<OrderAllResponse> findAllOrders(int page, int size, Long userId) {
+    public Page<OrderAllResponse> findAllOrders(int page, int size, Long userId, OrderStatus orderStatus) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Order> orders;
-        if(userId != null)
+        if(userId != null && orderStatus != null)
+            orders = orderRepository.findAllByUserIdAndOrderStatus(pageable, userId, orderStatus);
+        else if(userId != null)
             orders = orderRepository.findAllByUserId(pageable, userId);
+        else if(orderStatus != null)
+            orders = orderRepository.findAllByOrderStatus(pageable, orderStatus);
         else
             orders = orderRepository.findAll(pageable);
         return orders.map(orderMapper::toResponseAll);

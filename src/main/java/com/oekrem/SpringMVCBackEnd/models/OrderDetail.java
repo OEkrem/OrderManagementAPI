@@ -2,12 +2,13 @@ package com.oekrem.SpringMVCBackEnd.models;
 
 import com.oekrem.SpringMVCBackEnd.models.enums.QuantityType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+//@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -3,6 +3,7 @@ package com.oekrem.SpringMVCBackEnd.services;
 import com.oekrem.SpringMVCBackEnd.dto.Request.*;
 import com.oekrem.SpringMVCBackEnd.dto.Response.*;
 import com.oekrem.SpringMVCBackEnd.models.Order;
+import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface OrderService {
     Page<OrderResponse> findAll(int page, int size, Long userId);
-    Page<OrderAllResponse> findAllOrders(int page, int size, Long userId);
+    Page<OrderAllResponse> findAllOrders(int page, int size, Long userId, OrderStatus orderStatus);
 
     OrderResponse addOrder(CreateOrderRequest createOrderRequest);
     PaymentResponse savePayment(Long orderId, CreatePaymentRequest createPaymentRequest);

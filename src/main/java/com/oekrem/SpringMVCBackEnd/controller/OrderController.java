@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.*;
 import com.oekrem.SpringMVCBackEnd.dto.Response.*;
+import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -43,9 +44,10 @@ public class OrderController {
     public ResponseEntity<Page<OrderAllResponse>> getOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Long userId
-    ){
-        return ResponseEntity.ok(orderService.findAllOrders(page, size, userId));
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) OrderStatus orderStatus
+            ){
+        return ResponseEntity.ok(orderService.findAllOrders(page, size, userId, orderStatus));
     }
 
     @Operation(summary = "Get order by id")

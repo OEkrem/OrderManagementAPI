@@ -40,7 +40,8 @@ public class HibernateUserRepository implements UserRepository {
     @Transactional
     public User addUser(User user) {
         Session session = entityManager.unwrap(Session.class);
-        session.save(user);
+        session.persist(user);
+        session.flush();
         return user;
     }
 
@@ -48,8 +49,9 @@ public class HibernateUserRepository implements UserRepository {
     @Transactional
     public User updateUser(User user) {
         Session session = entityManager.unwrap(Session.class);
-        session.save(user);
-        return user;
+        User updatedUser = session.merge(user);
+        session.flush();
+        return updatedUser;
     }
 
     @Override

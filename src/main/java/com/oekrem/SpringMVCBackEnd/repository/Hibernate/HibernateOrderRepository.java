@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.repository.Hibernate;
 
 import com.oekrem.SpringMVCBackEnd.models.User;
+import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
 import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import jakarta.persistence.EntityManager;
@@ -23,6 +24,25 @@ public class HibernateOrderRepository implements OrderRepository {
     private final EntityManager entityManager;
 
     @Override
+    public Page<Order> findAllByUserIdAndOrderStatus(Pageable pageable, Long userId, OrderStatus orderStatus) {
+        Session session = entityManager.unwrap(Session.class);
+
+        List<Order> orders = session.createQuery("FROM Order o WHERE o.user.id = :userId AND o.orderStatus = :orderStatus", Order.class)
+                .setParameter("userId", userId)
+                .setParameter("orderStatus", orderStatus)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM Order o WHERE o.user.id = :userId AND o.orderStatus = :orderStatus", Long.class)
+                .setParameter("userId", userId)
+                .setParameter("orderStatus", orderStatus)
+                .getSingleResult();
+
+        return new PageImpl<>(orders, pageable, totalOrders);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<Order> findAllByUserId(Pageable pageable, Long userId) {
         Session session = entityManager.unwrap(Session.class);
@@ -35,6 +55,23 @@ public class HibernateOrderRepository implements OrderRepository {
 
         Long totalOrders = session.createQuery("SELECT COUNT(o) FROM Order o WHERE o.user.id = :userId", Long.class)
                 .setParameter("userId", userId)
+                .getSingleResult();
+
+        return new PageImpl<>(orders, pageable, totalOrders);
+    }
+
+    @Override
+    public Page<Order> findAllByOrderStatus(Pageable pageable, OrderStatus orderStatus) {
+        Session session = entityManager.unwrap(Session.class);
+
+        List<Order> orders = session.createQuery("FROM Order o WHERE o.orderStatus = :orderStatus", Order.class)
+                .setParameter("orderStatus", orderStatus)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .list();
+
+        Long totalOrders = session.createQuery("SELECT COUNT(o) FROM Order o WHERE o.orderStatus = :orderStatus", Long.class)
+                .setParameter("orderStatus", orderStatus)
                 .getSingleResult();
 
         return new PageImpl<>(orders, pageable, totalOrders);
