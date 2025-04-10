@@ -1,5 +1,6 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
+import com.oekrem.SpringMVCBackEnd.dto.Request.PaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +74,13 @@ public class PaymentController {
     public ResponseEntity<Void> deletePayment(@PathVariable Long paymentId){
         paymentService.deletePayment(paymentId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Started payment operations")
+    @PostMapping
+    public ResponseEntity<String> makePayment(@Valid @RequestBody PaymentRequest request) {
+        paymentService.processPayment(request);
+        return ResponseEntity.ok("Ödeme başarılı!");
     }
 
     /*@PutMapping("{paymentId}")

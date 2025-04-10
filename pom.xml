@@ -130,6 +130,18 @@
 			<version>2.6.0</version>
 		</dependency>
 
+		<!-- Spring Boot WebFlux for WebClient -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<!-- Reactor Core for Reactive Programming (optional, included in WebFlux) -->
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

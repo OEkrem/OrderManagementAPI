@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.services;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdatePaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.models.Order;
@@ -21,4 +22,6 @@ public interface PaymentService {
 
     // For OrderService
     PaymentResponse addPayment(Order order, CreatePaymentRequest createPaymentRequest);
+
+    boolean processPayment(PaymentRequest request);
 }

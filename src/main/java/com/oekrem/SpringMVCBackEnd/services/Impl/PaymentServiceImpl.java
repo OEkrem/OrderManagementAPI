@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.Request.PaymentRequest;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
@@ -12,6 +13,10 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.PaymentExceptions.PaymentNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.Payment;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
+import com.oekrem.SpringMVCBackEnd.services.bank.BinLookupService;
+import com.oekrem.SpringMVCBackEnd.services.bank.GarantiBankasiPaymentService;
+import com.oekrem.SpringMVCBackEnd.services.bank.IsBankasiPaymentService;
+import com.oekrem.SpringMVCBackEnd.services.bank.enums.BankType;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +30,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
+
+    private final BinLookupService binLookupService;
+    private final IsBankasiPaymentService isBankasiPaymentService;
+    private final GarantiBankasiPaymentService garantiBankasiPaymentService;
 
     @Override
     @Transactional
@@ -85,6 +94,18 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment validatePayment(Long id) {
         return paymentRepository.getPaymentById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+    }
+
+    @Override
+    public boolean processPayment(PaymentRequest request) {
+        BankType bankType = binLookupService.getBankByBin(request.cardNumber().substring(0, 6));
+
+        return switch (bankType) {
+            case GARANTI_BANK -> garantiBankasiPaymentService.processPayment(request);
+            case IS_BANK -> isBankasiPaymentService.processPayment(request);
+            case YAPI_KREDI -> throw new RuntimeException("Yapı Kredi şu an desteklenmiyor!");
+            default -> throw new RuntimeException("Desteklenmeyen banka: " + bankType);
+        };
     }
 
 }
