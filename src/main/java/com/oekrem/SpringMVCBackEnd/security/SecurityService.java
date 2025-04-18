@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.security;
 
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.UserNotFoundException;
+import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -27,21 +28,22 @@ public class SecurityService {
             case PAYMENT -> paymentRepository.getOwnerById( (Long) entityId)
                     .map(p-> p.equals(user))
                     .orElse(false);
-            case ORDER_DETAILS -> orderDetailRepository.getOwnerById( (Long) entityId)
-                    .map(p-> p.equals(user))
-                    .orElse(false);
+            case ORDER_DETAILS -> {
+                User test = orderDetailRepository.getOwnerById( (Long) entityId).orElse(null);
+                System.out.println("Order detail user: " + test.getEmail() + ", Authenticated email: " + email);
+                yield test != null && test.getEmail().equals(email);
+            }
             case ORDER -> orderRepository.getOwnerById( (Long) entityId)
                     .map(p-> p.equals(user))
                     .orElse(false);
             case USER -> {
                 if(entityId instanceof Long) {
-                    yield userRepository.getUserById( (Long) entityId)
-                            .map(p-> p.equals(user))
-                            .orElse(false);
+                    User test = userRepository.getUserById( (Long) entityId).orElse(null);
+                    yield test != null && test.getId().equals(entityId);
+
                 } else if (entityId instanceof String) {
-                    yield userRepository.getUserByEmail( (String) entityId)
-                            .map(p-> p.equals(user))
-                            .orElse(false);
+                    User test = userRepository.getUserByEmail( (String) entityId).orElse(null);
+                    yield test != null && test.getEmail().equals(entityId);
                 }
                 yield false;
             }

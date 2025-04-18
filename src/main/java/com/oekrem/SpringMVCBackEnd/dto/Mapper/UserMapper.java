@@ -15,7 +15,7 @@ public interface UserMapper {
 
     @Mapping(source = "roles", target = "roles")
     UserResponse toResponse(User user);
-    @Mapping(source = "roles", target = "roles")
+
     User toUserFromCreateRequest(CreateUserRequest createUserRequest);
     @Mapping(source = "roles", target = "roles")
     User toUserFromUpdateRequest(UpdateUserRequest updateUserRequest);

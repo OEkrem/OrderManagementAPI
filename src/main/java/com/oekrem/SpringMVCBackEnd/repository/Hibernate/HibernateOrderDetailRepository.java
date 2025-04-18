@@ -85,6 +85,7 @@ public class HibernateOrderDetailRepository implements OrderDetailRepository {
     }
 
     @Override
+    @Transactional
     public Optional<User> getOwnerById(Long id) {
         Session session = entityManager.unwrap(Session.class);
         return session.createQuery(

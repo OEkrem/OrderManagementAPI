@@ -61,7 +61,6 @@ public class UserMapperUnitTest {
                 .email("johndoe@gmail.com")
                 .password("password")
                 .phone("123456789")
-                .roles(Set.of(Role.ROLE_USER, Role.ROLE_ADMIN))
                 .build();
         User user = userMapper.toUserFromCreateRequest(createUserRequest);
 
@@ -71,7 +70,6 @@ public class UserMapperUnitTest {
         assertEquals(user.getEmail(), createUserRequest.email());
         assertEquals(user.getPassword(), createUserRequest.password());
         assertEquals(user.getPhone(), createUserRequest.phone());
-        assertEquals(user.getRoles(), createUserRequest.roles());
     }
 
     @Test

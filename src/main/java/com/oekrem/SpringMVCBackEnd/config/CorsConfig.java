@@ -11,7 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000") // Frontend'inizin bulunduğu adres
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // İzin verilen HTTP metotları
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS") // İzin verilen HTTP metotları
                 .allowedHeaders("*") // Tüm başlıklara izin ver
                 .allowCredentials(true) // Kimlik doğrulama bilgilerine izin ver
                 .maxAge(3600); // Preflight öncesi CORS sonucu ne kadar süre geçerli olsun

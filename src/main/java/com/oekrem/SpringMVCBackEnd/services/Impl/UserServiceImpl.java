@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import com.oekrem.SpringMVCBackEnd.repository.UserRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.UserMapper;
@@ -11,6 +12,8 @@ import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.EMailTakenException
 import com.oekrem.SpringMVCBackEnd.exceptions.UserExceptions.UserNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,14 +33,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Page<UserResponse> findAll(int page, int size) {
+    public PageResponse<UserResponse> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> users = userRepository.findAll(pageable);
-        return users.map(userMapper::toResponse);
+        Page<UserResponse> responsesPage = users.map(userMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override
     @Transactional
+    @Cacheable(value = "user", key = "#result.id")
     public UserResponse addUser(CreateUserRequest createUserRequest) {
         if(userRepository.findUserByEmail(createUserRequest.email()).isPresent())
             throw new EMailTakenException("Email already exists");
@@ -51,6 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "user", key = "#id")
     public UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest) {
         validateUser(id);
         User user = userMapper.toUserFromUpdateRequest(updateUserRequest);
@@ -61,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "user", key = "#id")
     public UserResponse patchUser(Long id, PatchUserRequest patchUserRequest) {
         User user = validateUser(id);
 
@@ -71,6 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "user", key = "#id")
     public void deleteUser(Long id) {
         validateUser(id);
         userRepository.deleteUser(id);
@@ -78,12 +86,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @Cacheable(value = "user", key = "#id", unless = "#result == null")
     public UserResponse getUserById(Long id) {
         User user = validateUser(id);
         return userMapper.toResponse(user);
     }
 
     @Override
+    @Cacheable(value = "user", key = "#email", unless = "#result == null")
     public UserResponse getUserResponseByEmail(String email) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found") );

@@ -1,15 +1,16 @@
 package com.oekrem.SpringMVCBackEnd.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

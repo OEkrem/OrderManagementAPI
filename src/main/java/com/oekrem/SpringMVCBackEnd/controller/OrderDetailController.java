@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -10,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class OrderDetailController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Page.class),
+                            schema = @Schema(implementation = PageResponse.class),
                             array = @ArraySchema(schema = @Schema(implementation = OrderDetailResponse.class)))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing parameters)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
@@ -35,7 +35,7 @@ public class OrderDetailController {
     })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#orderId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).ORDER ,authentication.name)")
-    public ResponseEntity<Page<OrderDetailResponse>> getOrderDetails(
+    public ResponseEntity<PageResponse<OrderDetailResponse>> getOrderDetails(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long orderId

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -84,6 +85,21 @@ public class ErrorController {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(apiErrorResponse);
     }
 
+    @Operation(summary = "Data Access Exception - Redis Connection Failture")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Redis Connection Failture", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class))
+            })
+    })
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<ApiErrorResponse> handleRedisException(DataAccessException ex){
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("Data Access Exception - Redis connection failture: " + ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
 
     @Operation(summary = "Handles generic errors")
     @ApiResponses(value = {
@@ -92,7 +108,7 @@ public class ErrorController {
             })
     })
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleException(Exception ex){
+    public ResponseEntity<ApiErrorResponse> handleException(Exception ex) {
         ApiErrorResponse error = ApiErrorResponse.builder()
                 .message("Exception : " + ex.getMessage())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
