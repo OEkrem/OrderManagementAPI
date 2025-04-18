@@ -11,6 +11,8 @@ import com.oekrem.SpringMVCBackEnd.exceptions.CategoryExceptions.CategoryNotFoun
 import com.oekrem.SpringMVCBackEnd.models.Category;
 import com.oekrem.SpringMVCBackEnd.services.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @Cacheable(value = "categories", key = "'page:' + #page + '-size:' + #size", unless = "#result == null")
     public PageResponse<CategoryResponse> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
@@ -35,6 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryResponse addCategory(CreateCategoryRequest createCategoryRequest) {
         Category category = categoryMapper.toCategoryFromCreateRequest(createCategoryRequest);
         Category addedCategory = categoryRepository.addCategory(category);
@@ -43,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryResponse updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest) {
         validateCategory(id);
         Category category = categoryMapper.toCategoryFromUpdateRequest(updateCategoryRequest);
@@ -52,6 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public CategoryResponse patchCategory(Long id, PatchCategoryRequest patchCategoryRequest) {
         Category category = validateCategory(id);
         categoryMapper.patchCategory(patchCategoryRequest, category);
@@ -61,6 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Long id) {
         validateCategory(id);
         categoryRepository.deleteCategory(id);

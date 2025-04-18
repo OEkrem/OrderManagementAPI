@@ -10,6 +10,8 @@ import com.oekrem.SpringMVCBackEnd.dto.Response.ProductResponse;
 import com.oekrem.SpringMVCBackEnd.exceptions.ProductExceptions.ProductNotFoundException;
 import com.oekrem.SpringMVCBackEnd.models.Product;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @Cacheable(value = "products", key = "'page:' + #page + '-size:' + #size + '-category:' + #categoryId", unless = "#result == null")
     public PageResponse<ProductResponse> findAll(int page, int size, Long categoryId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> products;
@@ -39,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public ProductResponse addProduct(CreateProductRequest product) {
         Product savedProduct = productRepository.addProduct(productMapper.toProductFromCreateRequest(product));
         return productMapper.toResponse(savedProduct);
@@ -46,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public ProductResponse updateProduct(Long id, UpdateProductRequest product) {
         validateProduct(id);
         Product productToUpdate = productMapper.toProductFromUpdateRequest(product);
@@ -57,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public ProductResponse patchProduct(Long id, PatchProductRequest patchProductRequest) {
         Product validateProduct = validateProduct(id);
 
@@ -67,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteProduct(Long id) {
         validateProduct(id);
         productRepository.deleteProduct(id);

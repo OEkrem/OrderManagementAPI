@@ -15,6 +15,8 @@ import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.services.OrderDetailService;
 import com.oekrem.SpringMVCBackEnd.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +37,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
+    @Cacheable(value = "orderDetails", key = "'page:' + #page + '-size:' + #size + '-orderId:' + #orderId")
     public PageResponse<OrderDetailResponse> findAll(int page, int size, Long orderId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<OrderDetail> orderDetails;
@@ -48,6 +51,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "orderDetails", allEntries = true)
     public OrderDetailsResponse addOrderDetails(Order order, List<CreateOrderDetailRequest> createOrderDetailRequest) {
         List<OrderDetailResponse> responses = new ArrayList<>();
         for(CreateOrderDetailRequest createOrderDetail : createOrderDetailRequest){
@@ -60,6 +64,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "orderDetails", allEntries = true)
     public OrderDetailResponse addOrderDetail(Order order, CreateOrderDetailRequest createOrderDetailRequest){
         OrderDetail mappedOrderDetail = orderDetailMapper.toOrderDetailFromCreateRequest(createOrderDetailRequest);
         Product product = productService.validateProduct(createOrderDetailRequest.productId());
@@ -82,6 +87,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "orderDetails", allEntries = true)
     public OrderDetailResponse updateOrderDetail(Long orderDetailId, UpdateOrderDetailRequest updateOrderDetailRequest) {
         OrderDetail validateOrderDetail = validateOrderDetail(orderDetailId);
 
@@ -93,6 +99,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "orderDetails", allEntries = true)
     public OrderDetailResponse patchOrderDetail(Long orderDetailId, PatchOrderDetailRequest patchOrderDetailRequest) {
         OrderDetail orderDetail = validateOrderDetail(orderDetailId);
 
@@ -103,6 +110,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "orderDetails", allEntries = true)
     public void deleteOrderDetail(Long id) {
         validateOrderDetail(id);
         orderDetailRepository.deleteOrderDetail(id);

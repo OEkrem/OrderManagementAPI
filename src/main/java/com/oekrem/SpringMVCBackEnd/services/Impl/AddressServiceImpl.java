@@ -13,6 +13,8 @@ import com.oekrem.SpringMVCBackEnd.models.User;
 import com.oekrem.SpringMVCBackEnd.services.AddressService;
 import com.oekrem.SpringMVCBackEnd.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
+    @Cacheable(value = "addresses", key = "'page:' + #page + '-size:' + #size + '-userId:' + #userId")
     public PageResponse<AddressResponse> findAll(int page, int size, Long userId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Address> addressPage;
@@ -55,6 +58,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "addresses", allEntries = true)
     public AddressResponse addAddress(CreateAddressRequest address) {
         userService.validateUser(address.userId());
         Address addressToAdd = addressMapper.toAddressFromCreateRequest(address);
@@ -65,6 +69,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "addresses", allEntries = true)
     public AddressResponse updateAddress(Long addressId, UpdateAddressRequest address) {
         validateAddress(addressId)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
@@ -76,6 +81,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "addresses", allEntries = true)
     public AddressResponse patchAddress(Long addressId, PatchAddressRequest address) {
         Address ad = validateAddress(addressId)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found"));
@@ -90,6 +96,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "addresses", allEntries = true)
     public void deleteAddress(Long addressId) {
         addressRepository.getAddressById(addressId)
                 .orElseThrow(() -> new AddressNotFoundException("There is no address with this id:" + addressId));
