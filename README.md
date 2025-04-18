@@ -2,6 +2,7 @@
  - Java ve Spring Framework kullanılarak MVC tasarım deseni ile geliştirilmiş, RESTful API aracılığıyla iletişim kuran, monolitik bir e-ticaret platformunun backend uygulamasıdır.
  - Pagination ve filtering yapıları ile lazy loading uygulanarak performans optimizasyonu sağlanmıştır.
  - HTTP Cookies üzerinden saklanan Refresh Token ve Access Token mekanizması ile güvenlik artırılmıştır.
+ - Redis Cache entegrasyonu ile sık erişilen veri üzerinde performans iyileştirmesi sağlanmıştır.
 
 ## PROJE YAPISI
 ```
@@ -27,6 +28,7 @@ src/
  - Spring AOP - Aspects
  - Spring Security – Authentication ve Authorization with JWT Refresh-Access Token
  - Spring Boot Mail – E-posta işlemleri için
+ - Redis – Spring Cache desteği ile entegre, sık erişilen verilerin hızlı sunumu için  
  - Mockito – Birim testler için
  - MapStruct - Dto / entity dönüşümleri için
  - Validation – Giriş doğrulama işlemleri için
@@ -37,8 +39,10 @@ src/
 
 ## Uygulanan Yapılar ve Teknikler
 - Pagination & Filtering Design
+- `PageResponse<T>` yapısı ile genişletilebilir ve anlamlı sayfalama yanıtları  
 - DTO Kullanımı
 - Builder Design Pattern
+- Redis ile Cache Yönetimi (kullanıcı verileri üzerinde performans optimizasyonu)  
 - Docker Compose ile Kolay Kurulum – Uygulama ve bağımlılıklarını tek komutla başlatmak için
 
 
