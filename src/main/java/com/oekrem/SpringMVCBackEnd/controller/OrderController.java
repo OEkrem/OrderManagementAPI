@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.*;
 import com.oekrem.SpringMVCBackEnd.dto.Response.*;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
 import com.oekrem.SpringMVCBackEnd.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +32,7 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful", content = {
                     @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Page.class),
+                            schema = @Schema(implementation = PageResponse.class),
                             array = @ArraySchema(schema = @Schema(implementation = OrderAllResponse.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing order parameters)"),
@@ -41,7 +41,7 @@ public class OrderController {
     })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#userId, T(com.oekrem.SpringMVCBackEnd.security.EntityType).USER ,authentication.name)")
-    public ResponseEntity<Page<OrderAllResponse>> getOrders(
+    public ResponseEntity<PageResponse<OrderAllResponse>> getOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long userId,

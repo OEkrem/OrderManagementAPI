@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailsResponse;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.Product;
 import com.oekrem.SpringMVCBackEnd.repository.OrderDetailRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.OrderDetailMapper;
@@ -34,14 +35,15 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
-    public Page<OrderDetailResponse> findAll(int page, int size, Long orderId) {
+    public PageResponse<OrderDetailResponse> findAll(int page, int size, Long orderId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<OrderDetail> orderDetails;
         if(orderId != null)
             orderDetails = orderDetailRepository.findByOrderId(pageable, orderId);
         else
             orderDetails = orderDetailRepository.findAll(pageable);
-        return orderDetails.map(orderDetailMapper::toResponse);
+        Page<OrderDetailResponse> responsesPage = orderDetails.map(orderDetailMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override

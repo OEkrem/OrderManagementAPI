@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchPaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.PaymentRequest;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
@@ -37,12 +38,15 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public Page<PaymentResponse> findAll(int page, int size, PaymentStatus status) {
+    public PageResponse<PaymentResponse> findAll(int page, int size, PaymentStatus status) {
         Pageable pageable = PageRequest.of(page, size);
+        Page<Payment> payments;
         if(status != null)
-            return paymentRepository.findByPaymentStatus(pageable, status).map(paymentMapper::toResponse);
+            payments = paymentRepository.findByPaymentStatus(pageable, status);
         else
-            return paymentRepository.findAll(pageable).map(paymentMapper::toResponse);
+            payments =  paymentRepository.findAll(pageable);
+        Page<PaymentResponse> responsesPage = payments.map(paymentMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override

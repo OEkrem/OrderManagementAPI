@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.controller;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PaymentRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.PaymentResponse;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.enums.PaymentStatus;
 import com.oekrem.SpringMVCBackEnd.services.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class PaymentController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Page.class),
+                            schema = @Schema(implementation = PageResponse.class),
                             array = @ArraySchema(schema = @Schema(implementation = PaymentResponse.class)))),
             @ApiResponse(responseCode = "400", description = "Bad Request (Invalid or missing parameters)"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, Authentication is required"),
@@ -38,7 +38,7 @@ public class PaymentController {
     })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<PaymentResponse>> getPayments(
+    public ResponseEntity<PageResponse<PaymentResponse>> getPayments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) PaymentStatus paymentStatus

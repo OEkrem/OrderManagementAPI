@@ -5,14 +5,14 @@ import com.oekrem.SpringMVCBackEnd.dto.Request.PatchOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Request.UpdateOrderDetailRequest;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailResponse;
 import com.oekrem.SpringMVCBackEnd.dto.Response.OrderDetailsResponse;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.Order;
 import com.oekrem.SpringMVCBackEnd.models.OrderDetail;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface OrderDetailService {
-    Page<OrderDetailResponse> findAll(int page, int size, Long userId);
+    PageResponse<OrderDetailResponse> findAll(int page, int size, Long userId);
 
     OrderDetailsResponse addOrderDetails(Order order, List<CreateOrderDetailRequest> createOrderDetailRequest);
     OrderDetailResponse addOrderDetail(Order order, CreateOrderDetailRequest createOrderDetailRequest);

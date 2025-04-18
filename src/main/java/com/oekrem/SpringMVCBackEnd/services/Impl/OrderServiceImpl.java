@@ -2,6 +2,7 @@ package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.*;
 import com.oekrem.SpringMVCBackEnd.dto.Response.*;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.enums.OrderStatus;
 import com.oekrem.SpringMVCBackEnd.repository.OrderRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.OrderMapper;
@@ -35,19 +36,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Page<OrderResponse> findAll(int page, int size, Long userId) {
+    public PageResponse<OrderResponse> findAll(int page, int size, Long userId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Order> orders;
         if(userId != null)
             orders = orderRepository.findAllByUserId(pageable, userId);
         else
             orders = orderRepository.findAll(pageable);
-        return orders.map(orderMapper::toResponse);
+        Page<OrderResponse> responsesPage = orders.map(orderMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override
     @Transactional
-    public Page<OrderAllResponse> findAllOrders(int page, int size, Long userId, OrderStatus orderStatus) {
+    public PageResponse<OrderAllResponse> findAllOrders(int page, int size, Long userId, OrderStatus orderStatus) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Order> orders;
         if(userId != null && orderStatus != null)
@@ -58,7 +60,8 @@ public class OrderServiceImpl implements OrderService {
             orders = orderRepository.findAllByOrderStatus(pageable, orderStatus);
         else
             orders = orderRepository.findAll(pageable);
-        return orders.map(orderMapper::toResponseAll);
+        Page<OrderAllResponse> responsesPage = orders.map(orderMapper::toResponseAll);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override

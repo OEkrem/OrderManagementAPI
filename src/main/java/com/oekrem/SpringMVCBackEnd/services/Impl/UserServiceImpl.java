@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchUserRequest;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.models.enums.Role;
 import com.oekrem.SpringMVCBackEnd.repository.UserRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.UserMapper;
@@ -30,10 +31,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Page<UserResponse> findAll(int page, int size) {
+    public PageResponse<UserResponse> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> users = userRepository.findAll(pageable);
-        return users.map(userMapper::toResponse);
+        Page<UserResponse> responsesPage = users.map(userMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override

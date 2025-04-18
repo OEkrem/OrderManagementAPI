@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchCategoryRequest;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.repository.CategoryRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.CategoryMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateCategoryRequest;
@@ -25,10 +26,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Page<CategoryResponse> findAll(int page, int size) {
+    public PageResponse<CategoryResponse> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
-        return categoryPage.map(categoryMapper::toResponse);
+        Page<CategoryResponse> responsesPage = categoryPage.map(categoryMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override

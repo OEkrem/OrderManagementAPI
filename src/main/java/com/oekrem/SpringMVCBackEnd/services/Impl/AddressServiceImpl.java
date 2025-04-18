@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchAddressRequest;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.repository.AddressRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.AddressMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateAddressRequest;
@@ -30,7 +31,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public Page<AddressResponse> findAll(int page, int size, Long userId) {
+    public PageResponse<AddressResponse> findAll(int page, int size, Long userId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Address> addressPage;
         if (userId != null) {
@@ -39,8 +40,8 @@ public class AddressServiceImpl implements AddressService {
         }
         else
             addressPage = addressRepository.findAll(pageable);
-
-        return addressPage.map(addressMapper::toResponse);
+        Page<AddressResponse> responsesPage = addressPage.map(addressMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override

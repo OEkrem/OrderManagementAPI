@@ -1,6 +1,7 @@
 package com.oekrem.SpringMVCBackEnd.services.Impl;
 
 import com.oekrem.SpringMVCBackEnd.dto.Request.PatchProductRequest;
+import com.oekrem.SpringMVCBackEnd.dto.common.PageResponse;
 import com.oekrem.SpringMVCBackEnd.repository.ProductRepository;
 import com.oekrem.SpringMVCBackEnd.dto.Mapper.ProductMapper;
 import com.oekrem.SpringMVCBackEnd.dto.Request.CreateProductRequest;
@@ -25,12 +26,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Page<ProductResponse> findAll(int page, int size, Long categoryId) {
+    public PageResponse<ProductResponse> findAll(int page, int size, Long categoryId) {
         Pageable pageable = PageRequest.of(page, size);
+        Page<Product> products;
         if(categoryId != null)
-            return productRepository.findByCategoryId(pageable, categoryId).map(productMapper::toResponse);
+            products = productRepository.findByCategoryId(pageable, categoryId);
         else
-            return productRepository.findAll(pageable).map(productMapper::toResponse);
+            products = productRepository.findAll(pageable);
+        Page<ProductResponse> responsesPage = products.map(productMapper::toResponse);
+        return PageResponse.fromPage(responsesPage);
     }
 
     @Override
